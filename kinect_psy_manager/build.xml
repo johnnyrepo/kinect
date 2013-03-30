@@ -1,0 +1,34 @@
+<project name="Packaging KinectManager app into single .jar">
+
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+	
+	<target name="copy">
+		<mkdir dir="build"/>
+		<copy toDir="build/lib">
+			<fileset dir="lib"/>
+		</copy>
+		<copy todir="build">
+			<fileset file="start.bat"/>
+			<fileset file="start.sh"/>
+		</copy>
+	</target>
+	
+	<target name="compile">
+		<javac sourcepath="" srcdir="src" destdir="bin" classpathref="lib" includeantruntime="no">
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean, compile, copy">
+		<jar destfile="build/kinectManager.jar">
+			<fileset dir="bin"/>
+			<manifest>
+				<attribute name="Main-Class" value="kinect.controller.MainController" />
+				<attribute name="Class-Path" value="lib/jni4net.j-0.8.6.0.jar lib/KinectSensorProxy.j4n.jar" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>
