@@ -2,6 +2,7 @@ package ee.ttu.kinect.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.MainModel;
@@ -19,6 +20,16 @@ public class MainController {
 
 		view = new MainView();
 
+		view.addListenerForMenuOpen(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File file = view.getSelectedFile(); //TODO: fix this hack
+				if (file != null) {
+					model.readFile(file);
+				}
+			}
+		});
+		
 		view.addListenerForStartTracking(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

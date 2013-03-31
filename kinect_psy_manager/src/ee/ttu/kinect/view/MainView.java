@@ -2,11 +2,17 @@ package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -18,6 +24,16 @@ public class MainView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private File selectedFile;
+	
+	private JMenuBar menuBar;
+	
+	private JMenu menu;
+	
+	private JMenuItem menuItemOpen;
+	
+	private JFileChooser fileChooser;
+	
 	private JPanel buttonPanel;
 	
 	private JButton startTrackingButton;
@@ -44,6 +60,15 @@ public class MainView extends JFrame {
 	
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		menuBar = new JMenuBar();
+		menu = new JMenu("File");
+		menuItemOpen = new JMenuItem("Open");
+		menu.add(menuItemOpen);
+		menuBar.add(menu);
+		setJMenuBar(menuBar);
+		
+		fileChooser = new JFileChooser();
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setSize(1200, 100);
@@ -73,7 +98,7 @@ public class MainView extends JFrame {
 		chartPanel = new ChartPanel();
 		chartPanel.setSize(1200, 300);
 
-		setTitle("KinectManager v0.1");
+		setTitle("KinectManager v0.2");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -90,12 +115,30 @@ public class MainView extends JFrame {
 		setVisible(true);
 	}
 
+	public File getSelectedFile() {
+		return selectedFile;
+	}
+	
 	public void redrawSkeleton(Body body) {
 		frontDrawPanel.redrawSkeleton(body);
 		sideDrawPanel.redrawSkeleton(body);
 		upDrawPanel.redrawSkeleton(body);
 	}
 
+	public void addListenerForMenuOpen(final ActionListener listener) {
+		menuItemOpen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				int res = fileChooser.showDialog(null, null);
+				if (res == JFileChooser.APPROVE_OPTION) {
+					selectedFile = fileChooser.getSelectedFile();
+					listener.actionPerformed(e);
+				}
+			}
+		});
+	}
+	
 	public void addListenerForStartTracking(ActionListener listener) {
 		startTrackingButton.addActionListener(listener);
 	}

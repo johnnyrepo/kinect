@@ -221,13 +221,13 @@ public class Body {
 	
 	public static String getHeader() {
 		StringBuffer line = new StringBuffer();
-		line = line.append("Frame Id").append("\t");
+		line = line.append("FrameId").append("\t");
 		line = line.append("Timestamp").append("\t");
 		
 		line = line.append(Joint.getHeader(JointType.HEAD));
-		line = line.append(Joint.getHeader(JointType.HIP_CENTER));
-		line = line.append(Joint.getHeader(JointType.SPINE));
 		line = line.append(Joint.getHeader(JointType.SHOULDER_CENTER));
+		line = line.append(Joint.getHeader(JointType.SPINE));
+		line = line.append(Joint.getHeader(JointType.HIP_CENTER));
 		line = line.append(Joint.getHeader(JointType.SHOULDER_LEFT));
 		line = line.append(Joint.getHeader(JointType.ELBOW_LEFT));
 		line = line.append(Joint.getHeader(JointType.WRIST_LEFT));
@@ -256,9 +256,9 @@ public class Body {
 			line = line.append((timestamp - veryFirstTimestamp)).append("\t");
 			
 			line = line.append(head.toString());
-			line = line.append(hipCenter.toString());
-			line = line.append(spine.toString());
 			line = line.append(shoulderCenter.toString());
+			line = line.append(spine.toString());
+			line = line.append(hipCenter.toString());
 			line = line.append(shoulderLeft.toString());
 			line = line.append(elbowLeft.toString());
 			line = line.append(wristLeft.toString());

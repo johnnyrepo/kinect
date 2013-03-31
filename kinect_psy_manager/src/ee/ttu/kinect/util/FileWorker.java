@@ -9,10 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
+import ee.ttu.kinect.model.Body;
 
 public class FileWorker {
 
@@ -21,72 +22,72 @@ public class FileWorker {
 	private BufferedWriter fileWriter;
 
 	private BufferedReader fileReader;
-	
-	private List<String> writerCache = new ArrayList<String>();
-	
-	public void openFileToWrite(String fileName, String experimentId, String header) throws IOException {
-		emptyCache();
-		File file = new File(fileName);
-		fileWriter = new BufferedWriter(new FileWriter(file, true));
-		fileWriter.write(experimentId);
-		fileWriter.newLine();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-		fileWriter.write(sdf.format(new Date()));
-		fileWriter.newLine();
-		fileWriter.write(header);
-		fileWriter.newLine();
-	}
 
-	public void openFileToRead(String fileName) throws FileNotFoundException {
-		File file = new File(fileName);
+	private List<String> textCache = new ArrayList<String>();
+
+	public void readFile(File file) throws FileNotFoundException {
 		fileReader = new BufferedReader(new FileReader(file));
+		emptyCache();
 		try {
-			logger.info("opening... " + fileReader.readLine());
+			String input = fileReader.readLine();
+			logger.info("opening... " + input);
+			while ((input = fileReader.readLine()) != null) {
+				addCachedText(input);
+			}
+			fileReader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void closeFile() throws IOException {
-		if (fileWriter != null) {
-			fileWriter.write(getCachedText());
-			emptyCache();
-			fileWriter.close();
-		}
+	public void dumpFile() throws IOException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
+		File file = new File(System.getProperty("user.dir") + "/"
+				+ sdf.format(new Date()) + ".csv");
+		fileWriter = new BufferedWriter(new FileWriter(file, true));
 
-		if (fileReader != null) {
-			fileReader.close();
-		}
+		fileWriter.write("experimentId");
+		fileWriter.newLine();
+		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+		fileWriter.write(sdf.format(new Date()));
+		fileWriter.newLine();
+		fileWriter.write(Body.getHeader());
+		fileWriter.newLine();
+
+		fileWriter.write(getCachedText());
+
+		emptyCache();
+		fileWriter.close();
 	}
 
-	public void saveToFile(String textToSave) throws IOException {
-		addCachedText(textToSave);
+	public void addToSave(String text) throws IOException {
+		addCachedText(text);
+	}
+
+	public String readNextLine() throws IOException {
+		String str = null;
+		try {
+			str = textCache.remove(0);
+		} catch(Exception e) {}
+		
+		return str ;
 	}
 
 	private String getCachedText() {
 		StringBuffer cachedText = new StringBuffer();
-		for (String cached : writerCache) {
+		for (String cached : textCache) {
 			cachedText = cachedText.append(cached).append("\n");
 		}
 		return cachedText.toString();
 	}
 
 	private void addCachedText(String text) {
-		writerCache.add(text);
+		textCache.add(text);
 	}
-	
+
 	private void emptyCache() {
-		writerCache = new ArrayList<String>();
-	}
-	
-	public void deleteFile(String fileName) {
-		File file = new File(fileName);
-		file.delete();
-	}
-	
-	public String readNextLine() throws IOException {
-		return fileReader.readLine();
+		textCache = new ArrayList<String>();
 	}
 
 }

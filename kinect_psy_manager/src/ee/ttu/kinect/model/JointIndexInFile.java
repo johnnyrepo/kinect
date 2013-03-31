@@ -3,9 +3,9 @@ package ee.ttu.kinect.model;
 public enum JointIndexInFile {
 	
 	HEAD, 
-	HIP_CENTER, 
-	SPINE, 
 	SHOULDER_CENTER, 
+	SPINE, 
+	HIP_CENTER, 
 	SHOULDER_LEFT, 
 	ELBOW_LEFT, 
 	WRIST_LEFT, 

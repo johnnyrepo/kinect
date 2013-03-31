@@ -87,74 +87,44 @@ public class MainModel {
 
 	public void doStop() {
 		logger.info("Shutdown requested");
+		
 		this.doRun = false;
 
 		String msg = this.kinectSensorProxy.stop();
-		try {
-			this.fileWorker.closeFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		logger.info(msg);
 	}
 
-	public void startReading() {
+	public void readFile(File file) {
 		try {
-			// doStop();
-			fileWorker.closeFile();
-			fileWorker.openFileToRead(System.getProperty("user.dir")
-					+ "/output.dat");
-
+			fileWorker.readFile(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void startReading() {
 			doReadFromFile = true;
 			doSaveToFile = false;
 
 			body = new Body();
-			// doStart();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	public void stopReading() {
-		try {
-			fileWorker.closeFile();
-
-			doReadFromFile = false;
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		doReadFromFile = false;
 	}
 
 	public void startSaving() {
-		try {
-			// doStop();
-			fileWorker.closeFile();
-			fileWorker.openFileToWrite(System.getProperty("user.dir")
-					+ "/output.dat", "###", Body.getHeader());
+		doSaveToFile = true;
+		doReadFromFile = false;
 
-			doSaveToFile = true;
-			doReadFromFile = false;
-
-			body = new Body();
-			// doStart();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		body = new Body();
 	}
 
 	public void stopSaving() {
 		try {
-			fileWorker.closeFile();
+			fileWorker.dumpFile();
 
 			doSaveToFile = false;
 		} catch (IOException e) {
@@ -229,7 +199,7 @@ public class MainModel {
 					// Save skeleton
 					if (doSaveToFile) {
 						try {
-							fileWorker.saveToFile(body.toString());
+							fileWorker.addToSave(body.toString());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
