@@ -245,6 +245,13 @@ public class Body {
 		line = line.append(Joint.getHeader(JointType.ANKLE_RIGHT));
 		line = line.append(Joint.getHeader(JointType.FOOT_RIGHT));
 		
+		// Markers
+		line = line.append("Marker1\t");
+		line = line.append("Marker2\t");
+		line = line.append("Marker3\t");
+		line = line.append("Marker4\t");
+		line = line.append("Marker5\t");
+		
 		return line.toString();
 	}
 	

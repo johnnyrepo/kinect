@@ -35,11 +35,7 @@ public class MainView extends JFrame {
 	private JFileChooser fileChooser;
 	
 	private JPanel buttonPanel;
-	
-	private JButton startTrackingButton;
-	
-	private JButton stopTrackingButton;
-	
+		
 	private JButton recordButton;
 	
 	private JButton playButton;
@@ -58,6 +54,8 @@ public class MainView extends JFrame {
 
 	private ChartPanel chartPanel;
 	
+	private MarkersPanel markersPanel;
+	
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -72,14 +70,10 @@ public class MainView extends JFrame {
 		
 		buttonPanel = new JPanel();
 		buttonPanel.setSize(1200, 100);
-		startTrackingButton = new JButton("Start tracking");
-		stopTrackingButton = new JButton("Stop tracking");
 		recordButton = new JButton("Record");
 		stopRecordButton = new JButton("Stop Record");
 		playButton = new JButton("Play");
 		stopPlayButton = new JButton("Stop Play");
-		//buttonPanel.add(startTrackingButton);
-		//buttonPanel.add(stopTrackingButton);
 		buttonPanel.add(recordButton);
 		buttonPanel.add(stopRecordButton);
 		buttonPanel.add(playButton);
@@ -97,6 +91,8 @@ public class MainView extends JFrame {
 
 		chartPanel = new ChartPanel();
 		chartPanel.setSize(1200, 300);
+		
+		markersPanel = new MarkersPanel();
 
 		setTitle("KinectManager v0.2");
 
@@ -106,10 +102,10 @@ public class MainView extends JFrame {
 			System.exit(1);
 		}
 
-		// getContentPane().add(imagePanel, BorderLayout.NORTH);
 		getContentPane().add(buttonPanel, BorderLayout.NORTH);
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
-		getContentPane().add(chartPanel, BorderLayout.SOUTH);
+		//getContentPane().add(chartPanel, BorderLayout.SOUTH);
+		getContentPane().add(markersPanel, BorderLayout.SOUTH);
 		
 		setSize(1200, 600);
 		setVisible(true);
@@ -138,14 +134,6 @@ public class MainView extends JFrame {
 			}
 		});
 	}
-	
-	public void addListenerForStartTracking(ActionListener listener) {
-		startTrackingButton.addActionListener(listener);
-	}
-
-	public void addListenerForStopTracking(ActionListener listener) {
-		stopTrackingButton.addActionListener(listener);
-	}
 
 	public void addListenerForStartRecord(ActionListener listener) {
 		recordButton.addActionListener(listener);
@@ -167,4 +155,8 @@ public class MainView extends JFrame {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
+	public boolean[] getMarkersState() {
+		return markersPanel.getMarkersState();
+	}
+	
 }

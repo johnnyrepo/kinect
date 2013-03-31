@@ -10,25 +10,12 @@
  *******************************************************************************/
 package ee.ttu.kinect;
 
-import java.io.IOException;
 import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import javax.swing.text.Position;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
@@ -40,7 +27,6 @@ public class SkeletonParserKinect implements SkeletonParser {
 
 	private XMLInputFactory inputFactory;
 	
-	private DocumentBuilder docBuilder;
 
 	private int oldNumSkeletons = -1;
 	private long frame = -1;
@@ -53,15 +39,6 @@ public class SkeletonParserKinect implements SkeletonParser {
 
 	public SkeletonParserKinect() {
 		inputFactory = XMLInputFactory.newInstance();
-        /*		
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-				.newInstance();
-		try {
-			this.docBuilder = docBuilderFactory.newDocumentBuilder();
-		} catch (ParserConfigurationException e) {
-			logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-		*/
 	}
 
 	@Override
@@ -131,78 +108,6 @@ public class SkeletonParserKinect implements SkeletonParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	/*
-	@Override
-	public void parseSkeleton(String input, Body body) {
-		try {
-			Document doc = docBuilder.parse(new InputSource(new StringReader(
-					input)));
-
-			NodeList frameNodes = doc.getElementsByTagName("frameId");
-			// TODO Possible NPE if document is invalid
-			Node frameNode = frameNodes.item(0);
-			int currentFrame = Integer.parseInt(frameNode.getTextContent());
-			if (currentFrame > this.frame) { // TODO I receive the same document
-												// multiple times
-				this.frame = currentFrame;
-
-				NodeList timeStampNode = doc.getElementsByTagName("timestamp");
-				Node timestampNode = timeStampNode.item(0);
-				this.timeStamp = Long.parseLong(timestampNode.getTextContent());
-				body.setTimestamp(timeStamp);
-				body.setFrameNumber(frame);
-
-				NodeList skeletons = doc.getElementsByTagName(SKELETON_KEYWORD);
-
-				// Check whether number of skeletons has changed
-				if (skeletons.getLength() != oldNumSkeletons) {
-					oldNumSkeletons = skeletons.getLength();
-					logger.info("Found " + skeletons.getLength() + " skeletons");
-				}
-
-				for (int i = 0; i < skeletons.getLength(); i++) {
-					Node skeleton = skeletons.item(i);
-					NodeList skeletonData = skeleton.getChildNodes();
-					for (int j = 0; j < skeletonData.getLength(); j++) {
-						Node data = skeletonData.item(j);
-
-						if (data.getNodeName().equals("joint")) {
-							Joint joint = parseJoint(data);
-							updateBody(body, joint);
-						}
-					}
-				}
-			}
-		} catch (SAXException e) {
-			logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		} catch (IOException e) {
-			logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
-		}
-	}
-	*/
-	private Joint parseJoint(Node jointNode) {
-		Joint joint = new Joint();
-
-		NodeList data = jointNode.getChildNodes();
-		for (int k = 0; k < data.getLength(); k++) {
-			Node jointData = data.item(k);
-			if (jointData.getNodeName().equals("jointId")) {
-				String jointId = jointData.getTextContent();
-				joint.setType(JointType.getValueOf(jointId));
-			} else if (jointData.getNodeName().equals("positionX")) {
-				String posX = jointData.getTextContent().replace(',', '.');
-				joint.setPositionX(Float.parseFloat(posX));
-			} else if (jointData.getNodeName().equals("positionY")) {
-				String posY = jointData.getTextContent().replace(',', '.');
-				joint.setPositionY(Float.parseFloat(posY));
-			} else if (jointData.getNodeName().equals("positionZ")) {
-				String posZ = jointData.getTextContent().replace(',', '.');
-				joint.setPositionZ(Float.parseFloat(posZ));
-			}
-		}
-
-		return joint;
 	}
 
 	private Joint parseJoint(String jointId, String positionX, String positionY, String positionZ) {

@@ -30,18 +30,6 @@ public class MainController {
 			}
 		});
 		
-		view.addListenerForStartTracking(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.doStart();
-			}
-		});
-		view.addListenerForStopTracking(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.doStop();
-			}
-		});
 		view.addListenerForStartRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -77,6 +65,10 @@ public class MainController {
 
 	public void showMessagePopup(String message) {
 		view.showMessagePopup(message);
+	}
+	
+	public boolean[] getMarkersState() {
+		return view.getMarkersState();
 	}
 	
 	public static void main(String... args) {

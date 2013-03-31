@@ -199,7 +199,7 @@ public class MainModel {
 					// Save skeleton
 					if (doSaveToFile) {
 						try {
-							fileWorker.addToSave(body.toString());
+							fileWorker.addToSave(body.toString() + getMarkers());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -216,6 +216,16 @@ public class MainModel {
 				}
 			}
 
+		}
+		
+		private String getMarkers() {
+			StringBuffer markers = new StringBuffer();
+			boolean[] markersBool = controller.getMarkersState();
+			for (boolean mb : markersBool) {
+				markers = markers.append(mb).append("\t");
+			}
+			
+			return markers.toString();
 		}
 
 	}

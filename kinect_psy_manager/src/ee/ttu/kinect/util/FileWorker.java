@@ -71,7 +71,7 @@ public class FileWorker {
 			str = textCache.remove(0);
 		} catch(Exception e) {}
 		
-		return str ;
+		return str;
 	}
 
 	private String getCachedText() {

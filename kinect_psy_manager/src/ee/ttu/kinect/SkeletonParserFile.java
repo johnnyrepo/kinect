@@ -24,7 +24,7 @@ public class SkeletonParserFile implements SkeletonParser {
 			body.setFrameNumber(Long.parseLong(jointCoords[1]));
 			
 			// Joints coords starting from third column
-			jointCoords = Arrays.copyOfRange(jointCoords, 2, jointCoords.length);
+			jointCoords = Arrays.copyOfRange(jointCoords, 2, (2 + 3 * JointIndexInFile.values().length)); // markers are ignored
 			int jointsCount = 0;
 			double coordX = 0;
 			double coordY = 0;
