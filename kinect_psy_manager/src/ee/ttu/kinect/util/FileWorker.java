@@ -41,7 +41,7 @@ public class FileWorker {
 		}
 	}
 
-	public void dumpFile() throws IOException {
+	public synchronized void dumpFile() throws IOException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
 		File file = new File(System.getProperty("user.dir") + "/"
 				+ sdf.format(new Date()) + ".csv");
@@ -74,7 +74,7 @@ public class FileWorker {
 		return str;
 	}
 
-	private String getCachedText() {
+	private synchronized String getCachedText() {
 		StringBuffer cachedText = new StringBuffer();
 		for (String cached : textCache) {
 			cachedText = cachedText.append(cached).append("\n");

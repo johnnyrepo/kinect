@@ -12,7 +12,6 @@ package ee.ttu.kinect;
 
 import java.io.StringReader;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

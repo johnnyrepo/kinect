@@ -122,7 +122,7 @@ public class MainModel {
 		body = new Body();
 	}
 
-	public void stopSaving() {
+	public synchronized void stopSaving() {
 		try {
 			fileWorker.dumpFile();
 
@@ -222,10 +222,14 @@ public class MainModel {
 			StringBuffer markers = new StringBuffer();
 			boolean[] markersBool = controller.getMarkersState();
 			for (boolean mb : markersBool) {
-				markers = markers.append(mb).append("\t");
+				markers = markers.append(booleanToInt(mb)).append("\t");
 			}
 			
 			return markers.toString();
+		}
+		
+		private int booleanToInt(boolean bool) {
+			return bool ? 1 : 0;
 		}
 
 	}

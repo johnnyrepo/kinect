@@ -25,7 +25,7 @@
 		<jar destfile="build/kinectManager.jar">
 			<fileset dir="bin"/>
 			<manifest>
-				<attribute name="Main-Class" value="kinect.controller.MainController" />
+				<attribute name="Main-Class" value="ee.ttu.kinect.controller.MainController" />
 				<attribute name="Class-Path" value="lib/jni4net.j-0.8.6.0.jar lib/KinectSensorProxy.j4n.jar" />
 			</manifest>
 		</jar>
