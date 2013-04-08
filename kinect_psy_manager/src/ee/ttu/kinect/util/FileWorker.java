@@ -61,11 +61,11 @@ public class FileWorker {
 		fileWriter.close();
 	}
 
-	public void addToSave(String text) throws IOException {
+	public synchronized void addToSave(String text) throws IOException {
 		addCachedText(text);
 	}
 
-	public String readNextLine() throws IOException {
+	public synchronized String readNextLine() throws IOException {
 		String str = null;
 		try {
 			str = textCache.remove(0);
@@ -74,7 +74,7 @@ public class FileWorker {
 		return str;
 	}
 
-	private synchronized String getCachedText() {
+	private String getCachedText() {
 		StringBuffer cachedText = new StringBuffer();
 		for (String cached : textCache) {
 			cachedText = cachedText.append(cached).append("\n");

@@ -122,11 +122,11 @@ public class MainModel {
 		body = new Body();
 	}
 
-	public synchronized void stopSaving() {
+	public void stopSaving() {
 		try {
-			fileWorker.dumpFile();
-
 			doSaveToFile = false;
+
+			fileWorker.dumpFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
