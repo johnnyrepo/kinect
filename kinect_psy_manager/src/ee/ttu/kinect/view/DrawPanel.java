@@ -6,15 +6,12 @@ import java.awt.Graphics2D;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
 
-
 public abstract class DrawPanel extends JPanel {
-
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +22,7 @@ public abstract class DrawPanel extends JPanel {
 	private JLabel coordLabel;
 
 	protected DrawPanel(String title) {
-		Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, title));
 		coordLabel = new JLabel();
 		add(coordLabel);
@@ -62,37 +59,8 @@ public abstract class DrawPanel extends JPanel {
 			drawJointLine(body.getKneeRight(), body.getAnkleRight());
 			drawJointLine(body.getAnkleRight(), body.getFootRight());
 
-			// drawJoint(body.getAnkleLeft());
-			// drawJoint(body.getAnkleRight());
-			// drawJoint(body.getElbowLeft());
-			// drawJoint(body.getElbowRight());
-			// drawJoint(body.getFootLeft());
-			// drawJoint(body.getFootRight());
-			// drawJoint(body.getHandLeft());
-			// drawJoint(body.getHandRight());
-			// drawJoint(body.getHead());
-			// drawJoint(body.getHipCenter());
-			// drawJoint(body.getHipLeft());
-			// drawJoint(body.getHipRight());
-			// drawJoint(body.getKneeLeft());
-			// drawJoint(body.getKneeRight());
-			// drawJoint(body.getShoulderCenter());
-			// drawJoint(body.getShoulderLeft());
-			// drawJoint(body.getShoulderRight());
-			// drawJoint(body.getSpine());
-			// drawJoint(body.getWristLeft());
-			// drawJoint(body.getWristRight());
-			// drawCentralPoint();
 			drawHead(body.getHead());
 			updateCoordLabel(body.getHead());
-		}
-	}
-
-	private void drawJoint(Joint joint) {
-		if (joint != null && graphics != null) {
-			int x = getXForGraph(joint);
-			int y = getYForGraph(joint);
-			graphics.drawOval(x, y, 5, 5);
 		}
 	}
 
@@ -121,10 +89,6 @@ public abstract class DrawPanel extends JPanel {
 			double z = (double) Math.round(joint.getPositionZ() * 100) / 100;
 			coordLabel.setText("X = " + x + ", Y = " + y + ", Z = " + z);
 		}
-	}
-
-	private void drawCentralPoint() {
-		graphics.drawOval(getWidth() / 2, getHeight() / 2, 10, 10);
 	}
 
 }

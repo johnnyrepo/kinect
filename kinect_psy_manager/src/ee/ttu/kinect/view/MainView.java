@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -34,15 +33,9 @@ public class MainView extends JFrame {
 	
 	private JFileChooser fileChooser;
 	
-	private JPanel buttonPanel;
-		
-	private JButton recordButton;
+	private ButtonPanel buttonPanel;
 	
-	private JButton playButton;
-	
-	private JButton stopRecordButton;
-
-	private JButton stopPlayButton;
+	private JPanel controlPanel;
 		
 	private JPanel drawPanel;
 	
@@ -68,16 +61,14 @@ public class MainView extends JFrame {
 		
 		fileChooser = new JFileChooser();
 		
-		buttonPanel = new JPanel();
-		buttonPanel.setSize(1200, 100);
-		recordButton = new JButton("Record");
-		stopRecordButton = new JButton("Stop Record");
-		playButton = new JButton("Play");
-		stopPlayButton = new JButton("Stop Play");
-		buttonPanel.add(recordButton);
-		buttonPanel.add(stopRecordButton);
-		buttonPanel.add(playButton);
-		buttonPanel.add(stopPlayButton);
+		controlPanel = new JPanel();
+		
+		buttonPanel = new ButtonPanel("Record / Play");
+				
+		markersPanel = new MarkersPanel();
+		
+		controlPanel.add(buttonPanel);
+		controlPanel.add(markersPanel);
 
 		drawPanel = new JPanel();
 		drawPanel.setSize(new Dimension(1200, 400));
@@ -92,9 +83,8 @@ public class MainView extends JFrame {
 		chartPanel = new ChartPanel();
 		chartPanel.setSize(1200, 300);
 		
-		markersPanel = new MarkersPanel();
 
-		setTitle("KinectManager v0.2");
+		setTitle("KinectManager v0.3");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -102,10 +92,9 @@ public class MainView extends JFrame {
 			System.exit(1);
 		}
 
-		getContentPane().add(buttonPanel, BorderLayout.NORTH);
+		getContentPane().add(controlPanel, BorderLayout.NORTH);
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
-		//getContentPane().add(chartPanel, BorderLayout.SOUTH);
-		getContentPane().add(markersPanel, BorderLayout.SOUTH);
+		getContentPane().add(chartPanel, BorderLayout.SOUTH);
 		
 		setSize(1200, 600);
 		setVisible(true);
@@ -136,19 +125,19 @@ public class MainView extends JFrame {
 	}
 
 	public void addListenerForStartRecord(ActionListener listener) {
-		recordButton.addActionListener(listener);
+		buttonPanel.addListenerForStartRecord(listener);
 	}
 
 	public void addListenerForStopRecord(ActionListener listener) {
-		stopRecordButton.addActionListener(listener);
+		buttonPanel.addListenerForStopRecord(listener);
 	}
 
 	public void addListenerForStartPlay(ActionListener listener) {
-		playButton.addActionListener(listener);
+		buttonPanel.addListenerForStartPlay(listener);
 	}
 
 	public void addListenerForStopPlay(ActionListener listener) {
-		stopPlayButton.addActionListener(listener);
+		buttonPanel.addListenerForStopPlay(listener);
 	}
 
 	public void showMessagePopup(String message) {

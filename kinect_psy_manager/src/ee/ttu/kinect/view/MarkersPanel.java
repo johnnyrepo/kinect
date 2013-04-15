@@ -4,7 +4,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 public class MarkersPanel extends JPanel {
@@ -22,7 +21,7 @@ public class MarkersPanel extends JPanel {
 	private JCheckBox marker5;
 
 	public MarkersPanel() {
-		Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, "Markers"));
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 

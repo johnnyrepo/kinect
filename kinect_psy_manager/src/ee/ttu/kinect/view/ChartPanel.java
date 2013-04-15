@@ -4,7 +4,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 public class ChartPanel extends JPanel {
@@ -18,7 +17,7 @@ public class ChartPanel extends JPanel {
 	private JCheckBox zCheckbox;
 
 	public ChartPanel() {
-		Border border = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, "Chart"));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		xCheckbox = new JCheckBox("X");
