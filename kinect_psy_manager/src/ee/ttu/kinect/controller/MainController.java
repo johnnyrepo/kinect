@@ -67,6 +67,10 @@ public class MainController {
 		view.redrawChart(body);
 	}
 
+	public void clearChart() {
+		view.clearChart();
+	}
+	
 	public void showMessagePopup(String message) {
 		view.showMessagePopup(message);
 	}

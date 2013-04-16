@@ -113,6 +113,7 @@ public class MainModel {
 
 	public void stopReading() {
 		doReadFromFile = false;
+		//controller.clearChart();
 	}
 
 	public void startSaving() {
@@ -193,10 +194,11 @@ public class MainModel {
 				}
 
 				if (input != null) {
-					if (body != null && body.isBodyReady()) {
+					if (body != null && body.isBodyReady() && body.isBodyChanged()) {
 						// Redraw the skeleton
 						controller.redrawSkeleton(body);
 						// Redraw chart
+						//System.out.println("before " + doReadFromFile + " " + body);
 						controller.redrawChart(body);
 					}
 

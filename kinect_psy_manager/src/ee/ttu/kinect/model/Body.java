@@ -664,6 +664,10 @@ public class Body implements Cloneable {
 				&& wristRight != null;
 	}
 	
+	public boolean isBodyChanged() {
+		return !this.equals(oldBody);
+	}
+	
 	public static String getHeader() {
 		StringBuffer line = new StringBuffer();
 		line = line.append("FrameId\t");
@@ -836,6 +840,319 @@ public class Body implements Cloneable {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		System.out.println("hoj " + (this == obj));
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Body other = (Body) obj;
+		if (ankleLeft == null) {
+			if (other.ankleLeft != null)
+				return false;
+		} else if (!ankleLeft.equals(other.ankleLeft))
+			return false;
+		if (Double.doubleToLongBits(ankleLeftXVelocity) != Double
+				.doubleToLongBits(other.ankleLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(ankleLeftYVelocity) != Double
+				.doubleToLongBits(other.ankleLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(ankleLeftZVelocity) != Double
+				.doubleToLongBits(other.ankleLeftZVelocity))
+			return false;
+		if (ankleRight == null) {
+			if (other.ankleRight != null)
+				return false;
+		} else if (!ankleRight.equals(other.ankleRight))
+			return false;
+		if (Double.doubleToLongBits(ankleRightXVelocity) != Double
+				.doubleToLongBits(other.ankleRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(ankleRightYVelocity) != Double
+				.doubleToLongBits(other.ankleRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(ankleRightZVelocity) != Double
+				.doubleToLongBits(other.ankleRightZVelocity))
+			return false;
+		if (elbowLeft == null) {
+			if (other.elbowLeft != null)
+				return false;
+		} else if (!elbowLeft.equals(other.elbowLeft))
+			return false;
+		if (Double.doubleToLongBits(elbowLeftXVelocity) != Double
+				.doubleToLongBits(other.elbowLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(elbowLeftYVelocity) != Double
+				.doubleToLongBits(other.elbowLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(elbowLeftZVelocity) != Double
+				.doubleToLongBits(other.elbowLeftZVelocity))
+			return false;
+		if (elbowRight == null) {
+			if (other.elbowRight != null)
+				return false;
+		} else if (!elbowRight.equals(other.elbowRight))
+			return false;
+		if (Double.doubleToLongBits(elbowRightXVelocity) != Double
+				.doubleToLongBits(other.elbowRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(elbowRightYVelocity) != Double
+				.doubleToLongBits(other.elbowRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(elbowRightZVelocity) != Double
+				.doubleToLongBits(other.elbowRightZVelocity))
+			return false;
+		if (footLeft == null) {
+			if (other.footLeft != null)
+				return false;
+		} else if (!footLeft.equals(other.footLeft))
+			return false;
+		if (Double.doubleToLongBits(footLeftXVelocity) != Double
+				.doubleToLongBits(other.footLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(footLeftYVelocity) != Double
+				.doubleToLongBits(other.footLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(footLeftZVelocity) != Double
+				.doubleToLongBits(other.footLeftZVelocity))
+			return false;
+		if (footRight == null) {
+			if (other.footRight != null)
+				return false;
+		} else if (!footRight.equals(other.footRight))
+			return false;
+		if (Double.doubleToLongBits(footRightXVelocity) != Double
+				.doubleToLongBits(other.footRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(footRightYVelocity) != Double
+				.doubleToLongBits(other.footRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(footRightZVelocity) != Double
+				.doubleToLongBits(other.footRightZVelocity))
+			return false;
+		if (frameNumber == null) {
+			if (other.frameNumber != null)
+				return false;
+		} else if (!frameNumber.equals(other.frameNumber))
+			return false;
+		if (handLeft == null) {
+			if (other.handLeft != null)
+				return false;
+		} else if (!handLeft.equals(other.handLeft))
+			return false;
+		if (Double.doubleToLongBits(handLeftXVelocity) != Double
+				.doubleToLongBits(other.handLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(handLeftYVelocity) != Double
+				.doubleToLongBits(other.handLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(handLeftZVelocity) != Double
+				.doubleToLongBits(other.handLeftZVelocity))
+			return false;
+		if (handRight == null) {
+			if (other.handRight != null)
+				return false;
+		} else if (!handRight.equals(other.handRight))
+			return false;
+		if (Double.doubleToLongBits(handRightXVelocity) != Double
+				.doubleToLongBits(other.handRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(handRightYVelocity) != Double
+				.doubleToLongBits(other.handRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(handRightZVelocity) != Double
+				.doubleToLongBits(other.handRightZVelocity))
+			return false;
+		if (head == null) {
+			if (other.head != null)
+				return false;
+		} else if (!head.equals(other.head))
+			return false;
+		if (Double.doubleToLongBits(headXVelocity) != Double
+				.doubleToLongBits(other.headXVelocity))
+			return false;
+		if (Double.doubleToLongBits(headYVelocity) != Double
+				.doubleToLongBits(other.headYVelocity))
+			return false;
+		if (Double.doubleToLongBits(headZVelocity) != Double
+				.doubleToLongBits(other.headZVelocity))
+			return false;
+		if (hipCenter == null) {
+			if (other.hipCenter != null)
+				return false;
+		} else if (!hipCenter.equals(other.hipCenter))
+			return false;
+		if (Double.doubleToLongBits(hipCenterXVelocity) != Double
+				.doubleToLongBits(other.hipCenterXVelocity))
+			return false;
+		if (Double.doubleToLongBits(hipCenterYVelocity) != Double
+				.doubleToLongBits(other.hipCenterYVelocity))
+			return false;
+		if (Double.doubleToLongBits(hipCenterZVelocity) != Double
+				.doubleToLongBits(other.hipCenterZVelocity))
+			return false;
+		if (hipLeft == null) {
+			if (other.hipLeft != null)
+				return false;
+		} else if (!hipLeft.equals(other.hipLeft))
+			return false;
+		if (Double.doubleToLongBits(hipLeftXVelocity) != Double
+				.doubleToLongBits(other.hipLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(hipLeftYVelocity) != Double
+				.doubleToLongBits(other.hipLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(hipLeftZVelocity) != Double
+				.doubleToLongBits(other.hipLeftZVelocity))
+			return false;
+		if (hipRight == null) {
+			if (other.hipRight != null)
+				return false;
+		} else if (!hipRight.equals(other.hipRight))
+			return false;
+		if (Double.doubleToLongBits(hipRightXVelocity) != Double
+				.doubleToLongBits(other.hipRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(hipRightYVelocity) != Double
+				.doubleToLongBits(other.hipRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(hipRightZVelocity) != Double
+				.doubleToLongBits(other.hipRightZVelocity))
+			return false;
+		if (kneeLeft == null) {
+			if (other.kneeLeft != null)
+				return false;
+		} else if (!kneeLeft.equals(other.kneeLeft))
+			return false;
+		if (Double.doubleToLongBits(kneeLeftXVelocity) != Double
+				.doubleToLongBits(other.kneeLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(kneeLeftYVelocity) != Double
+				.doubleToLongBits(other.kneeLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(kneeLeftZVelocity) != Double
+				.doubleToLongBits(other.kneeLeftZVelocity))
+			return false;
+		if (kneeRight == null) {
+			if (other.kneeRight != null)
+				return false;
+		} else if (!kneeRight.equals(other.kneeRight))
+			return false;
+		if (Double.doubleToLongBits(kneeRightXVelocity) != Double
+				.doubleToLongBits(other.kneeRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(kneeRightYVelocity) != Double
+				.doubleToLongBits(other.kneeRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(kneeRightZVelocity) != Double
+				.doubleToLongBits(other.kneeRightZVelocity))
+			return false;
+		if (oldBody == null) {
+			if (other.oldBody != null)
+				return false;
+		} else if (!oldBody.equals(other.oldBody))
+			return false;
+		if (shoulderCenter == null) {
+			if (other.shoulderCenter != null)
+				return false;
+		} else if (!shoulderCenter.equals(other.shoulderCenter))
+			return false;
+		if (Double.doubleToLongBits(shoulderCenterXVelocity) != Double
+				.doubleToLongBits(other.shoulderCenterXVelocity))
+			return false;
+		if (Double.doubleToLongBits(shoulderCenterYVelocity) != Double
+				.doubleToLongBits(other.shoulderCenterYVelocity))
+			return false;
+		if (Double.doubleToLongBits(shoulderCenterZVelocity) != Double
+				.doubleToLongBits(other.shoulderCenterZVelocity))
+			return false;
+		if (shoulderLeft == null) {
+			if (other.shoulderLeft != null)
+				return false;
+		} else if (!shoulderLeft.equals(other.shoulderLeft))
+			return false;
+		if (Double.doubleToLongBits(shoulderLeftXVelocity) != Double
+				.doubleToLongBits(other.shoulderLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(shoulderLeftYVelocity) != Double
+				.doubleToLongBits(other.shoulderLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(shoulderLeftZVelocity) != Double
+				.doubleToLongBits(other.shoulderLeftZVelocity))
+			return false;
+		if (shoulderRight == null) {
+			if (other.shoulderRight != null)
+				return false;
+		} else if (!shoulderRight.equals(other.shoulderRight))
+			return false;
+		if (Double.doubleToLongBits(shoulderRightXVelocity) != Double
+				.doubleToLongBits(other.shoulderRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(shoulderRightYVelocity) != Double
+				.doubleToLongBits(other.shoulderRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(shoulderRightZVelocity) != Double
+				.doubleToLongBits(other.shoulderRightZVelocity))
+			return false;
+		if (spine == null) {
+			if (other.spine != null)
+				return false;
+		} else if (!spine.equals(other.spine))
+			return false;
+		if (Double.doubleToLongBits(spineXVelocity) != Double
+				.doubleToLongBits(other.spineXVelocity))
+			return false;
+		if (Double.doubleToLongBits(spineYVelocity) != Double
+				.doubleToLongBits(other.spineYVelocity))
+			return false;
+		if (Double.doubleToLongBits(spineZVelocity) != Double
+				.doubleToLongBits(other.spineZVelocity))
+			return false;
+		if (timestamp == null) {
+			if (other.timestamp != null)
+				return false;
+		} else if (!timestamp.equals(other.timestamp))
+			return false;
+		if (veryFirstTimestamp == null) {
+			if (other.veryFirstTimestamp != null)
+				return false;
+		} else if (!veryFirstTimestamp.equals(other.veryFirstTimestamp))
+			return false;
+		if (wristLeft == null) {
+			if (other.wristLeft != null)
+				return false;
+		} else if (!wristLeft.equals(other.wristLeft))
+			return false;
+		if (Double.doubleToLongBits(wristLeftXVelocity) != Double
+				.doubleToLongBits(other.wristLeftXVelocity))
+			return false;
+		if (Double.doubleToLongBits(wristLeftYVelocity) != Double
+				.doubleToLongBits(other.wristLeftYVelocity))
+			return false;
+		if (Double.doubleToLongBits(wristLeftZVelocity) != Double
+				.doubleToLongBits(other.wristLeftZVelocity))
+			return false;
+		if (wristRight == null) {
+			if (other.wristRight != null)
+				return false;
+		} else if (!wristRight.equals(other.wristRight))
+			return false;
+		if (Double.doubleToLongBits(wristRightXVelocity) != Double
+				.doubleToLongBits(other.wristRightXVelocity))
+			return false;
+		if (Double.doubleToLongBits(wristRightYVelocity) != Double
+				.doubleToLongBits(other.wristRightYVelocity))
+			return false;
+		if (Double.doubleToLongBits(wristRightZVelocity) != Double
+				.doubleToLongBits(other.wristRightZVelocity))
+			return false;
+		return true;
 	}
 	
 }

@@ -114,6 +114,10 @@ public class MainView extends JFrame {
 		chartPanel.updateChart(body);
 	}
 
+	public void clearChart() {
+		chartPanel.clearChart();
+	}
+	
 	public void addListenerForMenuOpen(final ActionListener listener) {
 		menuItemOpen.addActionListener(new ActionListener() {
 			@Override
