@@ -49,6 +49,8 @@ public class JointChartPanel extends JPanel {
 	private TimeSeries seriesVelocityX = new TimeSeries("Velocity X");
 	private TimeSeries seriesVelocityY = new TimeSeries("Velocity Y");
 	private TimeSeries seriesVelocityZ = new TimeSeries("Velocity Z");
+	
+	private JointType selectedJoint; 
 
 	public JointChartPanel() {
 		Border border = BorderFactory.createEtchedBorder();
@@ -64,6 +66,8 @@ public class JointChartPanel extends JPanel {
 		zCheckbox = new JCheckBox("Z");
 		velocityCheckbox = new JCheckBox("Velocity");
 		accelerationCheckbox = new JCheckBox("Acceleration");
+
+		selectedJoint = (JointType) jointCombo.getSelectedItem();
 		
 		// listeners for controls
 		ChartControlChangeListener chartControlListener = new ChartControlChangeListener();
@@ -100,24 +104,41 @@ public class JointChartPanel extends JPanel {
 	private class ChartControlChangeListener implements ActionListener {
 		@Override
 		public synchronized void actionPerformed(ActionEvent e) {
+			if (!jointCombo.getSelectedItem().equals(selectedJoint)) {
+				selectedJoint = (JointType) jointCombo.getSelectedItem();
+				clearChart();
+			}
+			
 			if (velocityCheckbox.isSelected()) {
-				if (xCheckbox.isSelected() && !dataset.getSeries().contains(seriesVelocityX)) {
-					dataset.addSeries(seriesVelocityX);
+				if (xCheckbox.isSelected()) {
+					if (!dataset.getSeries().contains(seriesVelocityX)) {
+						dataset.addSeries(seriesVelocityX);
+					}
 				} else {
-					//velocitySeriesX.clear();
-					dataset.removeSeries(seriesVelocityX);
+					if (dataset.getSeries().contains(seriesVelocityX)) {
+						//velocitySeriesX.clear();
+						dataset.removeSeries(seriesVelocityX);
+					}
 				}
-				if (yCheckbox.isSelected() && !dataset.getSeries().contains(seriesVelocityY)) {
-					dataset.addSeries(seriesVelocityY);
+				if (yCheckbox.isSelected()) {
+					if (!dataset.getSeries().contains(seriesVelocityY)) {
+						dataset.addSeries(seriesVelocityY);
+					}
 				} else {
-					//velocitySeriesY.clear();
-					dataset.removeSeries(seriesVelocityY);
+					if (dataset.getSeries().contains(seriesVelocityY)) {
+						//velocitySeriesY.clear();
+						dataset.removeSeries(seriesVelocityY);
+					}
 				}
-				if (zCheckbox.isSelected() && !dataset.getSeries().contains(seriesVelocityZ)) {
-					dataset.addSeries(seriesVelocityZ);
+				if (zCheckbox.isSelected()) {
+					if (!dataset.getSeries().contains(seriesVelocityZ)) {
+						dataset.addSeries(seriesVelocityZ);
+					}
 				} else {
-					//velocitySeriesZ.clear();
-					dataset.removeSeries(seriesVelocityZ);
+					if (dataset.getSeries().contains(seriesVelocityZ)) {
+						//velocitySeriesZ.clear();
+						dataset.removeSeries(seriesVelocityZ);
+					}
 				}
 			} else {
 				dataset.removeSeries(seriesVelocityX);
@@ -200,7 +221,9 @@ public class JointChartPanel extends JPanel {
 	}
 	
 	public void clearChart() {
-		dataset.getSeries().clear();
+		seriesVelocityX.clear();
+		seriesVelocityY.clear();
+		seriesVelocityZ.clear();
 		dataset.removeAllSeries();
 	}
 

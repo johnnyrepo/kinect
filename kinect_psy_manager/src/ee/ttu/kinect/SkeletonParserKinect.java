@@ -27,12 +27,12 @@ public class SkeletonParserKinect implements SkeletonParser {
 	private XMLInputFactory inputFactory;
 	
 
-	private int oldNumSkeletons = -1;
+	//private int oldNumSkeletons = -1;
 	private long frame = -1;
 	private long timestamp = -1;
 
 	public void reset() {
-		this.oldNumSkeletons = -1;
+		//this.oldNumSkeletons = -1;
 		this.frame = -1;
 	}
 
@@ -62,7 +62,8 @@ public class SkeletonParserKinect implements SkeletonParser {
 									//logger.info("Found skeleton");
 									streamReader.nextTag(); // moving to 'trackingId' tag
 									if (streamReader.getLocalName().equals("trackingId")) {
-										String trackingId = streamReader.getElementText();
+										//String trackingId = 
+										streamReader.getElementText(); // trackingId
 										while (streamReader.hasNext()) {
 											streamReader.nextTag(); // moving to 'joint' tag
 											if (streamReader.getLocalName().equals("joint")) {
