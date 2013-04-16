@@ -193,13 +193,17 @@ public class MainModel {
 				}
 
 				if (input != null) {
-					// Redraw the skeleton
-					controller.redrawSkeleton(body);
+					if (body != null && body.isBodyReady()) {
+						// Redraw the skeleton
+						controller.redrawSkeleton(body);
+						// Redraw chart
+						controller.redrawChart(body);
+					}
 
 					// Save skeleton
 					if (doSaveToFile) {
 						try {
-							fileWorker.addToSave(body.toString() + getMarkers());
+							fileWorker.addToSave(body.getJointString() + body.getVelocityString() + getMarkers());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -217,7 +221,7 @@ public class MainModel {
 			}
 
 		}
-		
+
 		private String getMarkers() {
 			StringBuffer markers = new StringBuffer();
 			boolean[] markersBool = controller.getMarkersState();

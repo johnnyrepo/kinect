@@ -107,6 +107,9 @@ public class SkeletonParserKinect implements SkeletonParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// trigger BodyUpdated action
+		body.updated();
 	}
 
 	private Joint parseJoint(String jointId, String positionX, String positionY, String positionZ) {

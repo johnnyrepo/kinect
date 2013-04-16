@@ -62,6 +62,10 @@ public class MainController {
 	public void redrawSkeleton(Body body) {
 		view.redrawSkeleton(body);
 	}
+	
+	public void redrawChart(Body body) {
+		view.redrawChart(body);
+	}
 
 	public void showMessagePopup(String message) {
 		view.showMessagePopup(message);
@@ -74,6 +78,5 @@ public class MainController {
 	public static void main(String... args) {
 		new MainController();
 	}
-
 
 }

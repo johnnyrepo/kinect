@@ -36,6 +36,9 @@ public class SkeletonParserFile implements SkeletonParser {
 				parseJoint(body, JointIndexInFile.getValueOf(jointsCount), coordX, coordY, coordZ);
 				jointsCount++;
 			}
+			
+			// trigger BodyUpdated action
+			body.updated();
 		}
 	}
 	

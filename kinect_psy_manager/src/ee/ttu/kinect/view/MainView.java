@@ -45,7 +45,7 @@ public class MainView extends JFrame {
 
 	private UpDrawPanel upDrawPanel;
 
-	private ChartPanel chartPanel;
+	private JointChartPanel chartPanel;
 	
 	private MarkersPanel markersPanel;
 	
@@ -80,11 +80,11 @@ public class MainView extends JFrame {
 		drawPanel.add(sideDrawPanel);
 		drawPanel.add(upDrawPanel);
 
-		chartPanel = new ChartPanel();
+		chartPanel = new JointChartPanel();
 		chartPanel.setSize(1200, 300);
 		
 
-		setTitle("KinectManager v0.3");
+		setTitle("KinectManager v0.4");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -108,6 +108,10 @@ public class MainView extends JFrame {
 		frontDrawPanel.redrawSkeleton(body);
 		sideDrawPanel.redrawSkeleton(body);
 		upDrawPanel.redrawSkeleton(body);
+	}
+	
+	public void redrawChart(Body body) {
+		chartPanel.updateChart(body);
 	}
 
 	public void addListenerForMenuOpen(final ActionListener listener) {

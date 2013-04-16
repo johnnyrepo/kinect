@@ -46,9 +46,27 @@ public class Joint {
 	
 	public static String getHeader(JointType jointType) {
 		StringBuffer line = new StringBuffer();
-		line = line.append(jointType).append("X").append("\t");
-		line = line.append(jointType).append("Y").append("\t");
-		line = line.append(jointType).append("Z").append("\t");
+		line = line.append(jointType).append("X\t");
+		line = line.append(jointType).append("Y\t");
+		line = line.append(jointType).append("Z\t");
+		
+		return line.toString();
+	}
+	
+	public static String getVelocityHeader(JointType jointType) {
+		StringBuffer line = new StringBuffer();
+		line = line.append(jointType).append("XVelocity\t");
+		line = line.append(jointType).append("YVelocity\t");
+		line = line.append(jointType).append("ZVelocity\t");
+		
+		return line.toString();
+	}
+	
+	public static String getAccelerationHeader(JointType jointType) {
+		StringBuffer line = new StringBuffer();
+		line = line.append(jointType).append("XAcceleration\t");
+		line = line.append(jointType).append("YAcceleration\t");
+		line = line.append(jointType).append("ZAcceleration\t");
 		
 		return line.toString();
 	}
