@@ -149,7 +149,10 @@ public class JointChartPanel extends JPanel {
 	}
 	
 	public void updateChart(Body body) {
-		System.out.println("update: " + body);
+		if (!velocityCheckbox.isSelected()) {
+			return;
+		}
+		
 		JointType selectedType = (JointType) jointCombo.getSelectedItem();
 		switch (selectedType) {
 		case ANKLE_LEFT:

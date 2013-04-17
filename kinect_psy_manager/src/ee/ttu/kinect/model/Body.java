@@ -844,7 +844,6 @@ public class Body implements Cloneable {
 
 	@Override
 	public boolean equals(Object obj) {
-		System.out.println("hoj " + (this == obj));
 		if (this == obj)
 			return true;
 		if (obj == null)
