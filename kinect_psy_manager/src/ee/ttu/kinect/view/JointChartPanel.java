@@ -219,9 +219,9 @@ public class JointChartPanel extends JPanel {
 	}
 
 	private void updateVelocity(long timestamp, double velocityX, double velocityY, double velocityZ) {
-		seriesVelocityX.add(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityX));
-		seriesVelocityY.add(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityY));
-		seriesVelocityZ.add(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityZ));
+		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityX));
+		seriesVelocityY.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityY));
+		seriesVelocityZ.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityZ));
 	}
 	
 	public void clearChart() {
