@@ -20,6 +20,8 @@ public class MainController {
 
 		view = new MainView();
 
+		//SwingUtilities.invokeLater(view);
+		
 		view.addListenerForMenuOpen(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -45,17 +47,17 @@ public class MainController {
 		view.addListenerForStartPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.startReading();
+				model.playFile();
+				view.clearChart();
 			}
 		});
 		view.addListenerForStopPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.stopReading();
+				model.stopPlay();
 			}
 		});
 
-		model.init();
 		model.doStart();
 	}
 

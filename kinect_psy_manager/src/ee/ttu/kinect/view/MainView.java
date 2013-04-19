@@ -50,6 +50,10 @@ public class MainView extends JFrame {
 	private MarkersPanel markersPanel;
 	
 	public MainView() {
+		buildUI();
+	}
+	
+	private void buildUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		menuBar = new JMenuBar();
@@ -84,7 +88,7 @@ public class MainView extends JFrame {
 		chartPanel.setSize(1200, 300);
 		
 
-		setTitle("KinectManager v0.4");
+		setTitle("KinectManager v0.5");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

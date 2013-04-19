@@ -30,11 +30,12 @@ public abstract class DrawPanel extends JPanel {
 
 	public void redrawSkeleton(Body body) {
 		this.body = body;
+		
 		repaint();
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		super.paint(g);
 
 		if (body != null && body.isBodyReady()) {
