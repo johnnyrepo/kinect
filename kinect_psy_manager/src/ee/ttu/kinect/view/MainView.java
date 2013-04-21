@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -35,6 +36,10 @@ public class MainView extends JFrame {
 	
 	private ButtonPanel buttonPanel;
 	
+	private MarkersPanel markersPanel;
+	
+	private JCheckBox seatedModeCheckbox;
+	
 	private JPanel controlPanel;
 		
 	private JPanel drawPanel;
@@ -47,13 +52,8 @@ public class MainView extends JFrame {
 
 	private JointChartPanel chartPanel;
 	
-	private MarkersPanel markersPanel;
 	
 	public MainView() {
-		buildUI();
-	}
-	
-	private void buildUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		menuBar = new JMenuBar();
@@ -71,8 +71,11 @@ public class MainView extends JFrame {
 				
 		markersPanel = new MarkersPanel();
 		
+		seatedModeCheckbox = new JCheckBox("Seated mode ON");
+		
 		controlPanel.add(buttonPanel);
 		controlPanel.add(markersPanel);
+		controlPanel.add(seatedModeCheckbox);
 
 		drawPanel = new JPanel();
 		drawPanel.setSize(new Dimension(1200, 400));
@@ -88,7 +91,7 @@ public class MainView extends JFrame {
 		chartPanel.setSize(1200, 300);
 		
 
-		setTitle("KinectManager v0.5");
+		setTitle("KinectManager v0.6");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -102,6 +105,10 @@ public class MainView extends JFrame {
 		
 		setSize(1200, 600);
 		setVisible(true);
+	}
+	
+	public void setSensorOn(boolean sensorOn) {
+		buttonPanel.setSensorOn(sensorOn);
 	}
 
 	public File getSelectedFile() {
@@ -134,6 +141,14 @@ public class MainView extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public void addListenerForSeatedModeCheckbox(ActionListener listener) {
+		seatedModeCheckbox.addActionListener(listener);
+	}
+	
+	public void addListenerForSensorOn(ActionListener listener) {
+		buttonPanel.addListenerForSensorOn(listener);
 	}
 
 	public void addListenerForStartRecord(ActionListener listener) {

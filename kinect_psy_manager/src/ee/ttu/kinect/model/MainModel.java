@@ -20,34 +20,13 @@ public class MainModel {
 		this.sensorRunner = new SensorRunner(controller);
 		this.fileRunner = new FileRunner(controller);
 	}
-	
-	public void doStart() {
-		logger.info("Starting MainModel");
-		
-		// starting sensor skeleton tracking
-		sensorRunner.start();
-		
-//		this.doRun = true;
-//		kinectThread = new KinectThread();
-//		kinectThread.start();
-	}
-
-	public void doStop() {
-		logger.info("Shutdown requested");
-		//String msg = this.kinectSensorProxy.stop();
-
-		//logger.info(msg);
-	}
 
 	public void readFile(File file) {
 		fileRunner.readFile(file);
 	}
 	
 	public void playFile() {
-		if (sensorRunner.isRunning()) {
-			sensorRunner.doStop();
-			//sensorRunner = new SensorRunner(controller);
-		}
+		stopSensor();
 		
 		if (!fileRunner.isRunning()) {
 			fileRunner.start();
@@ -56,32 +35,54 @@ public class MainModel {
 
 	public void stopPlay() {
 		if (fileRunner.isRunning()) {
-			fileRunner.doStop();
+			fileRunner.stop();
 			//fileRunner = new FileRunner(controller);
 		}
 		
-		if (!sensorRunner.isRunning()) {
-			sensorRunner.start();
-		}
+		startSensor();
 		//controller.clearChart();
 	}
 
-	public void startSaving() {
+	public void startRecord() {
 		if (fileRunner.isRunning()) {
-			fileRunner.doStop();
+			fileRunner.stop();
 			//fileRunner = new FileRunner(controller);
 		}
 		
-		sensorRunner.startSaving();
+		sensorRunner.startRecord();
 	}
 
-	public void stopSaving() {
+	public void stopRecord() {
 		if (fileRunner.isRunning()) {
-			fileRunner.doStop();
+			fileRunner.stop();
 			//fileRunner = new FileRunner(controller);
 		}
 		
-		sensorRunner.stopSaving();
+		sensorRunner.stopRecord();
+	}
+	
+	public void startSensor() {
+		if (!sensorRunner.isRunning()) {
+			sensorRunner.start();
+		}
+	}
+	
+	public void stopSensor() {
+		if (sensorRunner.isRunning()) {
+			sensorRunner.stop();
+		}
+	}
+	
+	public boolean isSensorRunning() {
+		return sensorRunner.isRunning();
 	}
 
+	public void setSeatedSkeletonTrackingMode() {
+		sensorRunner.setSeatedSkeletonTrackingMode();
+	}
+	
+	public void setDefaultSkeletonTrackingMode() {
+		sensorRunner.setDefaultSkeletonTrackingMode();
+	}
+	
 }

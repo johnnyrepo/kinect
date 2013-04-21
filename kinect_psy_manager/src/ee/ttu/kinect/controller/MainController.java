@@ -3,6 +3,9 @@ package ee.ttu.kinect.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.logging.Logger;
+
+import javax.swing.JCheckBox;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.MainModel;
@@ -31,17 +34,16 @@ public class MainController {
 				}
 			}
 		});
-		
 		view.addListenerForStartRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.startSaving();
+				model.startRecord();
 			}
 		});
 		view.addListenerForStopRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.stopSaving();
+				model.stopRecord();
 			}
 		});
 		view.addListenerForStartPlay(new ActionListener() {
@@ -57,8 +59,31 @@ public class MainController {
 				model.stopPlay();
 			}
 		});
+		view.addListenerForSensorOn(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean sensorOn = ((JCheckBox) e.getSource()).isSelected();
+				Logger.getLogger(getClass().getName()).info("sensor on canged: " + sensorOn);
+				if (!sensorOn) {
+					model.stopSensor();
+				} else {
+					model.startSensor();
+				}
+			}
+		});
+		view.addListenerForSeatedModeCheckbox(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean seatedMode = ((JCheckBox) e.getSource()).isSelected();
+				if (!seatedMode) {
+					model.setDefaultSkeletonTrackingMode();
+				} else {
+					model.setSeatedSkeletonTrackingMode();
+				}
+			}
+		});
 
-		model.doStart();
+		model.startSensor();
 	}
 
 	public void redrawSkeleton(Body body) {
@@ -68,10 +93,6 @@ public class MainController {
 	public void redrawChart(Body body) {
 		view.redrawChart(body);
 	}
-
-	public void clearChart() {
-		view.clearChart();
-	}
 	
 	public void showMessagePopup(String message) {
 		view.showMessagePopup(message);
@@ -79,6 +100,10 @@ public class MainController {
 	
 	public boolean[] getMarkersState() {
 		return view.getMarkersState();
+	}
+	
+	public void setSensorOn(boolean sensorOn) {
+		view.setSensorOn(sensorOn);
 	}
 	
 	public static void main(String... args) {
