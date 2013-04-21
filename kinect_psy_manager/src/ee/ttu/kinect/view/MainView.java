@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -38,7 +37,7 @@ public class MainView extends JFrame {
 	
 	private MarkersPanel markersPanel;
 	
-	private JCheckBox seatedModeCheckbox;
+	private SeatedModePanel seatedModePanel;
 	
 	private JPanel controlPanel;
 		
@@ -71,11 +70,11 @@ public class MainView extends JFrame {
 				
 		markersPanel = new MarkersPanel();
 		
-		seatedModeCheckbox = new JCheckBox("Seated mode ON");
+		seatedModePanel = new SeatedModePanel();
 		
 		controlPanel.add(buttonPanel);
 		controlPanel.add(markersPanel);
-		controlPanel.add(seatedModeCheckbox);
+		controlPanel.add(seatedModePanel);
 
 		drawPanel = new JPanel();
 		drawPanel.setSize(new Dimension(1200, 400));
@@ -137,6 +136,7 @@ public class MainView extends JFrame {
 				int res = fileChooser.showDialog(null, null);
 				if (res == JFileChooser.APPROVE_OPTION) {
 					selectedFile = fileChooser.getSelectedFile();
+					buttonPanel.updateSelectedFileLabel(selectedFile.getName());
 					listener.actionPerformed(e);
 				}
 			}
@@ -144,7 +144,7 @@ public class MainView extends JFrame {
 	}
 	
 	public void addListenerForSeatedModeCheckbox(ActionListener listener) {
-		seatedModeCheckbox.addActionListener(listener);
+		seatedModePanel.addLsitenerForCheckbox(listener);
 	}
 	
 	public void addListenerForSensorOn(ActionListener listener) {

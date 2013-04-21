@@ -1,22 +1,16 @@
 package ee.ttu.kinect.model;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import ee.ttu.kinect.controller.MainController;
 
 public class MainModel {
-
-	private final Logger logger = Logger.getLogger(this.getClass().getName());
-
-	private MainController controller;
 	
 	private SensorRunner sensorRunner;
 	
 	private FileRunner fileRunner;
 		
 	public MainModel(MainController controller) {
-		this.controller = controller;
 		this.sensorRunner = new SensorRunner(controller);
 		this.fileRunner = new FileRunner(controller);
 	}
@@ -36,7 +30,6 @@ public class MainModel {
 	public void stopPlay() {
 		if (fileRunner.isRunning()) {
 			fileRunner.stop();
-			//fileRunner = new FileRunner(controller);
 		}
 		
 		startSensor();
@@ -46,7 +39,6 @@ public class MainModel {
 	public void startRecord() {
 		if (fileRunner.isRunning()) {
 			fileRunner.stop();
-			//fileRunner = new FileRunner(controller);
 		}
 		
 		sensorRunner.startRecord();
@@ -55,7 +47,6 @@ public class MainModel {
 	public void stopRecord() {
 		if (fileRunner.isRunning()) {
 			fileRunner.stop();
-			//fileRunner = new FileRunner(controller);
 		}
 		
 		sensorRunner.stopRecord();

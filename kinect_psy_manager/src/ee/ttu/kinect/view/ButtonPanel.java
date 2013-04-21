@@ -6,12 +6,15 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 public class ButtonPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	private JLabel selectedFileLabel;
 	
 	private JButton recordButton;
 	
@@ -27,12 +30,14 @@ public class ButtonPanel extends JPanel {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, title));
 		
+		selectedFileLabel = new JLabel();
 		recordButton = new JButton("Record");
 		stopRecordButton = new JButton("Stop Record");
 		playButton = new JButton("Play");
 		stopPlayButton = new JButton("Stop Play");
 		sensorOnCheckbox = new JCheckBox("Sensor ON");
 		
+		add(selectedFileLabel);
 		add(sensorOnCheckbox);
 		add(recordButton);
 		add(stopRecordButton);
@@ -46,6 +51,10 @@ public class ButtonPanel extends JPanel {
 		Logger logger = Logger.getLogger(getClass().getName());
 		logger.info("sensor on: " + sensorRunning);
 		sensorOnCheckbox.setSelected(sensorRunning);		
+	}
+	
+	public void updateSelectedFileLabel(String name) {
+		selectedFileLabel.setText(name);
 	}
 	
 	public void addListenerForSensorOn(ActionListener lsitener) {
