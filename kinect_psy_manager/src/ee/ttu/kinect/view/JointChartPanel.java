@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -19,9 +18,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.FixedMillisecond;
-import org.jfree.data.time.Hour;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
@@ -161,7 +157,7 @@ public class JointChartPanel extends JPanel {
 		}	
 	}
 	
-	public void updateChart(Body body) {
+	public void updateChart(Body body, boolean seatedMode) {
 		if (!velocityCheckbox.isSelected()) {
 			return;
 		}
@@ -175,10 +171,14 @@ public class JointChartPanel extends JPanel {
 			updateVelocity(body.getTimestamp(), body.getAnkleRightXVelocity(), body.getAnkleRightYVelocity(), body.getAnkleRightZVelocity());
 			break;
 		case ELBOW_LEFT:
-			updateVelocity(body.getTimestamp(), body.getElbowLeftXVelocity(), body.getElbowLeftYVelocity(), body.getElbowLeftZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getElbowLeftXVelocity(), body.getElbowLeftYVelocity(), body.getElbowLeftZVelocity());
+			}
 			break;
 		case ELBOW_RIGHT:
-			updateVelocity(body.getTimestamp(), body.getElbowRightXVelocity(), body.getElbowRightYVelocity(), body.getElbowRightZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getElbowRightXVelocity(), body.getElbowRightYVelocity(), body.getElbowRightZVelocity());
+			}
 			break;
 		case FOOT_LEFT:
 			updateVelocity(body.getTimestamp(), body.getFootLeftXVelocity(), body.getFootLeftYVelocity(), body.getFootLeftZVelocity());
@@ -187,13 +187,19 @@ public class JointChartPanel extends JPanel {
 			updateVelocity(body.getTimestamp(), body.getFootRightXVelocity(), body.getFootRightYVelocity(), body.getFootRightZVelocity());
 			break;
 		case HAND_LEFT:
-			updateVelocity(body.getTimestamp(), body.getHandLeftXVelocity(), body.getHandLeftXVelocity(), body.getHandLeftXVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getHandLeftXVelocity(), body.getHandLeftXVelocity(), body.getHandLeftXVelocity());
+			}
 			break;
 		case HAND_RIGHT:
-			updateVelocity(body.getTimestamp(), body.getHandRightXVelocity(), body.getHandRightYVelocity(), body.getHandRightZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getHandRightXVelocity(), body.getHandRightYVelocity(), body.getHandRightZVelocity());
+			}
 			break;
 		case HEAD:
-			updateVelocity(body.getTimestamp(), body.getHeadXVelocity(), body.getHeadXVelocity(), body.getHeadXVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getHeadXVelocity(), body.getHeadXVelocity(), body.getHeadXVelocity());
+			}
 			break;
 		case HIP_CENTER:
 			updateVelocity(body.getTimestamp(), body.getHipCenterXVelocity(), body.getHipCenterXVelocity(), body.getHipCenterZVelocity());
@@ -211,22 +217,32 @@ public class JointChartPanel extends JPanel {
 			updateVelocity(body.getTimestamp(), body.getKneeRightXVelocity(), body.getKneeRightYVelocity(), body.getKneeRightZVelocity());
 			break;
 		case SHOULDER_CENTER:
-			updateVelocity(body.getTimestamp(), body.getShoulderCenterXVelocity(), body.getShoulderCenterYVelocity(), body.getShoulderCenterZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getShoulderCenterXVelocity(), body.getShoulderCenterYVelocity(), body.getShoulderCenterZVelocity());
+			}	
 			break;
 		case SHOULDER_LEFT:
-			updateVelocity(body.getTimestamp(), body.getShoulderLeftXVelocity(), body.getShoulderLeftYVelocity(), body.getShoulderLeftZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getShoulderLeftXVelocity(), body.getShoulderLeftYVelocity(), body.getShoulderLeftZVelocity());
+			}
 			break;
 		case SHOULDER_RIGHT:
-			updateVelocity(body.getTimestamp(), body.getShoulderRightXVelocity(), body.getShoulderRightYVelocity(), body.getShoulderRightZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getShoulderRightXVelocity(), body.getShoulderRightYVelocity(), body.getShoulderRightZVelocity());
+			}
 			break;
 		case SPINE:
 			updateVelocity(body.getTimestamp(), body.getSpineXVelocity(), body.getSpineYVelocity(), body.getSpineZVelocity());
 			break;
 		case WRIST_LEFT:
-			updateVelocity(body.getTimestamp(), body.getWristLeftXVelocity(), body.getWristLeftYVelocity(), body.getWristLeftZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getWristLeftXVelocity(), body.getWristLeftYVelocity(), body.getWristLeftZVelocity());
+			}
 			break;
 		case WRIST_RIGHT:
-			updateVelocity(body.getTimestamp(), body.getWristRightXVelocity(), body.getWristRightYVelocity(), body.getWristRightZVelocity());
+			if (seatedMode) {
+				updateVelocity(body.getTimestamp(), body.getWristRightXVelocity(), body.getWristRightYVelocity(), body.getWristRightZVelocity());
+			}
 			break;
 		}
 	}

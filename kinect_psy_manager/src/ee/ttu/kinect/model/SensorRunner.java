@@ -15,6 +15,8 @@ public class SensorRunner extends Runner {
 	private KinectSensorProxy kinectSensorProxy;
 
 	private SkeletonParserKinect skeletonParserKinect;
+	
+	private boolean seatedSkeletonTrackingMode = false;
 
 	public SensorRunner(MainController controller) {
 		super(controller);
@@ -137,13 +139,20 @@ public class SensorRunner extends Runner {
 	}
 
 	public void setSeatedSkeletonTrackingMode() {
+		seatedSkeletonTrackingMode = true;
 		String msg = kinectSensorProxy.setSeatedTrackingMode();
 		logger.info(msg);
 	}
 
 	public void setDefaultSkeletonTrackingMode() {
+		seatedSkeletonTrackingMode = false;
 		String msg = kinectSensorProxy.setDefaultTrackingMode();
 		logger.info(msg);
 	}
 
+	
+	public boolean isSeatedSkeletonTrackingMode() {
+		return seatedSkeletonTrackingMode;
+	}
+	
 }

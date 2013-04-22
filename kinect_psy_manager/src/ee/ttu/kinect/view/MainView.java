@@ -114,14 +114,14 @@ public class MainView extends JFrame {
 		return selectedFile;
 	}
 	
-	public void redrawSkeleton(Body body) {
-		frontDrawPanel.redrawSkeleton(body);
-		sideDrawPanel.redrawSkeleton(body);
-		upDrawPanel.redrawSkeleton(body);
+	public void redrawSkeleton(Body body, boolean seatedMode) {
+		frontDrawPanel.redrawSkeleton(body, seatedMode);
+		sideDrawPanel.redrawSkeleton(body, seatedMode);
+		upDrawPanel.redrawSkeleton(body, seatedMode);
 	}
 	
-	public void redrawChart(Body body) {
-		chartPanel.updateChart(body);
+	public void redrawChart(Body body, boolean seatedMode) {
+		chartPanel.updateChart(body, seatedMode);
 	}
 
 	public void clearChart() {

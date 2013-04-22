@@ -87,11 +87,11 @@ public class MainController {
 	}
 
 	public void redrawSkeleton(Body body) {
-		view.redrawSkeleton(body);
+		view.redrawSkeleton(body, model.isSeatedSkeletonTrackingMode());
 	}
 	
 	public void redrawChart(Body body) {
-		view.redrawChart(body);
+		view.redrawChart(body, model.isSeatedSkeletonTrackingMode());
 	}
 	
 	public void showMessagePopup(String message) {

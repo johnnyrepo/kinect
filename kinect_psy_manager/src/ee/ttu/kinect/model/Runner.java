@@ -18,17 +18,18 @@ public abstract class Runner {
 	protected Body body;
 
 	protected FileWorker fileWorker;
-	
+
 	private Worker worker;
 
 	private boolean running = false;
 
+	
 	public Runner(MainController controller) {
 		this.controller = controller;
 		this.body = new Body();
 		this.fileWorker = new FileWorker();
 	}
-	
+
 	public synchronized void start() {
 		logger.info("Starting " + getClass().getName());
 		running = true;
@@ -44,7 +45,7 @@ public abstract class Runner {
 	public boolean isRunning() {
 		return running;
 	}
-	
+
 	protected abstract String getSkeletonData();
 
 	protected abstract void parseSkeleton(String input);
@@ -55,7 +56,8 @@ public abstract class Runner {
 
 		@Override
 		public Void doInBackground() {
-			//logger.info("Running: " + getClass().getName() + " " + isCancelled());
+			// logger.info("Running: " + getClass().getName() + " " +
+			// isCancelled());
 			while (running) {
 				// get data
 				String input = null;
@@ -65,7 +67,8 @@ public abstract class Runner {
 				}
 
 				if (input != null) {
-					if (body != null && body.isBodyReady() && body.isBodyChanged()) {
+					if (body != null && body.isBodyReady()
+							&& body.isBodyChanged()) {
 						try {
 							Body clone = body.clone();
 							publish(clone);
@@ -84,13 +87,14 @@ public abstract class Runner {
 					logger.info(e.getLocalizedMessage());
 				}
 			}
-			
+
 			return null;
 		}
-		
+
 		@Override
 		protected void process(List<Body> chunks) {
-			//logger.info("processing: " + getClass().getName() + " " + chunks);
+			// logger.info("processing: " + getClass().getName() + " " +
+			// chunks);
 			for (Body chunk : chunks) {
 				// Redraw the skeleton
 				controller.redrawSkeleton(chunk);
@@ -98,12 +102,12 @@ public abstract class Runner {
 				controller.redrawChart(chunk);
 			}
 		}
-		
+
 		@Override
 		protected void done() {
 			logger.info(getClass().getName() + " sucessfully stopped");
 		}
-		
+
 	}
-	
+
 }

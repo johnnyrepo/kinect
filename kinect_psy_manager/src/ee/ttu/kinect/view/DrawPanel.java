@@ -17,9 +17,11 @@ public abstract class DrawPanel extends JPanel {
 
 	protected Graphics2D graphics;
 
+	private JLabel coordLabel;
+
 	private Body body;
 
-	private JLabel coordLabel;
+	private boolean seatedMode;
 
 	protected DrawPanel(String title) {
 		Border border = BorderFactory.createEtchedBorder();
@@ -28,8 +30,9 @@ public abstract class DrawPanel extends JPanel {
 		add(coordLabel);
 	}
 
-	public void redrawSkeleton(Body body) {
+	public void redrawSkeleton(Body body, boolean seatedMode) {
 		this.body = body;
+		this.seatedMode = seatedMode;
 		
 		repaint();
 	}
@@ -39,6 +42,7 @@ public abstract class DrawPanel extends JPanel {
 		super.paint(g);
 
 		if (body != null && body.isBodyReady()) {
+			// draw joint connection
 			this.graphics = (Graphics2D) g;
 			drawJointLine(body.getHead(), body.getShoulderCenter());
 			drawJointLine(body.getShoulderCenter(), body.getShoulderLeft());
@@ -49,16 +53,42 @@ public abstract class DrawPanel extends JPanel {
 			drawJointLine(body.getShoulderRight(), body.getElbowRight());
 			drawJointLine(body.getElbowRight(), body.getWristRight());
 			drawJointLine(body.getWristRight(), body.getHandRight());
-			drawJointLine(body.getShoulderCenter(), body.getSpine());
-			drawJointLine(body.getSpine(), body.getHipCenter());
-			drawJointLine(body.getHipCenter(), body.getHipLeft());
-			drawJointLine(body.getHipLeft(), body.getKneeLeft());
-			drawJointLine(body.getKneeLeft(), body.getAnkleLeft());
-			drawJointLine(body.getAnkleLeft(), body.getFootLeft());
-			drawJointLine(body.getHipCenter(), body.getHipRight());
-			drawJointLine(body.getHipRight(), body.getKneeRight());
-			drawJointLine(body.getKneeRight(), body.getAnkleRight());
-			drawJointLine(body.getAnkleRight(), body.getFootRight());
+			
+			// draw joint
+			drawJoint(body.getShoulderCenter());
+			drawJoint(body.getShoulderLeft());
+			drawJoint(body.getShoulderLeft());
+			drawJoint(body.getShoulderRight());
+			drawJoint(body.getElbowLeft());
+			drawJoint(body.getElbowRight());
+			drawJoint(body.getWristLeft());
+			drawJoint(body.getWristRight());
+			drawJoint(body.getHandLeft());
+			drawJoint(body.getHandRight());
+			
+			if (!seatedMode) {
+				drawJointLine(body.getShoulderCenter(), body.getSpine());
+				drawJointLine(body.getSpine(), body.getHipCenter());
+				drawJointLine(body.getHipCenter(), body.getHipLeft());
+				drawJointLine(body.getHipLeft(), body.getKneeLeft());
+				drawJointLine(body.getKneeLeft(), body.getAnkleLeft());
+				drawJointLine(body.getAnkleLeft(), body.getFootLeft());
+				drawJointLine(body.getHipCenter(), body.getHipRight());
+				drawJointLine(body.getHipRight(), body.getKneeRight());
+				drawJointLine(body.getKneeRight(), body.getAnkleRight());
+				drawJointLine(body.getAnkleRight(), body.getFootRight());
+				
+				drawJoint(body.getSpine());
+				drawJoint(body.getHipCenter());
+				drawJoint(body.getHipLeft());
+				drawJoint(body.getHipRight());
+				drawJoint(body.getKneeLeft());
+				drawJoint(body.getKneeRight());
+				drawJoint(body.getAnkleLeft());
+				drawJoint(body.getAnkleRight());
+				drawJoint(body.getFootLeft());
+				drawJoint(body.getFootRight());
+			}
 
 			drawHead(body.getHead());
 			updateCoordLabel(body.getHead());
@@ -66,6 +96,8 @@ public abstract class DrawPanel extends JPanel {
 	}
 
 	abstract protected void drawJointLine(Joint joint1, Joint joint2);
+	
+	abstract protected void drawJoint(Joint joint);
 
 	abstract protected void drawHead(Joint head);
 

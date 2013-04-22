@@ -75,5 +75,9 @@ public class MainModel {
 	public void setDefaultSkeletonTrackingMode() {
 		sensorRunner.setDefaultSkeletonTrackingMode();
 	}
+
+	public boolean isSeatedSkeletonTrackingMode() {
+		return sensorRunner.isSeatedSkeletonTrackingMode();
+	}
 	
 }

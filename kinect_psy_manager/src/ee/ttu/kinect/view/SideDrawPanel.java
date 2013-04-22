@@ -1,5 +1,7 @@
 package ee.ttu.kinect.view;
 
+import java.awt.Color;
+
 import ee.ttu.kinect.model.Joint;
 
 public class SideDrawPanel extends DrawPanel {
@@ -27,5 +29,14 @@ public class SideDrawPanel extends DrawPanel {
 		int z = getZForGraph(head);
 		graphics.drawOval(z - 10, y - 20, 20, 20);
 	}
+	
+	@Override
+	protected void drawJoint(Joint joint) {
+		int y = getYForGraph(joint);
+		int z = getZForGraph(joint);
+		graphics.setColor(Color.MAGENTA);
+		graphics.fillOval(z - 3, y - 3, 6, 6);
+		graphics.setColor(Color.BLACK);
+	}	
 
 }
