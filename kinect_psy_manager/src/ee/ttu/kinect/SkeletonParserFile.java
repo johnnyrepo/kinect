@@ -20,8 +20,8 @@ public class SkeletonParserFile implements SkeletonParser {
 				return; // not a row with coords
 			}
 			
-			body.setTimestamp(Long.parseLong(jointCoords[0]));
-			body.setFrameNumber(Long.parseLong(jointCoords[1]));
+			body.setFrameNumber(Long.parseLong(jointCoords[0]));
+			body.setTimestamp(Long.parseLong(jointCoords[1]));
 			
 			// Joints coords starting from third column
 			jointCoords = Arrays.copyOfRange(jointCoords, 2, (2 + 3 * JointIndexInFile.values().length)); // markers are ignored

@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -20,6 +19,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.FixedMillisecond;
+import org.jfree.data.time.Hour;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
@@ -154,9 +154,9 @@ public class JointChartPanel extends JPanel {
 					}
 				}
 			} else {
-				dataset.removeSeries(seriesVelocityX);
-				dataset.removeSeries(seriesVelocityY);
-				dataset.removeSeries(seriesVelocityZ);
+//				dataset.removeSeries(seriesVelocityX);
+//				dataset.removeSeries(seriesVelocityY);
+//				dataset.removeSeries(seriesVelocityZ);
 			}
 		}	
 	}
@@ -232,16 +232,15 @@ public class JointChartPanel extends JPanel {
 	}
 
 	private void updateVelocity(long timestamp, double velocityX, double velocityY, double velocityZ) {
-		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(new Millisecond(new Date(timestamp)), velocityX));
-		seriesVelocityY.addOrUpdate(new TimeSeriesDataItem(new Millisecond(new Date(timestamp)), velocityY));
-		seriesVelocityZ.addOrUpdate(new TimeSeriesDataItem(new Millisecond(new Date(timestamp)), velocityZ));
+		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityX));
+		seriesVelocityY.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityY));
+		seriesVelocityZ.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityZ));
 	}
 	
 	public void clearChart() {
 		seriesVelocityX.clear();
 		seriesVelocityY.clear();
 		seriesVelocityZ.clear();
-		dataset.removeAllSeries();
 	}
 
 }

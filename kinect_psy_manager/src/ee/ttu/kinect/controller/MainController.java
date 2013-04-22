@@ -49,8 +49,8 @@ public class MainController {
 		view.addListenerForStartPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.playFile();
 				view.clearChart();
+				model.playFile();
 			}
 		});
 		view.addListenerForStopPlay(new ActionListener() {
