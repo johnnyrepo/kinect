@@ -167,7 +167,7 @@ namespace KinectSensorProxy {
         	}
         	
             kinectSensor = KinectSensor.KinectSensors[0];
-
+            
             try {
                 kinectSensor.ColorStream.Enable();
                 kinectSensor.DepthStream.Enable();
@@ -185,5 +185,16 @@ namespace KinectSensorProxy {
             this.kinectSensor.Stop();
             return "OK, stop() done!";
         }
+
+        public String setSeatedTrackingMode() {
+            this.kinectSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
+            return "Seated skeleton tracking mode set";
+        }
+
+        public String setDefaultTrackingMode() {
+            this.kinectSensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
+            return "Default skeleton tracking mode set";
+        }
+
     }
 }
