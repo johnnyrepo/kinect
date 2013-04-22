@@ -3,6 +3,9 @@ package ee.ttu.kinect.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -14,7 +17,11 @@ import javax.swing.border.Border;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.FixedMillisecond;
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
@@ -46,9 +53,9 @@ public class JointChartPanel extends JPanel {
 	
 	private TimeSeriesCollection dataset;
 	
-	private TimeSeries seriesVelocityX = new TimeSeries("Velocity X");
-	private TimeSeries seriesVelocityY = new TimeSeries("Velocity Y");
-	private TimeSeries seriesVelocityZ = new TimeSeries("Velocity Z");
+	private TimeSeries seriesVelocityX;
+	private TimeSeries seriesVelocityY;
+	private TimeSeries seriesVelocityZ;
 	
 	private JointType selectedJoint; 
 
@@ -78,10 +85,16 @@ public class JointChartPanel extends JPanel {
 		velocityCheckbox.addActionListener(chartControlListener);
 		accelerationCheckbox.addActionListener(chartControlListener);
 
+		seriesVelocityX = new TimeSeries("Velocity X");
+		seriesVelocityY = new TimeSeries("Velocity Y");
+		seriesVelocityZ = new TimeSeries("Velocity Z");
 		dataset = new TimeSeriesCollection();
 		chart = ChartFactory.createTimeSeriesChart("Velocity/Acceleration chart",
 				"Time", "Velocity/Acceleration", dataset,
 				true, true, false);
+		XYPlot plot = (XYPlot) chart.getPlot();
+		DateAxis axis = (DateAxis) plot.getDomainAxis();
+		axis.setDateFormatOverride(new SimpleDateFormat("mm:ss.SSS"));
 		
 		chartPanel = new ChartPanel(chart);
 		chartPanel.setPreferredSize(new Dimension(200, 300));
@@ -219,9 +232,9 @@ public class JointChartPanel extends JPanel {
 	}
 
 	private void updateVelocity(long timestamp, double velocityX, double velocityY, double velocityZ) {
-		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityX));
-		seriesVelocityY.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityY));
-		seriesVelocityZ.addOrUpdate(new TimeSeriesDataItem(new FixedMillisecond(timestamp), velocityZ));
+		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(new Millisecond(new Date(timestamp)), velocityX));
+		seriesVelocityY.addOrUpdate(new TimeSeriesDataItem(new Millisecond(new Date(timestamp)), velocityY));
+		seriesVelocityZ.addOrUpdate(new TimeSeriesDataItem(new Millisecond(new Date(timestamp)), velocityZ));
 	}
 	
 	public void clearChart() {
