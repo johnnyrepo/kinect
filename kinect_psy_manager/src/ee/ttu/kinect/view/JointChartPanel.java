@@ -210,6 +210,9 @@ public class JointChartPanel extends JPanel {
 				&& !accelerationZCheckbox.isSelected()) {
 			return;
 		}
+		if (body == null || !body.isBodyReady()) {
+			return;
+		}
 
 		JointType selectedType = (JointType) jointCombo.getSelectedItem();
 		switch (selectedType) {
