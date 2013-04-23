@@ -297,9 +297,9 @@ public class JointChartPanel extends JPanel {
 					body.getHandRightYVelocity(), 
 					body.getHandRightZVelocity());
 			updateAcceleration(body.getTimestamp(),
-					body.getHandLeftXAcceleration(),
-					body.getHandLeftYAcceleration(),
-					body.getHandLeftZAcceleration());
+					body.getHandRightXAcceleration(),
+					body.getHandRightYAcceleration(),
+					body.getHandRightZAcceleration());
 			break;
 		case HEAD:
 			updateVelocity(body.getTimestamp(), 

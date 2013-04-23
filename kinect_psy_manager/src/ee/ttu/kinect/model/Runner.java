@@ -1,7 +1,6 @@
 package ee.ttu.kinect.model;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
@@ -18,6 +17,8 @@ public abstract class Runner {
 	protected Body body;
 
 	protected FileWorker fileWorker;
+	
+	protected boolean seatedMode = false;
 
 	private Worker worker;
 
@@ -45,6 +46,18 @@ public abstract class Runner {
 	public boolean isRunning() {
 		return running;
 	}
+	
+	public void setSeatedMode() {
+		seatedMode = true;
+	}
+
+	public void setDefaultMode() {
+		seatedMode = false;
+	}
+
+	public boolean isSeatedMode() {
+		return seatedMode;
+	}
 
 	protected abstract String getSkeletonData();
 
@@ -55,7 +68,7 @@ public abstract class Runner {
 	private class Worker extends SwingWorker<Void, Body> {
 
 		@Override
-		public Void doInBackground() {
+		public synchronized Void doInBackground() {
 			// logger.info("Running: " + getClass().getName() + " " +
 			// isCancelled());
 			while (running) {
@@ -64,16 +77,14 @@ public abstract class Runner {
 				input = getSkeletonData();
 				if (input != null) {
 					parseSkeleton(input);
-				}
-
-				if (input != null) {
+					// render body
 					if (body != null && body.isBodyReady()
 							&& body.isBodyChanged()) {
 						try {
 							Body clone = body.clone();
 							publish(clone);
 						} catch (CloneNotSupportedException e) {
-							logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
+							logger.info(e.getLocalizedMessage());
 						}
 					}
 					// Save skeleton, if needed
@@ -87,14 +98,11 @@ public abstract class Runner {
 					logger.info(e.getLocalizedMessage());
 				}
 			}
-
 			return null;
 		}
 
 		@Override
 		protected void process(List<Body> chunks) {
-			// logger.info("processing: " + getClass().getName() + " " +
-			// chunks);
 			for (Body chunk : chunks) {
 				// Redraw the skeleton
 				controller.redrawSkeleton(chunk);

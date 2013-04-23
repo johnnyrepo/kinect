@@ -15,8 +15,6 @@ public class SensorRunner extends Runner {
 	private KinectSensorProxy kinectSensorProxy;
 
 	private SkeletonParserKinect skeletonParserKinect;
-	
-	private boolean seatedSkeletonTrackingMode = false;
 
 	public SensorRunner(MainController controller) {
 		super(controller);
@@ -105,7 +103,7 @@ public class SensorRunner extends Runner {
 	protected void saveSkeleton() {
 		if (savingToFile) {
 			try {
-				fileWorker.addToSave(body.getJointString() + getMarkers());
+				fileWorker.addToSave(body.getJointString(seatedMode) + getMarkers());
 			} catch (IOException e) {
 				logger.info(e.getLocalizedMessage());
 			}
@@ -132,27 +130,24 @@ public class SensorRunner extends Runner {
 		try {
 			savingToFile = false;
 
-			fileWorker.dumpFile();
+			fileWorker.dumpFile(seatedMode);
 		} catch (IOException e) {
 			logger.info(e.getLocalizedMessage());
 		}
 	}
 
-	public void setSeatedSkeletonTrackingMode() {
-		seatedSkeletonTrackingMode = true;
+	@Override
+	public void setSeatedMode() {
+		super.setSeatedMode();
 		String msg = kinectSensorProxy.setSeatedTrackingMode();
 		logger.info(msg);
 	}
 
-	public void setDefaultSkeletonTrackingMode() {
-		seatedSkeletonTrackingMode = false;
+	@Override
+	public void setDefaultMode() {
+		super.setDefaultMode();
 		String msg = kinectSensorProxy.setDefaultTrackingMode();
 		logger.info(msg);
-	}
-
-	
-	public boolean isSeatedSkeletonTrackingMode() {
-		return seatedSkeletonTrackingMode;
 	}
 	
 }

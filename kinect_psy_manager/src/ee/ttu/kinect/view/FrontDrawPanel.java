@@ -33,11 +33,13 @@ public class FrontDrawPanel extends DrawPanel {
 
 	@Override
 	protected void drawJoint(Joint joint) {
-		int x = getXForGraph(joint);
-		int y = getYForGraph(joint);
-		graphics.setColor(Color.MAGENTA);
-		graphics.fillOval(x - 3, y - 3, 6, 6);
-		graphics.setColor(Color.BLACK);
+		if (joint != null) {
+			int x = getXForGraph(joint);
+			int y = getYForGraph(joint);
+			graphics.setColor(Color.MAGENTA);
+			graphics.fillOval(x - 3, y - 3, 6, 6);
+			graphics.setColor(Color.BLACK);
+		}
 	}		
 
 }

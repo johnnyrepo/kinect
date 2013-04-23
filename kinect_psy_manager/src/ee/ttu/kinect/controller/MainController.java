@@ -76,9 +76,9 @@ public class MainController {
 			public void actionPerformed(ActionEvent e) {
 				boolean seatedMode = ((JCheckBox) e.getSource()).isSelected();
 				if (!seatedMode) {
-					model.setDefaultSkeletonTrackingMode();
+					model.setDefaultMode();
 				} else {
-					model.setSeatedSkeletonTrackingMode();
+					model.setSeatedMode();
 				}
 			}
 		});
@@ -87,11 +87,11 @@ public class MainController {
 	}
 
 	public void redrawSkeleton(Body body) {
-		view.redrawSkeleton(body, model.isSeatedSkeletonTrackingMode());
+		view.redrawSkeleton(body, model.isSeatedMode());
 	}
 	
 	public void redrawChart(Body body) {
-		view.redrawChart(body, model.isSeatedSkeletonTrackingMode());
+		view.redrawChart(body, model.isSeatedMode());
 	}
 	
 	public void showMessagePopup(String message) {

@@ -24,7 +24,7 @@ public class FileRunner extends Runner {
 	}
 
 	@Override
-	protected String getSkeletonData() {
+	protected synchronized String getSkeletonData() {
 		String input = null;
 		try {
 			input = fileWorker.readNextLine();
@@ -32,21 +32,20 @@ public class FileRunner extends Runner {
 				stop();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.info(e.getLocalizedMessage());
 		}
 
 		return input;
 	}
 
 	@Override
-	protected void parseSkeleton(String input) {
+	protected synchronized void parseSkeleton(String input) {
 		skeletonParserFile.parseSkeleton(input, body);
 	}
 
 	@Override
-	protected void saveSkeleton() {
-		// TODO Auto-generated method stub
+	protected synchronized void saveSkeleton() {
+		// do nothing
 	}
 	
 	public void readFile(File file) {
@@ -57,4 +56,9 @@ public class FileRunner extends Runner {
 		}
 	}
 
+	@Override
+	public boolean isSeatedMode() {
+		return skeletonParserFile.isSeatedMode();
+	}
+	
 }

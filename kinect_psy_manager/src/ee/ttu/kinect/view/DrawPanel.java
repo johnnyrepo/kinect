@@ -40,7 +40,6 @@ public abstract class DrawPanel extends JPanel {
 	@Override
 	public synchronized void paint(Graphics g) {
 		super.paint(g);
-
 		if (body != null && body.isBodyReady()) {
 			// draw joint connection
 			this.graphics = (Graphics2D) g;

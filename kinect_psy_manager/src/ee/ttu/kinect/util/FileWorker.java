@@ -36,12 +36,11 @@ public class FileWorker {
 			}
 			fileReader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.info(e.getLocalizedMessage());
 		}
 	}
 
-	public synchronized void dumpFile() throws IOException {
+	public synchronized void dumpFile(boolean seatedMode) throws IOException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
 		File file = new File(System.getProperty("user.dir") + "/"
 				+ sdf.format(new Date()) + ".csv");
@@ -52,7 +51,7 @@ public class FileWorker {
 		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		fileWriter.write(sdf.format(new Date()));
 		fileWriter.newLine();
-		fileWriter.write(Body.getHeader());
+		fileWriter.write(Body.getHeader(seatedMode));
 		fileWriter.newLine();
 
 		fileWriter.write(getCachedText());
@@ -69,8 +68,9 @@ public class FileWorker {
 		String str = null;
 		try {
 			str = textCache.remove(0);
-		} catch(Exception e) {}
-		
+		} catch(Exception e) {
+			logger.info(e.getLocalizedMessage());
+		}
 		return str;
 	}
 

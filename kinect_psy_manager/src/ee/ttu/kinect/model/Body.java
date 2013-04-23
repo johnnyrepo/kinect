@@ -196,17 +196,17 @@ public class Body implements Cloneable {
 
 	private final Logger logger = Logger.getLogger(getClass().getName());
 
-	public void updated() {
+	public void updated(boolean seatedMode) {
 		if (oldBody != null) {
-			calculateVelocities();
-			calculateAccelerations();
+			calculateVelocities(seatedMode);
+			calculateAccelerations(seatedMode);
 		}
 		
 		if (isBodyReady()) {
 			try {
 				oldBody = clone();
 			} catch (CloneNotSupportedException e) {
-				logger .info(e.getLocalizedMessage());
+				logger.info(e.getLocalizedMessage());
 			}
 		}
 	}
@@ -871,29 +871,38 @@ public class Body implements Cloneable {
 	}
 
 	public boolean isBodyReady() {
-		return ankleLeft != null && ankleRight != null && elbowLeft != null
-				&& elbowRight != null && footLeft != null && footRight != null
+		return elbowLeft != null && elbowRight != null
 				&& handLeft != null && handRight != null && head != null
-				&& hipCenter != null && hipLeft != null && hipRight != null
-				&& kneeLeft != null && kneeRight != null
 				&& shoulderCenter != null && shoulderLeft != null
-				&& shoulderRight != null && spine != null && wristLeft != null
-				&& wristRight != null;
+				&& shoulderRight != null && wristLeft != null && wristRight != null;
 	}
+	
+//	public boolean isBodyReady() {
+//		return ankleLeft != null && ankleRight != null && elbowLeft != null
+//				&& elbowRight != null && footLeft != null && footRight != null
+//				&& handLeft != null && handRight != null && head != null
+//				&& hipCenter != null && hipLeft != null && hipRight != null
+//				&& kneeLeft != null && kneeRight != null
+//				&& shoulderCenter != null && shoulderLeft != null
+//				&& shoulderRight != null && spine != null && wristLeft != null
+//				&& wristRight != null;
+//	}
 	
 	public boolean isBodyChanged() {
 		return !this.equals(oldBody);
 	}
 	
-	public static String getHeader() {
+	public static String getHeader(boolean seatedMode) {
 		StringBuffer line = new StringBuffer();
 		line = line.append("FrameId\t");
 		line = line.append("Timestamp\t");
 		
 		line = line.append(Joint.getHeader(JointType.HEAD));
 		line = line.append(Joint.getHeader(JointType.SHOULDER_CENTER));
-		line = line.append(Joint.getHeader(JointType.SPINE));
-		line = line.append(Joint.getHeader(JointType.HIP_CENTER));
+		if (!seatedMode) {
+			line = line.append(Joint.getHeader(JointType.SPINE));
+			line = line.append(Joint.getHeader(JointType.HIP_CENTER));
+		}
 		line = line.append(Joint.getHeader(JointType.SHOULDER_LEFT));
 		line = line.append(Joint.getHeader(JointType.ELBOW_LEFT));
 		line = line.append(Joint.getHeader(JointType.WRIST_LEFT));
@@ -902,20 +911,16 @@ public class Body implements Cloneable {
 		line = line.append(Joint.getHeader(JointType.ELBOW_RIGHT));
 		line = line.append(Joint.getHeader(JointType.WRIST_RIGHT));
 		line = line.append(Joint.getHeader(JointType.HAND_RIGHT));
-		line = line.append(Joint.getHeader(JointType.HIP_LEFT));
-		line = line.append(Joint.getHeader(JointType.KNEE_LEFT));
-		line = line.append(Joint.getHeader(JointType.ANKLE_LEFT));
-		line = line.append(Joint.getHeader(JointType.FOOT_LEFT));
-		line = line.append(Joint.getHeader(JointType.HIP_RIGHT));
-		line = line.append(Joint.getHeader(JointType.KNEE_RIGHT));
-		line = line.append(Joint.getHeader(JointType.ANKLE_RIGHT));
-		line = line.append(Joint.getHeader(JointType.FOOT_RIGHT));
-		
-		// Velocities
-		line = line.append(Joint.getVelocityHeader(JointType.HEAD));
-
-		// Accelerations
-		//line = line.append(Joint.getAccelerationHeader(JointType.HEAD));
+		if (!seatedMode) {
+			line = line.append(Joint.getHeader(JointType.HIP_LEFT));
+			line = line.append(Joint.getHeader(JointType.KNEE_LEFT));
+			line = line.append(Joint.getHeader(JointType.ANKLE_LEFT));
+			line = line.append(Joint.getHeader(JointType.FOOT_LEFT));
+			line = line.append(Joint.getHeader(JointType.HIP_RIGHT));
+			line = line.append(Joint.getHeader(JointType.KNEE_RIGHT));
+			line = line.append(Joint.getHeader(JointType.ANKLE_RIGHT));
+			line = line.append(Joint.getHeader(JointType.FOOT_RIGHT));
+		}
 		
 		// Markers
 		line = line.append("Marker1\t");
@@ -927,7 +932,7 @@ public class Body implements Cloneable {
 		return line.toString();
 	}
 	
-	public String getJointString() {
+	public String getJointString(boolean seatedMode) {
 		StringBuffer line = new StringBuffer();
 		if (isBodyReady()) {
 			line = line.append(frameNumber).append("\t");
@@ -935,8 +940,10 @@ public class Body implements Cloneable {
 			
 			line = line.append(head.toString());
 			line = line.append(shoulderCenter.toString());
-			line = line.append(spine.toString());
-			line = line.append(hipCenter.toString());
+			if (!seatedMode) {
+				line = line.append(spine.toString());
+				line = line.append(hipCenter.toString());
+			}
 			line = line.append(shoulderLeft.toString());
 			line = line.append(elbowLeft.toString());
 			line = line.append(wristLeft.toString());
@@ -945,14 +952,16 @@ public class Body implements Cloneable {
 			line = line.append(elbowRight.toString());
 			line = line.append(wristRight.toString());
 			line = line.append(handRight.toString());
-			line = line.append(hipLeft.toString());
-			line = line.append(kneeLeft.toString());
-			line = line.append(ankleLeft.toString());
-			line = line.append(footLeft.toString());
-			line = line.append(hipRight.toString());
-			line = line.append(kneeRight.toString());
-			line = line.append(ankleRight.toString());
-			line = line.append(footRight.toString());
+			if (!seatedMode) {
+				line = line.append(hipLeft.toString());
+				line = line.append(kneeLeft.toString());
+				line = line.append(ankleLeft.toString());
+				line = line.append(footLeft.toString());
+				line = line.append(hipRight.toString());
+				line = line.append(kneeRight.toString());
+				line = line.append(ankleRight.toString());
+				line = line.append(footRight.toString());
+			}
 		}
 		
 		return line.toString();
@@ -1046,7 +1055,7 @@ public class Body implements Cloneable {
 		return line.toString();
 	}
 	
-	private void calculateVelocities() {
+	private void calculateVelocities(boolean seatedMode) {
 		// head
 		headXVelocity = calculateVelocity(head.getPositionX(), oldBody.head.getPositionX(), timestamp, oldBody.getTimestamp());
 		headYVelocity = calculateVelocity(head.getPositionY(), oldBody.head.getPositionY(), timestamp, oldBody.getTimestamp());
@@ -1055,14 +1064,16 @@ public class Body implements Cloneable {
 		shoulderCenterXVelocity = calculateVelocity(shoulderCenter.getPositionX(), oldBody.shoulderCenter.getPositionX(), timestamp, oldBody.getTimestamp());
 		shoulderCenterYVelocity = calculateVelocity(shoulderCenter.getPositionY(), oldBody.shoulderCenter.getPositionY(), timestamp, oldBody.getTimestamp());
 		shoulderCenterZVelocity = calculateVelocity(shoulderCenter.getPositionZ(), oldBody.shoulderCenter.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// spine
-		spineXVelocity = calculateVelocity(spine.getPositionX(), oldBody.spine.getPositionX(), timestamp, oldBody.getTimestamp());
-		spineYVelocity = calculateVelocity(spine.getPositionY(), oldBody.spine.getPositionY(), timestamp, oldBody.getTimestamp());
-		spineZVelocity = calculateVelocity(spine.getPositionZ(), oldBody.spine.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// hipCenter
-		hipCenterXVelocity = calculateVelocity(hipCenter.getPositionX(), oldBody.hipCenter.getPositionX(), timestamp, oldBody.getTimestamp());
-		hipCenterYVelocity = calculateVelocity(hipCenter.getPositionY(), oldBody.hipCenter.getPositionY(), timestamp, oldBody.getTimestamp());
-		hipCenterZVelocity = calculateVelocity(hipCenter.getPositionZ(), oldBody.hipCenter.getPositionZ(), timestamp, oldBody.getTimestamp());
+		if (!seatedMode) {
+			// spine
+			spineXVelocity = calculateVelocity(spine.getPositionX(), oldBody.spine.getPositionX(), timestamp, oldBody.getTimestamp());
+			spineYVelocity = calculateVelocity(spine.getPositionY(), oldBody.spine.getPositionY(), timestamp, oldBody.getTimestamp());
+			spineZVelocity = calculateVelocity(spine.getPositionZ(), oldBody.spine.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// hipCenter
+			hipCenterXVelocity = calculateVelocity(hipCenter.getPositionX(), oldBody.hipCenter.getPositionX(), timestamp, oldBody.getTimestamp());
+			hipCenterYVelocity = calculateVelocity(hipCenter.getPositionY(), oldBody.hipCenter.getPositionY(), timestamp, oldBody.getTimestamp());
+			hipCenterZVelocity = calculateVelocity(hipCenter.getPositionZ(), oldBody.hipCenter.getPositionZ(), timestamp, oldBody.getTimestamp());
+		}
 		//shoulderLeft
 		shoulderLeftXVelocity = calculateVelocity(shoulderLeft.getPositionX(), oldBody.shoulderLeft.getPositionX(), timestamp, oldBody.getTimestamp());
 		shoulderLeftYVelocity = calculateVelocity(shoulderLeft.getPositionY(), oldBody.shoulderLeft.getPositionY(), timestamp, oldBody.getTimestamp());
@@ -1095,41 +1106,43 @@ public class Body implements Cloneable {
 		handRightXVelocity = calculateVelocity(handRight.getPositionX(), oldBody.handRight.getPositionX(), timestamp, oldBody.getTimestamp());
 		handRightYVelocity = calculateVelocity(handRight.getPositionY(), oldBody.handRight.getPositionY(), timestamp, oldBody.getTimestamp());
 		handRightZVelocity = calculateVelocity(handRight.getPositionZ(), oldBody.handRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// hipLeft
-		hipLeftXVelocity = calculateVelocity(hipLeft.getPositionX(), oldBody.hipLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		hipLeftYVelocity = calculateVelocity(hipLeft.getPositionY(), oldBody.hipLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		hipLeftZVelocity = calculateVelocity(hipLeft.getPositionZ(), oldBody.hipLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// kneeLeft
-		kneeLeftXVelocity = calculateVelocity(kneeLeft.getPositionX(), oldBody.kneeLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		kneeLeftYVelocity = calculateVelocity(kneeLeft.getPositionY(), oldBody.kneeLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		kneeLeftZVelocity = calculateVelocity(kneeLeft.getPositionZ(), oldBody.kneeLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// ankleLeft
-		ankleLeftXVelocity = calculateVelocity(ankleLeft.getPositionX(), oldBody.ankleLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		ankleLeftYVelocity = calculateVelocity(ankleLeft.getPositionY(), oldBody.ankleLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		ankleLeftZVelocity = calculateVelocity(ankleLeft.getPositionZ(), oldBody.ankleLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// footLeft
-		footLeftXVelocity = calculateVelocity(footLeft.getPositionX(), oldBody.footLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		footLeftYVelocity = calculateVelocity(footLeft.getPositionY(), oldBody.footLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		footLeftZVelocity = calculateVelocity(footLeft.getPositionZ(), oldBody.footLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// hipRight
-		hipRightXVelocity = calculateVelocity(hipRight.getPositionX(), oldBody.hipRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		hipRightYVelocity = calculateVelocity(hipRight.getPositionY(), oldBody.hipRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		hipRightZVelocity = calculateVelocity(hipRight.getPositionZ(), oldBody.hipRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// kneeRight
-		kneeRightXVelocity = calculateVelocity(kneeRight.getPositionX(), oldBody.kneeRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		kneeRightYVelocity = calculateVelocity(kneeRight.getPositionY(), oldBody.kneeRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		kneeRightZVelocity = calculateVelocity(kneeRight.getPositionZ(), oldBody.kneeRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// ankleRight
-		ankleRightXVelocity = calculateVelocity(ankleRight.getPositionX(), oldBody.ankleRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		ankleRightYVelocity = calculateVelocity(ankleRight.getPositionY(), oldBody.ankleRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		ankleRightZVelocity = calculateVelocity(ankleRight.getPositionZ(), oldBody.ankleRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// footRight
-		footRightXVelocity = calculateVelocity(footRight.getPositionX(), oldBody.footRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		footRightYVelocity = calculateVelocity(footRight.getPositionY(), oldBody.footRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		footRightZVelocity = calculateVelocity(footRight.getPositionZ(), oldBody.footRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+		if (!seatedMode) {
+			// hipLeft
+			hipLeftXVelocity = calculateVelocity(hipLeft.getPositionX(), oldBody.hipLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			hipLeftYVelocity = calculateVelocity(hipLeft.getPositionY(), oldBody.hipLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			hipLeftZVelocity = calculateVelocity(hipLeft.getPositionZ(), oldBody.hipLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// kneeLeft
+			kneeLeftXVelocity = calculateVelocity(kneeLeft.getPositionX(), oldBody.kneeLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			kneeLeftYVelocity = calculateVelocity(kneeLeft.getPositionY(), oldBody.kneeLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			kneeLeftZVelocity = calculateVelocity(kneeLeft.getPositionZ(), oldBody.kneeLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// ankleLeft
+			ankleLeftXVelocity = calculateVelocity(ankleLeft.getPositionX(), oldBody.ankleLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			ankleLeftYVelocity = calculateVelocity(ankleLeft.getPositionY(), oldBody.ankleLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			ankleLeftZVelocity = calculateVelocity(ankleLeft.getPositionZ(), oldBody.ankleLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// footLeft
+			footLeftXVelocity = calculateVelocity(footLeft.getPositionX(), oldBody.footLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			footLeftYVelocity = calculateVelocity(footLeft.getPositionY(), oldBody.footLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			footLeftZVelocity = calculateVelocity(footLeft.getPositionZ(), oldBody.footLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// hipRight
+			hipRightXVelocity = calculateVelocity(hipRight.getPositionX(), oldBody.hipRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			hipRightYVelocity = calculateVelocity(hipRight.getPositionY(), oldBody.hipRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			hipRightZVelocity = calculateVelocity(hipRight.getPositionZ(), oldBody.hipRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// kneeRight
+			kneeRightXVelocity = calculateVelocity(kneeRight.getPositionX(), oldBody.kneeRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			kneeRightYVelocity = calculateVelocity(kneeRight.getPositionY(), oldBody.kneeRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			kneeRightZVelocity = calculateVelocity(kneeRight.getPositionZ(), oldBody.kneeRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// ankleRight
+			ankleRightXVelocity = calculateVelocity(ankleRight.getPositionX(), oldBody.ankleRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			ankleRightYVelocity = calculateVelocity(ankleRight.getPositionY(), oldBody.ankleRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			ankleRightZVelocity = calculateVelocity(ankleRight.getPositionZ(), oldBody.ankleRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// footRight
+			footRightXVelocity = calculateVelocity(footRight.getPositionX(), oldBody.footRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			footRightYVelocity = calculateVelocity(footRight.getPositionY(), oldBody.footRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			footRightZVelocity = calculateVelocity(footRight.getPositionZ(), oldBody.footRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+		}
 	}
 	
-	private void calculateAccelerations() {
+	private void calculateAccelerations(boolean seatedMode) {
 		// head
 		headXAcceleration = calculateAcceleration(head.getPositionX(), oldBody.getHead().getPositionX(), timestamp, oldBody.getTimestamp());
 		headYAcceleration = calculateAcceleration(head.getPositionY(), oldBody.getHead().getPositionY(), timestamp, oldBody.getTimestamp());
@@ -1138,14 +1151,16 @@ public class Body implements Cloneable {
 		shoulderCenterXAcceleration = calculateAcceleration(shoulderCenter.getPositionX(), oldBody.getShoulderCenter().getPositionX(), timestamp, oldBody.getTimestamp());
 		shoulderCenterXAcceleration = calculateAcceleration(shoulderCenter.getPositionY(), oldBody.getShoulderCenter().getPositionY(), timestamp, oldBody.getTimestamp());
 		shoulderCenterXAcceleration = calculateAcceleration(shoulderCenter.getPositionZ(), oldBody.getShoulderCenter().getPositionZ(), timestamp, oldBody.getTimestamp());
-		// spine
-		spineXAcceleration = calculateAcceleration(spine.getPositionX(), oldBody.getSpine().getPositionX(), timestamp, oldBody.getTimestamp());
-		spineYAcceleration = calculateAcceleration(spine.getPositionY(), oldBody.getSpine().getPositionY(), timestamp, oldBody.getTimestamp());
-		spineZAcceleration = calculateAcceleration(spine.getPositionZ(), oldBody.getSpine().getPositionZ(), timestamp, oldBody.getTimestamp());
-		// hipCenter
-		hipCenterXAcceleration = calculateAcceleration(hipCenter.getPositionX(), oldBody.getHipCenter().getPositionX(), timestamp, oldBody.getTimestamp());
-		hipCenterYAcceleration = calculateAcceleration(hipCenter.getPositionY(), oldBody.getHipCenter().getPositionY(), timestamp, oldBody.getTimestamp());
-		hipCenterZAcceleration = calculateAcceleration(hipCenter.getPositionZ(), oldBody.getHipCenter().getPositionZ(), timestamp, oldBody.getTimestamp());
+		if (!seatedMode) {
+			// spine
+			spineXAcceleration = calculateAcceleration(spine.getPositionX(), oldBody.getSpine().getPositionX(), timestamp, oldBody.getTimestamp());
+			spineYAcceleration = calculateAcceleration(spine.getPositionY(), oldBody.getSpine().getPositionY(), timestamp, oldBody.getTimestamp());
+			spineZAcceleration = calculateAcceleration(spine.getPositionZ(), oldBody.getSpine().getPositionZ(), timestamp, oldBody.getTimestamp());
+			// hipCenter
+			hipCenterXAcceleration = calculateAcceleration(hipCenter.getPositionX(), oldBody.getHipCenter().getPositionX(), timestamp, oldBody.getTimestamp());
+			hipCenterYAcceleration = calculateAcceleration(hipCenter.getPositionY(), oldBody.getHipCenter().getPositionY(), timestamp, oldBody.getTimestamp());
+			hipCenterZAcceleration = calculateAcceleration(hipCenter.getPositionZ(), oldBody.getHipCenter().getPositionZ(), timestamp, oldBody.getTimestamp());
+		}
 		// shoulderLeft
 		shoulderLeftXAcceleration = calculateAcceleration(shoulderLeft.getPositionX(), oldBody.getShoulderLeft().getPositionX(), timestamp, oldBody.getTimestamp());
 		shoulderLeftYAcceleration = calculateAcceleration(shoulderLeft.getPositionY(), oldBody.getShoulderLeft().getPositionY(), timestamp, oldBody.getTimestamp());
@@ -1178,38 +1193,40 @@ public class Body implements Cloneable {
 		handRightXAcceleration = calculateAcceleration(handRight.getPositionX(), oldBody.getHandRight().getPositionX(), timestamp, oldBody.getTimestamp());
 		handRightYAcceleration = calculateAcceleration(handRight.getPositionY(), oldBody.getHandRight().getPositionY(), timestamp, oldBody.getTimestamp());
 		handRightZAcceleration = calculateAcceleration(handRight.getPositionZ(), oldBody.getHandRight().getPositionZ(), timestamp, oldBody.getTimestamp());
-		// hipLeft
-		hipLeftXAcceleration = calculateAcceleration(hipLeft.getPositionX(), oldBody.hipLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		hipLeftYAcceleration = calculateAcceleration(hipLeft.getPositionY(), oldBody.hipLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		hipLeftZAcceleration = calculateAcceleration(hipLeft.getPositionZ(), oldBody.hipLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// kneeLeft
-		kneeLeftXAcceleration = calculateAcceleration(kneeLeft.getPositionX(), oldBody.kneeLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		kneeLeftYAcceleration = calculateAcceleration(kneeLeft.getPositionY(), oldBody.kneeLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		kneeLeftZAcceleration = calculateAcceleration(kneeLeft.getPositionZ(), oldBody.kneeLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// ankleLeft
-		ankleLeftXAcceleration = calculateAcceleration(ankleLeft.getPositionX(), oldBody.ankleLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		ankleLeftYAcceleration = calculateAcceleration(ankleLeft.getPositionY(), oldBody.ankleLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		ankleLeftZAcceleration = calculateAcceleration(ankleLeft.getPositionZ(), oldBody.ankleLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// footLeft
-		footLeftXAcceleration = calculateAcceleration(footLeft.getPositionX(), oldBody.footLeft.getPositionX(), timestamp, oldBody.getTimestamp());
-		footLeftYAcceleration = calculateAcceleration(footLeft.getPositionY(), oldBody.footLeft.getPositionY(), timestamp, oldBody.getTimestamp());
-		footLeftZAcceleration = calculateAcceleration(footLeft.getPositionZ(), oldBody.footLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// hipRight
-		hipRightXAcceleration = calculateAcceleration(hipRight.getPositionX(), oldBody.hipRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		hipRightYAcceleration = calculateAcceleration(hipRight.getPositionY(), oldBody.hipRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		hipRightZAcceleration = calculateAcceleration(hipRight.getPositionZ(), oldBody.hipRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// kneeRight
-		kneeRightXAcceleration = calculateAcceleration(kneeRight.getPositionX(), oldBody.kneeRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		kneeRightYAcceleration = calculateAcceleration(kneeRight.getPositionY(), oldBody.kneeRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		kneeRightZAcceleration = calculateAcceleration(kneeRight.getPositionZ(), oldBody.kneeRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// ankleRight
-		ankleRightXAcceleration = calculateAcceleration(ankleRight.getPositionX(), oldBody.ankleRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		ankleRightYAcceleration = calculateAcceleration(ankleRight.getPositionY(), oldBody.ankleRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		ankleRightZAcceleration = calculateAcceleration(ankleRight.getPositionZ(), oldBody.ankleRight.getPositionZ(), timestamp, oldBody.getTimestamp());
-		// footRight
-		footRightXAcceleration = calculateAcceleration(footRight.getPositionX(), oldBody.footRight.getPositionX(), timestamp, oldBody.getTimestamp());
-		footRightYAcceleration = calculateAcceleration(footRight.getPositionY(), oldBody.footRight.getPositionY(), timestamp, oldBody.getTimestamp());
-		footRightZAcceleration = calculateAcceleration(footRight.getPositionZ(), oldBody.footRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+		if (!seatedMode) {
+			// hipLeft
+			hipLeftXAcceleration = calculateAcceleration(hipLeft.getPositionX(), oldBody.hipLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			hipLeftYAcceleration = calculateAcceleration(hipLeft.getPositionY(), oldBody.hipLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			hipLeftZAcceleration = calculateAcceleration(hipLeft.getPositionZ(), oldBody.hipLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// kneeLeft
+			kneeLeftXAcceleration = calculateAcceleration(kneeLeft.getPositionX(), oldBody.kneeLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			kneeLeftYAcceleration = calculateAcceleration(kneeLeft.getPositionY(), oldBody.kneeLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			kneeLeftZAcceleration = calculateAcceleration(kneeLeft.getPositionZ(), oldBody.kneeLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// ankleLeft
+			ankleLeftXAcceleration = calculateAcceleration(ankleLeft.getPositionX(), oldBody.ankleLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			ankleLeftYAcceleration = calculateAcceleration(ankleLeft.getPositionY(), oldBody.ankleLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			ankleLeftZAcceleration = calculateAcceleration(ankleLeft.getPositionZ(), oldBody.ankleLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// footLeft
+			footLeftXAcceleration = calculateAcceleration(footLeft.getPositionX(), oldBody.footLeft.getPositionX(), timestamp, oldBody.getTimestamp());
+			footLeftYAcceleration = calculateAcceleration(footLeft.getPositionY(), oldBody.footLeft.getPositionY(), timestamp, oldBody.getTimestamp());
+			footLeftZAcceleration = calculateAcceleration(footLeft.getPositionZ(), oldBody.footLeft.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// hipRight
+			hipRightXAcceleration = calculateAcceleration(hipRight.getPositionX(), oldBody.hipRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			hipRightYAcceleration = calculateAcceleration(hipRight.getPositionY(), oldBody.hipRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			hipRightZAcceleration = calculateAcceleration(hipRight.getPositionZ(), oldBody.hipRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// kneeRight
+			kneeRightXAcceleration = calculateAcceleration(kneeRight.getPositionX(), oldBody.kneeRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			kneeRightYAcceleration = calculateAcceleration(kneeRight.getPositionY(), oldBody.kneeRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			kneeRightZAcceleration = calculateAcceleration(kneeRight.getPositionZ(), oldBody.kneeRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// ankleRight
+			ankleRightXAcceleration = calculateAcceleration(ankleRight.getPositionX(), oldBody.ankleRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			ankleRightYAcceleration = calculateAcceleration(ankleRight.getPositionY(), oldBody.ankleRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			ankleRightZAcceleration = calculateAcceleration(ankleRight.getPositionZ(), oldBody.ankleRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+			// footRight
+			footRightXAcceleration = calculateAcceleration(footRight.getPositionX(), oldBody.footRight.getPositionX(), timestamp, oldBody.getTimestamp());
+			footRightYAcceleration = calculateAcceleration(footRight.getPositionY(), oldBody.footRight.getPositionY(), timestamp, oldBody.getTimestamp());
+			footRightZAcceleration = calculateAcceleration(footRight.getPositionZ(), oldBody.footRight.getPositionZ(), timestamp, oldBody.getTimestamp());
+		}
 	}
 
 	private double calculateVelocity(double pos1, double pos2, double time1, double time2) {

@@ -110,7 +110,7 @@ public class SkeletonParserKinect implements SkeletonParser {
 		}
 
 		// trigger BodyUpdated action
-		body.updated();
+		body.updated(false);
 	}
 
 	private Joint parseJoint(String jointId, String positionX, String positionY, String positionZ) {

@@ -6,6 +6,8 @@ import ee.ttu.kinect.controller.MainController;
 
 public class MainModel {
 	
+	private Runner activeRunner;
+	
 	private SensorRunner sensorRunner;
 	
 	private FileRunner fileRunner;
@@ -24,6 +26,8 @@ public class MainModel {
 		
 		if (!fileRunner.isRunning()) {
 			fileRunner.start();
+			
+			activeRunner = fileRunner;
 		}
 	}
 
@@ -55,6 +59,8 @@ public class MainModel {
 	public void startSensor() {
 		if (!sensorRunner.isRunning()) {
 			sensorRunner.start();
+			
+			activeRunner = sensorRunner;
 		}
 	}
 	
@@ -68,16 +74,16 @@ public class MainModel {
 		return sensorRunner.isRunning();
 	}
 
-	public void setSeatedSkeletonTrackingMode() {
-		sensorRunner.setSeatedSkeletonTrackingMode();
+	public void setSeatedMode() {
+		activeRunner.setSeatedMode();
 	}
 	
-	public void setDefaultSkeletonTrackingMode() {
-		sensorRunner.setDefaultSkeletonTrackingMode();
+	public void setDefaultMode() {
+		activeRunner.setDefaultMode();
 	}
 
-	public boolean isSeatedSkeletonTrackingMode() {
-		return sensorRunner.isSeatedSkeletonTrackingMode();
+	public boolean isSeatedMode() {
+		return activeRunner.isSeatedMode();
 	}
 	
 }

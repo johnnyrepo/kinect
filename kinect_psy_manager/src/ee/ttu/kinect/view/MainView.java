@@ -1,7 +1,6 @@
 package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -77,7 +76,7 @@ public class MainView extends JFrame {
 		controlPanel.add(seatedModePanel);
 
 		drawPanel = new JPanel();
-		drawPanel.setSize(new Dimension(1200, 400));
+		//drawPanel.setSize(new Dimension(1200, 400));
 		drawPanel.setLayout(new BoxLayout(drawPanel, BoxLayout.X_AXIS));
 		frontDrawPanel = new FrontDrawPanel();
 		sideDrawPanel = new SideDrawPanel();
@@ -87,10 +86,10 @@ public class MainView extends JFrame {
 		drawPanel.add(upDrawPanel);
 
 		chartPanel = new JointChartPanel();
-		chartPanel.setSize(1200, 300);
+		//chartPanel.setSize(1200, 300);
 		
 
-		setTitle("KinectManager v0.6");
+		setTitle("KinectManager v0.7");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -102,7 +101,7 @@ public class MainView extends JFrame {
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
 		getContentPane().add(chartPanel, BorderLayout.SOUTH);
 		
-		setSize(1200, 600);
+		setSize(1200, 700);
 		setVisible(true);
 	}
 	
