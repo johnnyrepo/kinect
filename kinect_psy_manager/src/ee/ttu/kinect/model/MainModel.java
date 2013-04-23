@@ -20,10 +20,20 @@ public class MainModel {
 	public void readFile(File file) {
 		fileRunner.readFile(file);
 	}
-	
-	public void playFile() {
-		stopSensor();
+
+	public void startRecord() {
+		stopFileRun();
 		
+		sensorRunner.startRecord();
+	}
+
+	public void stopRecord() {
+		stopFileRun();
+		
+		sensorRunner.stopRecord();
+	}
+	
+	public void startFileRun() {
 		if (!fileRunner.isRunning()) {
 			fileRunner.start();
 			
@@ -31,32 +41,13 @@ public class MainModel {
 		}
 	}
 
-	public void stopPlay() {
+	public void stopFileRun() {
 		if (fileRunner.isRunning()) {
 			fileRunner.stop();
 		}
-		
-		startSensor();
-		//controller.clearChart();
-	}
-
-	public void startRecord() {
-		if (fileRunner.isRunning()) {
-			fileRunner.stop();
-		}
-		
-		sensorRunner.startRecord();
-	}
-
-	public void stopRecord() {
-		if (fileRunner.isRunning()) {
-			fileRunner.stop();
-		}
-		
-		sensorRunner.stopRecord();
 	}
 	
-	public void startSensor() {
+	public void startSensorRun() {
 		if (!sensorRunner.isRunning()) {
 			sensorRunner.start();
 			
@@ -64,7 +55,7 @@ public class MainModel {
 		}
 	}
 	
-	public void stopSensor() {
+	public void stopSensorRun() {
 		if (sensorRunner.isRunning()) {
 			sensorRunner.stop();
 		}

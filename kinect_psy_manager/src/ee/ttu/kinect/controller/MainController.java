@@ -50,13 +50,14 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				view.clearChart();
-				model.playFile();
+				model.stopSensorRun();
+				model.startFileRun();
 			}
 		});
 		view.addListenerForStopPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.stopPlay();
+				model.stopFileRun();
 			}
 		});
 		view.addListenerForSensorOn(new ActionListener() {
@@ -65,9 +66,10 @@ public class MainController {
 				boolean sensorOn = ((JCheckBox) e.getSource()).isSelected();
 				Logger.getLogger(getClass().getName()).info("sensor on canged: " + sensorOn);
 				if (!sensorOn) {
-					model.stopSensor();
+					model.stopSensorRun();
 				} else {
-					model.startSensor();
+					view.clearChart();
+					model.startSensorRun();
 				}
 			}
 		});
@@ -83,7 +85,7 @@ public class MainController {
 			}
 		});
 
-		model.startSensor();
+		model.startSensorRun();
 	}
 
 	public void redrawSkeleton(Body body) {
