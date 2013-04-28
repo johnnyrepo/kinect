@@ -4,11 +4,11 @@ import java.awt.Color;
 
 import ee.ttu.kinect.model.Joint;
 
-public class SideDrawPanel extends DrawPanel {
+public class SideTracingPanel extends TracingPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public SideDrawPanel() {
+	public SideTracingPanel() {
 		super("Side View");
 	}
 

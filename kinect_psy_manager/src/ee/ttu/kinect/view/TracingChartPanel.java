@@ -25,7 +25,7 @@ import org.jfree.data.time.TimeSeriesDataItem;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 
-public class JointChartPanel extends JPanel {
+public class TracingChartPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class JointChartPanel extends JPanel {
 
 	private JointType selectedJoint;
 
-	public JointChartPanel() {
+	public TracingChartPanel() {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, "Chart"));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

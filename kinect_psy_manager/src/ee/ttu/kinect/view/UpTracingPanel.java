@@ -4,11 +4,11 @@ import java.awt.Color;
 
 import ee.ttu.kinect.model.Joint;
 
-public class UpDrawPanel extends DrawPanel {
+public class UpTracingPanel extends TracingPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public UpDrawPanel() {
+	public UpTracingPanel() {
 		super("Up View");
 	}
 

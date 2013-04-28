@@ -4,12 +4,12 @@ import java.awt.Color;
 
 import ee.ttu.kinect.model.Joint;
 
-public class FrontDrawPanel extends DrawPanel {
+public class FrontTracingPanel extends TracingPanel {
 
 
 	private static final long serialVersionUID = 1L;
 
-	public FrontDrawPanel() {
+	public FrontTracingPanel() {
 		super("Front View");
 	}
 

@@ -11,7 +11,7 @@ import javax.swing.border.Border;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
 
-public abstract class DrawPanel extends JPanel {
+public abstract class TracingPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public abstract class DrawPanel extends JPanel {
 
 	private boolean seatedMode;
 
-	protected DrawPanel(String title) {
+	protected TracingPanel(String title) {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, title));
 		coordLabel = new JLabel();

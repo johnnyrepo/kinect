@@ -42,13 +42,13 @@ public class MainView extends JFrame {
 		
 	private JPanel drawPanel;
 	
-	private FrontDrawPanel frontDrawPanel;
+	private FrontTracingPanel frontDrawPanel;
 
-	private SideDrawPanel sideDrawPanel;
+	private SideTracingPanel sideDrawPanel;
 
-	private UpDrawPanel upDrawPanel;
+	private UpTracingPanel upDrawPanel;
 
-	private JointChartPanel chartPanel;
+	private TracingChartPanel chartPanel;
 	
 	
 	public MainView() {
@@ -78,14 +78,14 @@ public class MainView extends JFrame {
 		drawPanel = new JPanel();
 		//drawPanel.setSize(new Dimension(1200, 400));
 		drawPanel.setLayout(new BoxLayout(drawPanel, BoxLayout.X_AXIS));
-		frontDrawPanel = new FrontDrawPanel();
-		sideDrawPanel = new SideDrawPanel();
-		upDrawPanel = new UpDrawPanel();
+		frontDrawPanel = new FrontTracingPanel();
+		sideDrawPanel = new SideTracingPanel();
+		upDrawPanel = new UpTracingPanel();
 		drawPanel.add(frontDrawPanel);
 		drawPanel.add(sideDrawPanel);
 		drawPanel.add(upDrawPanel);
 
-		chartPanel = new JointChartPanel();
+		chartPanel = new TracingChartPanel();
 		//chartPanel.setSize(1200, 300);
 		
 
