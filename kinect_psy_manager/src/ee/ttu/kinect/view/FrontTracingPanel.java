@@ -36,7 +36,7 @@ public class FrontTracingPanel extends TracingPanel {
 		if (joint != null) {
 			int x = getXForGraph(joint);
 			int y = getYForGraph(joint);
-			graphics.setColor(Color.MAGENTA);
+			graphics.setColor(new Color(0, 160, 0));
 			graphics.fillOval(x - 3, y - 3, 6, 6);
 			graphics.setColor(Color.BLACK);
 		}

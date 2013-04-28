@@ -31,6 +31,8 @@ public class TracingChartPanel extends JPanel {
 
 	private JComboBox<JointType> jointCombo;
 
+	private JCheckBox packedModeChekbox;
+	
 	private JCheckBox velocityXCheckbox;
 
 	private JCheckBox velocityYCheckbox;
@@ -70,6 +72,7 @@ public class TracingChartPanel extends JPanel {
 		for (JointType jt : JointType.values()) {
 			jointCombo.addItem(jt);
 		}
+		packedModeChekbox = new JCheckBox("Packed mode");
 		velocityXCheckbox = new JCheckBox("Velocity X");
 		velocityYCheckbox = new JCheckBox("Velocity Y");
 		velocityZCheckbox = new JCheckBox("Velocity Z");
@@ -88,6 +91,7 @@ public class TracingChartPanel extends JPanel {
 		accelerationXCheckbox.addActionListener(chartControlListener);
 		accelerationYCheckbox.addActionListener(chartControlListener);
 		accelerationZCheckbox.addActionListener(chartControlListener);
+		packedModeChekbox.addActionListener(chartControlListener);
 
 		seriesVelocityX = new TimeSeries("Velocity X");
 		seriesVelocityY = new TimeSeries("Velocity Y");
@@ -95,6 +99,7 @@ public class TracingChartPanel extends JPanel {
 		seriesAccelerationX = new TimeSeries("Acceleration X");
 		seriesAccelerationY = new TimeSeries("Acceleration Y");
 		seriesAccelerationZ = new TimeSeries("Acceleration Z");
+
 		dataset = new TimeSeriesCollection();
 		chart = ChartFactory.createTimeSeriesChart(
 				"Velocity/Acceleration chart", "Time", "Velocity/Acceleration",
@@ -104,12 +109,13 @@ public class TracingChartPanel extends JPanel {
 		axis.setDateFormatOverride(new SimpleDateFormat("mm:ss.SSS"));
 
 		chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new Dimension(200, 300));
+		chartPanel.setPreferredSize(new Dimension(200, 330));
 
 		chartControlPanel = new JPanel();
 
 		chartControlPanel.setLayout(new BoxLayout(chartControlPanel,
 				BoxLayout.X_AXIS));
+		chartControlPanel.add(packedModeChekbox);
 		chartControlPanel.add(jointCombo);
 		chartControlPanel.add(velocityXCheckbox);
 		chartControlPanel.add(velocityYCheckbox);
@@ -130,6 +136,9 @@ public class TracingChartPanel extends JPanel {
 				clearChart();
 			}
 
+			// packed mode checkbox
+			togglePackedMode(packedModeChekbox.isSelected());
+			
 			// velocity checkboxes
 			if (velocityXCheckbox.isSelected()) {
 				if (!dataset.getSeries().contains(seriesVelocityX)) {
@@ -198,6 +207,16 @@ public class TracingChartPanel extends JPanel {
 			// plot.getRenderer().setSeriesPaint(3, Color.YELLOW);
 			// plot.getRenderer().setSeriesPaint(4, Color.MAGENTA);
 			// plot.getRenderer().setSeriesPaint(5, Color.CYAN);
+		}
+
+		private void togglePackedMode(boolean selected) {
+			long period = selected ? 10000 : Long.MAX_VALUE;
+			seriesVelocityX.setMaximumItemAge(period);
+			seriesVelocityY.setMaximumItemAge(period);
+			seriesVelocityZ.setMaximumItemAge(period);
+			seriesAccelerationX.setMaximumItemAge(period);
+			seriesAccelerationY.setMaximumItemAge(period);
+			seriesAccelerationZ.setMaximumItemAge(period);
 		}
 	}
 

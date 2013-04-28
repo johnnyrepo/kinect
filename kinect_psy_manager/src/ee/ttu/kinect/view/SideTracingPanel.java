@@ -34,7 +34,7 @@ public class SideTracingPanel extends TracingPanel {
 	protected void drawJoint(Joint joint) {
 		int y = getYForGraph(joint);
 		int z = getZForGraph(joint);
-		graphics.setColor(Color.MAGENTA);
+		graphics.setColor(new Color(0, 160, 0));
 		graphics.fillOval(z - 3, y - 3, 6, 6);
 		graphics.setColor(Color.BLACK);
 	}	
