@@ -24,7 +24,7 @@ public class ButtonPanel extends JPanel {
 
 	private JButton stopPlayButton;
 	
-	private JCheckBox sensorOnCheckbox;
+	private JCheckBox sensorModeCheckbox;
 	
 	public ButtonPanel(String title) {
 		Border border = BorderFactory.createEtchedBorder();
@@ -35,10 +35,10 @@ public class ButtonPanel extends JPanel {
 		stopRecordButton = new JButton("Stop Record");
 		playButton = new JButton("Play");
 		stopPlayButton = new JButton("Stop Play");
-		sensorOnCheckbox = new JCheckBox("Sensor ON");
+		sensorModeCheckbox = new JCheckBox("Sensor mode");
 		
 		add(selectedFileLabel);
-		add(sensorOnCheckbox);
+		add(sensorModeCheckbox);
 		add(recordButton);
 		add(stopRecordButton);
 		add(playButton);
@@ -50,7 +50,7 @@ public class ButtonPanel extends JPanel {
 	public void setSensorOn(boolean sensorRunning) {
 		Logger logger = Logger.getLogger(getClass().getName());
 		logger.info("sensor on: " + sensorRunning);
-		sensorOnCheckbox.setSelected(sensorRunning);		
+		sensorModeCheckbox.setSelected(sensorRunning);		
 	}
 	
 	public void updateSelectedFileLabel(String name) {
@@ -58,7 +58,7 @@ public class ButtonPanel extends JPanel {
 	}
 	
 	public void addListenerForSensorOn(ActionListener lsitener) {
-		sensorOnCheckbox.addActionListener(lsitener);
+		sensorModeCheckbox.addActionListener(lsitener);
 	}
 
 	public void addListenerForStartRecord(ActionListener listener) {

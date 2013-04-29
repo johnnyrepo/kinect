@@ -4,16 +4,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -28,14 +23,24 @@ import org.jfree.data.time.TimeSeriesDataItem;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 
-public class TracingChartPanel extends JPanel {
+public class ChartComponent extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JComboBox<JointType> jointCombo;
+	private TimeSeries seriesVelocityX;
+	private TimeSeries seriesVelocityY;
+	private TimeSeries seriesVelocityZ;
 
-	private JCheckBox packedModeChekbox;
+	private TimeSeries seriesAccelerationX;
+	private TimeSeries seriesAccelerationY;
+	private TimeSeries seriesAccelerationZ;
 	
+	private TimeSeriesCollection dataset;
+
+	private JFreeChart chart;
+	
+	private ChartPanel chartPanel;
+		
 	private JCheckBox velocityXCheckbox;
 
 	private JCheckBox velocityYCheckbox;
@@ -48,40 +53,28 @@ public class TracingChartPanel extends JPanel {
 
 	private JCheckBox accelerationZCheckbox;
 	
-	private JButton drawChartButton;
-
-	private JFreeChart chart;
-
 	private JPanel chartControlPanel;
-
-	private ChartPanel chartPanel;
-
-	private TimeSeriesCollection dataset;
-
-	private TimeSeries seriesVelocityX;
-	private TimeSeries seriesVelocityY;
-	private TimeSeries seriesVelocityZ;
-
-	private TimeSeries seriesAccelerationX;
-	private TimeSeries seriesAccelerationY;
-	private TimeSeries seriesAccelerationZ;
-
-	private JointType selectedJoint;
-
-	private ChartSelector chartSelector;
-
-	private List<Body> data = new ArrayList<Body>();
-
-	public TracingChartPanel() {
-		Border border = BorderFactory.createEtchedBorder();
-		setBorder(BorderFactory.createTitledBorder(border, "Chart"));
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-		jointCombo = new JComboBox<JointType>();
-		for (JointType jt : JointType.values()) {
-			jointCombo.addItem(jt);
-		}
-		packedModeChekbox = new JCheckBox("Packed mode");
+	
+	public ChartComponent() {
+		seriesVelocityX = new TimeSeries("Velocity X");
+		seriesVelocityY = new TimeSeries("Velocity Y");
+		seriesVelocityZ = new TimeSeries("Velocity Z");
+		seriesAccelerationX = new TimeSeries("Acceleration X");
+		seriesAccelerationY = new TimeSeries("Acceleration Y");
+		seriesAccelerationZ = new TimeSeries("Acceleration Z");
+		
+		dataset = new TimeSeriesCollection();
+		
+		chart = ChartFactory.createTimeSeriesChart(
+				null, null, "Velocity/Acceleration",
+				dataset, true, true, false);
+		XYPlot plot = (XYPlot) chart.getPlot();
+		DateAxis axis = (DateAxis) plot.getDomainAxis();
+		axis.setDateFormatOverride(new SimpleDateFormat("mm:ss.SSS"));
+		
+		chartPanel = new ChartPanel(chart);
+		chartPanel.setPreferredSize(new Dimension(1500, 260));
+		
 		velocityXCheckbox = new JCheckBox("Velocity X");
 		velocityYCheckbox = new JCheckBox("Velocity Y");
 		velocityZCheckbox = new JCheckBox("Velocity Z");
@@ -89,86 +82,34 @@ public class TracingChartPanel extends JPanel {
 		accelerationYCheckbox = new JCheckBox("Acceleration Y");
 		accelerationZCheckbox = new JCheckBox("Acceleration Z");
 		
-		drawChartButton = new JButton("Draw chart");
-
-		chartSelector = new ChartSelector();
-		
-		selectedJoint = (JointType) jointCombo.getSelectedItem();
-
 		// listeners for controls
 		ChartControlChangeListener chartControlListener = new ChartControlChangeListener();
-		jointCombo.addActionListener(chartControlListener);
 		velocityXCheckbox.addActionListener(chartControlListener);
 		velocityYCheckbox.addActionListener(chartControlListener);
 		velocityZCheckbox.addActionListener(chartControlListener);
 		accelerationXCheckbox.addActionListener(chartControlListener);
 		accelerationYCheckbox.addActionListener(chartControlListener);
 		accelerationZCheckbox.addActionListener(chartControlListener);
-		packedModeChekbox.addActionListener(chartControlListener);
-		drawChartButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				openChartSelector();
-			}
-		});
-
-		packedModeChekbox.setSelected(true);
 		
-		seriesVelocityX = new TimeSeries("Velocity X");
-		seriesVelocityY = new TimeSeries("Velocity Y");
-		seriesVelocityZ = new TimeSeries("Velocity Z");
-		seriesAccelerationX = new TimeSeries("Acceleration X");
-		seriesAccelerationY = new TimeSeries("Acceleration Y");
-		seriesAccelerationZ = new TimeSeries("Acceleration Z");
-
-		dataset = new TimeSeriesCollection();
-		chart = ChartFactory.createTimeSeriesChart(
-				"Velocity/Acceleration chart", "Time", "Velocity/Acceleration",
-				dataset, true, true, false);
-		XYPlot plot = (XYPlot) chart.getPlot();
-		DateAxis axis = (DateAxis) plot.getDomainAxis();
-		axis.setDateFormatOverride(new SimpleDateFormat("mm:ss.SSS"));
-
-		chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new Dimension(200, 330));
-
 		chartControlPanel = new JPanel();
-
 		chartControlPanel.setLayout(new BoxLayout(chartControlPanel,
 				BoxLayout.X_AXIS));
-		chartControlPanel.add(packedModeChekbox);
-		chartControlPanel.add(jointCombo);
+		
 		chartControlPanel.add(velocityXCheckbox);
 		chartControlPanel.add(velocityYCheckbox);
 		chartControlPanel.add(velocityZCheckbox);
 		chartControlPanel.add(accelerationXCheckbox);
 		chartControlPanel.add(accelerationYCheckbox);
 		chartControlPanel.add(accelerationZCheckbox);
-		chartControlPanel.add(drawChartButton);
-
-		add(chartControlPanel);
+		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(chartPanel);
+		add(chartControlPanel);
 	}
 	
-	// XYPlot plot = (XYPlot) (chart.getPlot());
-	// plot.getRenderer().setSeriesPaint(0, Color.RED);
-	// plot.getRenderer().setSeriesPaint(1, Color.GREEN);
-	// plot.getRenderer().setSeriesPaint(2, Color.BLUE);
-	// plot.getRenderer().setSeriesPaint(3, Color.YELLOW);
-	// plot.getRenderer().setSeriesPaint(4, Color.MAGENTA);
-	// plot.getRenderer().setSeriesPaint(5, Color.CYAN);
-
 	private class ChartControlChangeListener implements ActionListener {
 		@Override
-		public synchronized void actionPerformed(ActionEvent e) {
-			if (!jointCombo.getSelectedItem().equals(selectedJoint)) {
-				selectedJoint = (JointType) jointCombo.getSelectedItem();
-				clearChart();
-			}
-
-			// packed mode checkbox
-			togglePackedMode(packedModeChekbox.isSelected());
-			
+		public synchronized void actionPerformed(ActionEvent e) {	
 			// velocity checkboxes
 			if (velocityXCheckbox.isSelected()) {
 				if (!dataset.getSeries().contains(seriesVelocityX)) {
@@ -230,21 +171,35 @@ public class TracingChartPanel extends JPanel {
 				}
 			}
 		}
-
-		private void togglePackedMode(boolean selected) {
-			long period = selected ? Long.MAX_VALUE : 10000;
-			seriesVelocityX.setMaximumItemAge(period);
-			seriesVelocityY.setMaximumItemAge(period);
-			seriesVelocityZ.setMaximumItemAge(period);
-			seriesAccelerationX.setMaximumItemAge(period);
-			seriesAccelerationY.setMaximumItemAge(period);
-			seriesAccelerationZ.setMaximumItemAge(period);
+	}
+	
+	public void clearChart() {
+		seriesVelocityX.clear();
+		seriesVelocityY.clear();
+		seriesVelocityZ.clear();
+		seriesAccelerationX.clear();
+		seriesAccelerationY.clear();
+		seriesAccelerationZ.clear();
+	}
+	
+	public void drawChart(List<Body> data, JointType selectedType, boolean seatedMode) {
+		if (!velocityXCheckbox.isSelected() 
+				&& !velocityYCheckbox.isSelected()
+				&& !velocityZCheckbox.isSelected()
+				&& !accelerationXCheckbox.isSelected()
+				&& !accelerationYCheckbox.isSelected()
+				&& !accelerationZCheckbox.isSelected()) {
+			return;
+		}
+		for (Body body : data) {
+			if (body == null || !body.isBodyReady()) {
+				continue;
+			}
+			updateChart(body, selectedType, seatedMode);
 		}
 	}
 
-	public void updateChart(Body body, boolean seatedMode) {
-		data.add(body);
-		
+	public void updateChart(Body body, JointType selectedType, boolean seatedMode) {
 		if (!velocityXCheckbox.isSelected() 
 				&& !velocityYCheckbox.isSelected()
 				&& !velocityZCheckbox.isSelected()
@@ -257,7 +212,6 @@ public class TracingChartPanel extends JPanel {
 			return;
 		}
 
-		JointType selectedType = (JointType) jointCombo.getSelectedItem();
 		switch (selectedType) {
 		case ANKLE_LEFT:
 			if (!seatedMode) {
@@ -481,7 +435,7 @@ public class TracingChartPanel extends JPanel {
 			break;
 		}
 	}
-
+	
 	private void updateVelocity(long timestamp, double velocityX,
 			double velocityY, double velocityZ) {
 		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(
@@ -502,19 +456,4 @@ public class TracingChartPanel extends JPanel {
 				new FixedMillisecond(timestamp), accelerationZ));
 	}
 
-	public void clearChart() {
-		data = new ArrayList<Body>();
-		
-		seriesVelocityX.clear();
-		seriesVelocityY.clear();
-		seriesVelocityZ.clear();
-		seriesAccelerationX.clear();
-		seriesAccelerationY.clear();
-		seriesAccelerationZ.clear();
-	}
-
-	private void openChartSelector() {
-		chartSelector.open(data);
-	}
-	
 }

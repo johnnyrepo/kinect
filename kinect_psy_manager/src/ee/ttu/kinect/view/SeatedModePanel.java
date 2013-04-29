@@ -19,7 +19,7 @@ public class SeatedModePanel extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(border, "Tracking mode"));
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		seatedModeCheckbox = new JCheckBox("Seated mode ON");
+		seatedModeCheckbox = new JCheckBox("Seated mode");
 		add(seatedModeCheckbox);
 	}
 

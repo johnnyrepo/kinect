@@ -64,7 +64,7 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean sensorOn = ((JCheckBox) e.getSource()).isSelected();
-				Logger.getLogger(getClass().getName()).info("sensor on canged: " + sensorOn);
+				Logger.getLogger(getClass().getName()).info("sensor mode changed: " + sensorOn);
 				if (!sensorOn) {
 					model.stopSensorRun();
 				} else {
