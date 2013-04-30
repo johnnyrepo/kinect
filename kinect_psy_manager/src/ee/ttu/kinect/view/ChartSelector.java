@@ -3,10 +3,12 @@ package ee.ttu.kinect.view;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -22,76 +24,86 @@ public class ChartSelector extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private List<Body> data;
-	
+
 	private JList<JointType> jointsList;
-	
+
+	private JCheckBox singleModeCheckbox;
+
 	private JButton drawButton;
-	
+
 	private JPanel controlPanel;
-	
+
 	private JPanel chartsPanel;
 	
-	private ChartComponent cc1;
-	
-	private ChartComponent cc2;
-	
-	private ChartComponent cc3;
-	
+	private List<ChartComponent> charts;
+
 	public ChartSelector() {
 		setTitle("Analysis with charts");
 		setSize(1600, 800);
 		setLayout(new BorderLayout());
-		
+
 		jointsList = new JList<JointType>(JointType.values());
 		JScrollPane scrollPane = new JScrollPane(jointsList);
-		
+
 		jointsList.addListSelectionListener(new JointsListChangeListener());
-		
+
+		singleModeCheckbox = new JCheckBox("Single chart");
+
 		drawButton = new JButton("Draw model");
-		drawButton.addActionListener(new DrawButtonListener());
-		
+		drawButton.addActionListener(new DrawButtonChangeListener());
+
 		controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
 		controlPanel.add(scrollPane);
+		controlPanel.add(singleModeCheckbox);
 		controlPanel.add(drawButton);
-
-		cc1 = new ChartComponent();
-		cc2 = new ChartComponent();
-		cc3 = new ChartComponent();
 		
+		charts = new ArrayList<ChartComponent>();
+		for (int i = 0; i < 3; i++) {
+			charts.add(new ChartComponent());
+		}
+
 		chartsPanel = new JPanel();
 		chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
-		chartsPanel.add(cc1);
-		chartsPanel.add(cc2);
-		chartsPanel.add(cc3);
-		
+
 		add(controlPanel, BorderLayout.LINE_START);
 		add(chartsPanel, BorderLayout.CENTER);
 	}
-	
+
 	public void open(List<Body> data) {
 		this.data = data;
 		setVisible(true);
 	}
-	
+
 	private class JointsListChangeListener implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			int[] indexes = jointsList.getSelectedIndices();
 			if (indexes.length > 3) {
-				jointsList.removeSelectionInterval(e.getFirstIndex(), e.getLastIndex());
+				jointsList.removeSelectionInterval(e.getFirstIndex(),
+						e.getLastIndex());
 			}
 		}
 	}
-	
-	private class DrawButtonListener implements ActionListener {
+
+	private class DrawButtonChangeListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			List<JointType> selectedJoints = jointsList.getSelectedValuesList();
-			for (JointType selectedJoint : selectedJoints) {
-				cc1.drawChart(data, selectedJoint, false);
+			if (singleModeCheckbox.isSelected()) {
+				ChartComponent cc = charts.get(0);
+				cc.drawChart(data, selectedJoints, false);
+				chartsPanel.add(cc);
+			} else {
+				for (int i = 0; i < selectedJoints.size(); i++) {
+					ChartComponent cc = charts.get(i);
+					cc.drawChart(data, selectedJoints.get(i), false);
+					chartsPanel.add(cc);
+				}
 			}
+			chartsPanel.validate();
+			chartsPanel.repaint();
 		}
 	}
-	
+
 }

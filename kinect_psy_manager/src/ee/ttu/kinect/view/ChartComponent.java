@@ -182,6 +182,17 @@ public class ChartComponent extends JPanel {
 		seriesAccelerationZ.clear();
 	}
 	
+	public void drawChart(List<Body> data, List<JointType> selectedTypes, boolean seatedMode) {
+		for (JointType selectedType : selectedTypes) {
+			for (Body body : data) {
+				if (body == null || !body.isBodyReady()) {
+					continue;
+				}
+				updateChart(body, selectedType, seatedMode);
+			}
+		}
+	}
+	
 	public void drawChart(List<Body> data, JointType selectedType, boolean seatedMode) {
 		for (Body body : data) {
 			if (body == null || !body.isBodyReady()) {
