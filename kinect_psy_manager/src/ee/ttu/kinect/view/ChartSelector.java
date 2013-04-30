@@ -1,8 +1,6 @@
 package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -41,7 +39,7 @@ public class ChartSelector extends JFrame {
 	
 	public ChartSelector() {
 		setTitle("Analysis with charts");
-		setSize(1600, 900);
+		setSize(1600, 800);
 		setLayout(new BorderLayout());
 		
 		jointsList = new JList<JointType>(JointType.values());
@@ -62,21 +60,13 @@ public class ChartSelector extends JFrame {
 		cc3 = new ChartComponent();
 		
 		chartsPanel = new JPanel();
-		chartsPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.VERTICAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		chartsPanel.add(cc1, c);
-		c.gridx = 0;
-		c.gridy = 1;
-		chartsPanel.add(cc2, c);
-		c.gridx = 0;
-		c.gridy = 2;
-		chartsPanel.add(cc3, c);
+		chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
+		chartsPanel.add(cc1);
+		chartsPanel.add(cc2);
+		chartsPanel.add(cc3);
 		
 		add(controlPanel, BorderLayout.LINE_START);
-		add(chartsPanel, BorderLayout.LINE_END);
+		add(chartsPanel, BorderLayout.CENTER);
 	}
 	
 	public void open(List<Body> data) {

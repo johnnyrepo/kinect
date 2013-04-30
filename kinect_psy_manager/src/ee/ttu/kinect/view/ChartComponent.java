@@ -183,14 +183,6 @@ public class ChartComponent extends JPanel {
 	}
 	
 	public void drawChart(List<Body> data, JointType selectedType, boolean seatedMode) {
-		if (!velocityXCheckbox.isSelected() 
-				&& !velocityYCheckbox.isSelected()
-				&& !velocityZCheckbox.isSelected()
-				&& !accelerationXCheckbox.isSelected()
-				&& !accelerationYCheckbox.isSelected()
-				&& !accelerationZCheckbox.isSelected()) {
-			return;
-		}
 		for (Body body : data) {
 			if (body == null || !body.isBodyReady()) {
 				continue;
