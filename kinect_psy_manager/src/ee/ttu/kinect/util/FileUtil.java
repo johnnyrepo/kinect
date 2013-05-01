@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 import ee.ttu.kinect.model.Body;
 
-public class FileWorker {
+public class FileUtil {
 
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
 

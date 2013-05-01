@@ -17,7 +17,7 @@ public class FileRunner extends Runner {
 	}
 
 	@Override
-	public void start() {
+	public synchronized void start() {
 		body = new Body();
 		
 		super.start();
@@ -60,5 +60,5 @@ public class FileRunner extends Runner {
 	public boolean isSeatedMode() {
 		return skeletonParserFile.isSeatedMode();
 	}
-	
+
 }

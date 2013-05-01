@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 
 import ee.ttu.kinect.controller.MainController;
-import ee.ttu.kinect.util.FileWorker;
+import ee.ttu.kinect.util.FileUtil;
 
 public abstract class Runner {
 
@@ -16,35 +16,53 @@ public abstract class Runner {
 
 	protected Body body;
 
-	protected FileWorker fileWorker;
+	protected FileUtil fileWorker;
 	
 	protected boolean seatedMode = false;
 
 	private Worker worker;
 
 	private boolean running = false;
+	
+	private boolean paused = false;
 
 	
 	public Runner(MainController controller) {
 		this.controller = controller;
 		this.body = new Body();
-		this.fileWorker = new FileWorker();
+		this.fileWorker = new FileUtil();
 	}
 
 	public synchronized void start() {
 		logger.info("Starting " + getClass().getName());
 		running = true;
+		unpause();
 		worker = new Worker();
 		worker.execute();
 	}
-
-	public void stop() {
+	
+	public synchronized void stop() {
 		logger.info("Stopping " + getClass().getName());
 		running = false;
+		unpause();
 	}
 
+	public synchronized void pause() {
+		logger.info("Pausing " + getClass().getName());
+		paused = true;
+	}
+	
+	public synchronized void unpause() {
+		logger.info("Unpausing " + getClass().getName());
+		paused = false;
+	}
+	
 	public boolean isRunning() {
 		return running;
+	}
+	
+	public boolean isPaused() {
+		return paused;
 	}
 	
 	public void setSeatedMode() {
@@ -72,6 +90,9 @@ public abstract class Runner {
 			// logger.info("Running: " + getClass().getName() + " " +
 			// isCancelled());
 			while (running) {
+				if (paused) {
+					continue;
+				}
 				// get data
 				String input = null;
 				input = getSkeletonData();

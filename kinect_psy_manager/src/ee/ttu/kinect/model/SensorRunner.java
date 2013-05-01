@@ -30,7 +30,7 @@ public class SensorRunner extends Runner {
 		logger.info("Starting skeleton tracking");
 
 		try {
-			String msg = this.kinectSensorProxy.initialize(); // Ignoring the return value. "Setup Done!"
+			String msg = this.kinectSensorProxy.initialize();
 			if (msg.contains("FAIL")) {
 				throw new Exception(msg.replaceAll("FAIL,", ""));
 			}			
@@ -43,7 +43,7 @@ public class SensorRunner extends Runner {
 		} catch (Exception e) {
 			controller.showMessagePopup(e.getMessage());
 		}
-		controller.setSensorOn(isRunning());
+		controller.setSensorEnabled(isRunning());
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class SensorRunner extends Runner {
 			String msg = this.kinectSensorProxy.stop();
 			logger.info("Stopping kinect tracking: " + msg);
 			super.stop();
-			controller.setSensorOn(isRunning());
+			controller.setSensorEnabled(isRunning());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}		

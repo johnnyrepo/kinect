@@ -94,6 +94,11 @@ public abstract class TracingPanel extends JPanel {
 		}
 	}
 
+	public void clear() {
+		this.body = null;
+		repaint();
+	}
+	
 	abstract protected void drawJointLine(Joint joint1, Joint joint2);
 	
 	abstract protected void drawJoint(Joint joint);

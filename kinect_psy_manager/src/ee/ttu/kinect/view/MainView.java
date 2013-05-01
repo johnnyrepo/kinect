@@ -105,8 +105,10 @@ public class MainView extends JFrame {
 		setVisible(true);
 	}
 	
-	public void setSensorOn(boolean sensorOn) {
-		buttonPanel.setSensorOn(sensorOn);
+	public void setSensorEnabled(boolean enabled) {
+		buttonPanel.setSensorEnabled(enabled);
+		buttonPanel.setRecordingEnabled(enabled);
+		buttonPanel.setPlayingEnabled(!enabled);
 	}
 
 	public File getSelectedFile() {
@@ -125,6 +127,12 @@ public class MainView extends JFrame {
 
 	public void clearChart() {
 		chartPanel.clearChart();
+	}
+	
+	public void clearDraw() {
+		frontDrawPanel.clear();
+		sideDrawPanel.clear();
+		upDrawPanel.clear();
 	}
 	
 	public void addListenerForMenuOpen(final ActionListener listener) {
@@ -162,6 +170,10 @@ public class MainView extends JFrame {
 		buttonPanel.addListenerForStartPlay(listener);
 	}
 
+	public void addListenerForPause(ActionListener listener) {
+		buttonPanel.addListenerForPause(listener);
+	}
+	
 	public void addListenerForStopPlay(ActionListener listener) {
 		buttonPanel.addListenerForStopPlay(listener);
 	}

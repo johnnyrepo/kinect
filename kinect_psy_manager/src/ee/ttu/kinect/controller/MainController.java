@@ -2,7 +2,6 @@ package ee.ttu.kinect.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
@@ -28,10 +27,7 @@ public class MainController {
 		view.addListenerForMenuOpen(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				File file = view.getSelectedFile(); //TODO: fix this hack
-				if (file != null) {
-					model.readFile(file);
-				}
+				model.setFileToPlay(view.getSelectedFile()); //TODO: fix this hack
 			}
 		});
 		view.addListenerForStartRecord(new ActionListener() {
@@ -49,9 +45,20 @@ public class MainController {
 		view.addListenerForStartPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.clearChart();
-				model.stopSensorRun();
-				model.startFileRun();
+				if (model.isFileRunPaused()) {
+					model.unpauseFileRun();
+				} else {
+					view.clearChart();
+					view.clearDraw();
+					model.stopSensorRun();
+					model.startFileRun();
+				}
+			}
+		});
+		view.addListenerForPause(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.pauseFileRun();
 			}
 		});
 		view.addListenerForStopPlay(new ActionListener() {
@@ -104,8 +111,8 @@ public class MainController {
 		return view.getMarkersState();
 	}
 	
-	public void setSensorOn(boolean sensorOn) {
-		view.setSensorOn(sensorOn);
+	public void setSensorEnabled(boolean enabled) {
+		view.setSensorEnabled(enabled);
 	}
 	
 	public static void main(String... args) {

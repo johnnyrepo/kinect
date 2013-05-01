@@ -11,14 +11,16 @@ public class MainModel {
 	private SensorRunner sensorRunner;
 	
 	private FileRunner fileRunner;
+	
+	private File fileToPlay;
 		
 	public MainModel(MainController controller) {
 		this.sensorRunner = new SensorRunner(controller);
 		this.fileRunner = new FileRunner(controller);
 	}
 
-	public void readFile(File file) {
-		fileRunner.readFile(file);
+	public void setFileToPlay(File file) {
+		fileToPlay = file;
 	}
 
 	public void startRecord() {
@@ -34,6 +36,7 @@ public class MainModel {
 	}
 	
 	public void startFileRun() {
+		fileRunner.readFile(fileToPlay);
 		if (!fileRunner.isRunning()) {
 			fileRunner.start();
 			
@@ -41,6 +44,17 @@ public class MainModel {
 		}
 	}
 
+	public void pauseFileRun() {
+		if (fileRunner.isRunning()) {
+			fileRunner.pause();
+		}
+	}
+	
+	public void unpauseFileRun() {
+		if (fileRunner.isRunning()) {
+			fileRunner.unpause();		}
+	}
+	
 	public void stopFileRun() {
 		if (fileRunner.isRunning()) {
 			fileRunner.stop();
@@ -61,8 +75,8 @@ public class MainModel {
 		}
 	}
 	
-	public boolean isSensorRunning() {
-		return sensorRunner.isRunning();
+	public boolean isFileRunPaused() {
+		return fileRunner.isPaused();
 	}
 
 	public void setSeatedMode() {
