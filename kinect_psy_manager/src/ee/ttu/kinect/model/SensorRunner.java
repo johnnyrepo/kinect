@@ -106,7 +106,7 @@ public class SensorRunner extends Runner {
 	protected void saveSkeleton() {
 		if (savingToFile) {
 			try {
-				fileWorker.addToSave(body.getJointString(seatedMode) + getMarkers());
+				fileUtil.addToSave(body.getJointString(seatedMode) + getMarkers());
 			} catch (IOException e) {
 				logger.info(e.getLocalizedMessage());
 			}
@@ -133,7 +133,7 @@ public class SensorRunner extends Runner {
 		try {
 			savingToFile = false;
 
-			fileWorker.dumpFile(seatedMode);
+			fileUtil.dumpFile(seatedMode);
 		} catch (IOException e) {
 			logger.info(e.getLocalizedMessage());
 		}

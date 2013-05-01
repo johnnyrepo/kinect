@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
@@ -181,12 +182,20 @@ public class MainView extends JFrame {
 		buttonPanel.addListenerForStopPlay(listener);
 	}
 
+	public void addListenerForDrawChart(ActionListener listener) {
+		chartPanel.addListenerForDrawChart(listener);
+	}
+	
 	public void showMessagePopup(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
 
 	public boolean[] getMarkersState() {
 		return markersPanel.getMarkersState();
+	}
+
+	public void openChartSelector(List<Body> data) {
+		chartPanel.openChartSelector(data);
 	}
 	
 }

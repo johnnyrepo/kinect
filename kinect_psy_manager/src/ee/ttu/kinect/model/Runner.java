@@ -16,7 +16,7 @@ public abstract class Runner {
 
 	protected Body body;
 
-	protected FileUtil fileWorker;
+	protected FileUtil fileUtil;
 	
 	protected boolean seatedMode = false;
 
@@ -30,7 +30,7 @@ public abstract class Runner {
 	public Runner(MainController controller) {
 		this.controller = controller;
 		this.body = new Body();
-		this.fileWorker = new FileUtil();
+		this.fileUtil = new FileUtil();
 	}
 
 	public synchronized void start() {

@@ -1,6 +1,7 @@
 package ee.ttu.kinect.model;
 
 import java.io.File;
+import java.util.List;
 
 import ee.ttu.kinect.controller.MainController;
 
@@ -89,6 +90,11 @@ public class MainModel {
 
 	public boolean isSeatedMode() {
 		return activeRunner.isSeatedMode();
+	}
+
+	public List<Body> getFileData() {
+		fileRunner.readFile(fileToPlay);
+		return fileRunner.getData();
 	}
 	
 }

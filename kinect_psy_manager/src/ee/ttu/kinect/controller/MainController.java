@@ -92,6 +92,12 @@ public class MainController {
 				}
 			}
 		});
+		view.addListenerForDrawChart(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				view.openChartSelector(model.getFileData());
+			}
+		});
 
 		view.setRecordingEnabled(false);
 		view.setPlayingEnabled(false);

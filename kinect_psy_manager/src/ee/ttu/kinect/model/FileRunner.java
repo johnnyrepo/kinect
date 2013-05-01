@@ -3,6 +3,8 @@ package ee.ttu.kinect.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ee.ttu.kinect.SkeletonParserFile;
 import ee.ttu.kinect.controller.MainController;
@@ -27,7 +29,7 @@ public class FileRunner extends Runner {
 	protected synchronized String getSkeletonData() {
 		String input = null;
 		try {
-			input = fileWorker.readNextLine();
+			input = fileUtil.readNextLine();
 			if (input == null) { // end of file reached
 				stop();
 			}
@@ -50,7 +52,7 @@ public class FileRunner extends Runner {
 	
 	public void readFile(File file) {
 		try {
-			fileWorker.readFile(file);
+			fileUtil.readFile(file);
 		} catch (FileNotFoundException e) {
 			logger.info(e.getLocalizedMessage());
 		}
@@ -59,6 +61,23 @@ public class FileRunner extends Runner {
 	@Override
 	public boolean isSeatedMode() {
 		return skeletonParserFile.isSeatedMode();
+	}
+
+	public List<Body> getData() {
+		List<Body> data = new ArrayList<Body>();
+		Body body = new Body();
+		List<String> textData = fileUtil.readAllLines();
+		for (String text : textData) {
+			try {
+				skeletonParserFile.parseSkeleton(text, body);
+				Body clone = body.clone();
+				data.add(clone);
+			} catch (CloneNotSupportedException e) {
+				logger.info(e.getLocalizedMessage());
+			}
+		}
+		
+		return data;
 	}
 
 }

@@ -23,7 +23,9 @@ public class FileUtil {
 
 	private BufferedReader fileReader;
 
-	private List<String> textCache = new ArrayList<String>();
+	private List<String> stringCache = new ArrayList<String>();
+
+	private int stringCachePosition = 0;
 
 	public void readFile(File file) throws FileNotFoundException {
 		fileReader = new BufferedReader(new FileReader(file));
@@ -32,7 +34,7 @@ public class FileUtil {
 			String input = fileReader.readLine();
 			logger.info("opening... " + input);
 			while ((input = fileReader.readLine()) != null) {
-				addCachedText(input);
+				addCachedString(input);
 			}
 			fileReader.close();
 		} catch (IOException e) {
@@ -61,33 +63,39 @@ public class FileUtil {
 	}
 
 	public synchronized void addToSave(String text) throws IOException {
-		addCachedText(text);
+		addCachedString(text);
 	}
 
 	public synchronized String readNextLine() throws IOException {
 		String str = null;
 		try {
-			str = textCache.remove(0);
+			str = stringCache.get(stringCachePosition);
+			stringCachePosition++;
 		} catch(Exception e) {
 			logger.info(e.getLocalizedMessage());
 		}
 		return str;
 	}
+	
+	public synchronized List<String> readAllLines() {
+		return stringCache;
+	}
 
 	private String getCachedText() {
 		StringBuffer cachedText = new StringBuffer();
-		for (String cached : textCache) {
+		for (String cached : stringCache) {
 			cachedText = cachedText.append(cached).append("\n");
 		}
 		return cachedText.toString();
 	}
 
-	private void addCachedText(String text) {
-		textCache.add(text);
+	private void addCachedString(String text) {
+		stringCache.add(text);
 	}
 
 	private void emptyCache() {
-		textCache = new ArrayList<String>();
+		stringCache = new ArrayList<String>();
+		stringCachePosition = 0;
 	}
 
 }

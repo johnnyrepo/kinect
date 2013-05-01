@@ -1,6 +1,7 @@
 package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -72,9 +73,20 @@ public class ChartSelector extends JFrame {
 
 	public void open(List<Body> data) {
 		this.data = data;
+		clearCharts();
 		setVisible(true);
+		System.out.println("bujaaaa");
 	}
 
+	private void clearCharts() {
+		for (ChartComponent cc : charts) {
+			cc.clearChart();
+			chartsPanel.remove(cc);
+		}
+		chartsPanel.validate();
+		chartsPanel.repaint();
+	}
+	
 	private class JointsListChangeListener implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -89,6 +101,7 @@ public class ChartSelector extends JFrame {
 	private class DrawButtonChangeListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			clearCharts();
 			List<JointType> selectedJoints = jointsList.getSelectedValuesList();
 			if (singleModeCheckbox.isSelected()) {
 				ChartComponent cc = charts.get(0);

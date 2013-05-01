@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -70,7 +69,7 @@ public class TracingChartPanel extends JPanel {
 
 	private ChartSelector chartSelector;
 
-	private List<Body> data = new ArrayList<Body>();
+	//private List<Body> data = new ArrayList<Body>();
 
 	public TracingChartPanel() {
 		Border border = BorderFactory.createEtchedBorder();
@@ -108,7 +107,7 @@ public class TracingChartPanel extends JPanel {
 		drawChartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				openChartSelector();
+				
 			}
 		});
 
@@ -241,9 +240,28 @@ public class TracingChartPanel extends JPanel {
 			seriesAccelerationZ.setMaximumItemAge(period);
 		}
 	}
+	
+	public void addListenerForDrawChart(ActionListener listener) {
+		drawChartButton.addActionListener(listener);
+	}
+	
+	public void openChartSelector(List<Body> data) {
+		chartSelector.open(data);
+	}
 
+	public void clearChart() {
+		//data = new ArrayList<Body>();
+		
+		seriesVelocityX.clear();
+		seriesVelocityY.clear();
+		seriesVelocityZ.clear();
+		seriesAccelerationX.clear();
+		seriesAccelerationY.clear();
+		seriesAccelerationZ.clear();
+	}
+	
 	public void updateChart(Body body, boolean seatedMode) {
-		data.add(body);
+		//data.add(body);
 		
 		if (!velocityXCheckbox.isSelected() 
 				&& !velocityYCheckbox.isSelected()
@@ -500,21 +518,6 @@ public class TracingChartPanel extends JPanel {
 				new FixedMillisecond(timestamp), accelerationY));
 		seriesAccelerationZ.addOrUpdate(new TimeSeriesDataItem(
 				new FixedMillisecond(timestamp), accelerationZ));
-	}
-
-	public void clearChart() {
-		data = new ArrayList<Body>();
-		
-		seriesVelocityX.clear();
-		seriesVelocityY.clear();
-		seriesVelocityZ.clear();
-		seriesAccelerationX.clear();
-		seriesAccelerationY.clear();
-		seriesAccelerationZ.clear();
-	}
-
-	private void openChartSelector() {
-		chartSelector.open(data);
 	}
 	
 }
