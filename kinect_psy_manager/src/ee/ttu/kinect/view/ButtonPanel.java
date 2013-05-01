@@ -61,6 +61,7 @@ public class ButtonPanel extends JPanel {
 	
 	public void setPlayingEnabled(boolean enabled) {
 		playButton.setEnabled(enabled);
+		pausePlayButton.setEnabled(enabled);
 		stopPlayButton.setEnabled(enabled);
 	}
 	

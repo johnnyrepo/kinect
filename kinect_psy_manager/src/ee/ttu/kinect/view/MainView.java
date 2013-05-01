@@ -54,6 +54,14 @@ public class MainView extends JFrame {
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		setTitle("KinectManager v0.7");
+
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			System.exit(1);
+		}
+		
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
 		menuItemOpen = new JMenuItem("Open");
@@ -76,7 +84,6 @@ public class MainView extends JFrame {
 		controlPanel.add(seatedModePanel);
 
 		drawPanel = new JPanel();
-		//drawPanel.setSize(new Dimension(1200, 400));
 		drawPanel.setLayout(new BoxLayout(drawPanel, BoxLayout.X_AXIS));
 		frontDrawPanel = new FrontTracingPanel();
 		sideDrawPanel = new SideTracingPanel();
@@ -86,16 +93,6 @@ public class MainView extends JFrame {
 		drawPanel.add(upDrawPanel);
 
 		chartPanel = new TracingChartPanel();
-		//chartPanel.setSize(1200, 300);
-		
-
-		setTitle("KinectManager v0.7");
-
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) {
-			System.exit(1);
-		}
 
 		getContentPane().add(controlPanel, BorderLayout.NORTH);
 		getContentPane().add(drawPanel, BorderLayout.CENTER);
@@ -107,10 +104,16 @@ public class MainView extends JFrame {
 	
 	public void setSensorEnabled(boolean enabled) {
 		buttonPanel.setSensorEnabled(enabled);
-		buttonPanel.setRecordingEnabled(enabled);
-		buttonPanel.setPlayingEnabled(!enabled);
 	}
 
+	public void setRecordingEnabled(boolean enabled) {
+		buttonPanel.setRecordingEnabled(enabled);
+	}
+	
+	public void setPlayingEnabled(boolean enabled) {
+		buttonPanel.setPlayingEnabled(enabled);
+	}
+	
 	public File getSelectedFile() {
 		return selectedFile;
 	}

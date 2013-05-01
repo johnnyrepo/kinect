@@ -28,6 +28,7 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.setFileToPlay(view.getSelectedFile()); //TODO: fix this hack
+				view.setPlayingEnabled(true);
 			}
 		});
 		view.addListenerForStartRecord(new ActionListener() {
@@ -92,6 +93,8 @@ public class MainController {
 			}
 		});
 
+		view.setRecordingEnabled(false);
+		view.setPlayingEnabled(false);
 		model.startSensorRun();
 	}
 
@@ -113,6 +116,7 @@ public class MainController {
 	
 	public void setSensorEnabled(boolean enabled) {
 		view.setSensorEnabled(enabled);
+		view.setRecordingEnabled(enabled);
 	}
 	
 	public static void main(String... args) {
