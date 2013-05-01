@@ -31,16 +31,19 @@ public class SensorRunner extends Runner {
 
 		try {
 			String msg = this.kinectSensorProxy.initialize(); // Ignoring the return value. "Setup Done!"
-			logger.info(msg);
-			
+			if (msg.contains("FAIL")) {
+				throw new Exception(msg.replaceAll("FAIL,", ""));
+			}			
 			msg = this.kinectSensorProxy.start();
-			logger.info(msg);
+			if (msg.contains("FAIL")) {
+				throw new Exception(msg.replaceAll("FAIL,", ""));
+			}	
 			
 			super.start();
-			controller.setSensorOn(isRunning());
 		} catch (Exception e) {
 			controller.showMessagePopup(e.getMessage());
 		}
+		controller.setSensorOn(isRunning());
 	}
 
 	@Override
