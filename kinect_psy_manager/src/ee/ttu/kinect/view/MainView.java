@@ -73,6 +73,7 @@ public class MainView extends JFrame {
 		fileChooser = new JFileChooser();
 		
 		controlPanel = new JPanel();
+		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
 		buttonPanel = new ButtonPanel("Record / Play");
 				

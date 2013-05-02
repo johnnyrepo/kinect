@@ -1,7 +1,6 @@
 package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -75,7 +74,6 @@ public class ChartSelector extends JFrame {
 		this.data = data;
 		clearCharts();
 		setVisible(true);
-		System.out.println("bujaaaa");
 	}
 
 	private void clearCharts() {

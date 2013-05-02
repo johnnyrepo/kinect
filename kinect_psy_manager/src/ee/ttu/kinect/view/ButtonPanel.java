@@ -46,8 +46,6 @@ public class ButtonPanel extends JPanel {
 		add(playButton);
 		add(pausePlayButton);
 		add(stopPlayButton);
-
-		setSize(1200, 100);
 	}
 
 	public void setSensorEnabled(boolean enabled) {
