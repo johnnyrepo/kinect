@@ -55,7 +55,7 @@ public class MainView extends JFrame {
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setTitle("KinectManager v0.7");
+		setTitle("KinectPsyManager v0.8");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

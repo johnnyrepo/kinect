@@ -1,9 +1,9 @@
 package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -34,8 +34,6 @@ public class ChartSelector extends JFrame {
 	private JPanel controlPanel;
 
 	private JPanel chartsPanel;
-	
-	private List<ChartComponent> charts;
 
 	public ChartSelector() {
 		setTitle("Analysis with charts");
@@ -57,11 +55,6 @@ public class ChartSelector extends JFrame {
 		controlPanel.add(scrollPane);
 		controlPanel.add(singleModeCheckbox);
 		controlPanel.add(drawButton);
-		
-		charts = new ArrayList<ChartComponent>();
-		for (int i = 0; i < 3; i++) {
-			charts.add(new ChartComponent());
-		}
 
 		chartsPanel = new JPanel();
 		chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
@@ -77,9 +70,11 @@ public class ChartSelector extends JFrame {
 	}
 
 	private void clearCharts() {
-		for (ChartComponent cc : charts) {
-			cc.clearChart();
-			chartsPanel.remove(cc);
+		for (Component comp : chartsPanel.getComponents()) {
+			if (comp instanceof ChartComponent) {
+				((ChartComponent) comp).clearChart();
+				chartsPanel.remove(comp);
+			}
 		}
 		chartsPanel.validate();
 		chartsPanel.repaint();
@@ -102,12 +97,12 @@ public class ChartSelector extends JFrame {
 			clearCharts();
 			List<JointType> selectedJoints = jointsList.getSelectedValuesList();
 			if (singleModeCheckbox.isSelected()) {
-				ChartComponent cc = charts.get(0);
+				ChartComponent cc = new ChartComponent();
 				cc.drawChart(data, selectedJoints, false);
 				chartsPanel.add(cc);
 			} else {
 				for (int i = 0; i < selectedJoints.size(); i++) {
-					ChartComponent cc = charts.get(i);
+					ChartComponent cc = new ChartComponent();
 					cc.drawChart(data, selectedJoints.get(i), false);
 					chartsPanel.add(cc);
 				}
