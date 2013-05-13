@@ -107,9 +107,9 @@ public abstract class Runner {
 						} catch (CloneNotSupportedException e) {
 							logger.info(e.getLocalizedMessage());
 						}
+						// Save skeleton, if needed
+						saveSkeleton();
 					}
-					// Save skeleton, if needed
-					saveSkeleton();
 				}
 
 				// Sleep for X ms
