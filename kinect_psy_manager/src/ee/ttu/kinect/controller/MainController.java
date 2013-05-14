@@ -2,11 +2,22 @@ package ee.ttu.kinect.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 
+import com.stromberglabs.cluster.Cluster;
+import com.stromberglabs.cluster.ElkanKMeansClusterer;
+import com.stromberglabs.cluster.KClusterer;
+import com.stromberglabs.cluster.KMeansClusterer;
+import com.stromberglabs.cluster.KMeansForestClusterer;
+import com.stromberglabs.cluster.KMeansTreeClusterer;
+
 import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Joint;
+import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MainModel;
 import ee.ttu.kinect.view.MainView;
 
@@ -95,7 +106,39 @@ public class MainController {
 		view.addListenerForDrawChart(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.openChartSelector(model.getFileData());
+				List<Body> data = model.getFileData();
+				view.openChartSelector(data);
+
+				KClusterer clusterer1 = new KMeansClusterer();
+				KClusterer clusterer2 = new KMeansForestClusterer();
+				KClusterer clusterer3 = new KMeansTreeClusterer();
+				KClusterer clusterer4 = new ElkanKMeansClusterer();
+				calculateClusters(data, clusterer1);
+				calculateClusters(data, clusterer2);
+				calculateClusters(data, clusterer3);
+				calculateClusters(data, clusterer4);
+			}		
+		
+			private void calculateClusters(List<Body> data, KClusterer clusterer) {
+				List<Joint> jointData = getListOfJoints(data, JointType.HAND_LEFT);
+				Cluster[] clusters = clusterer.cluster(jointData, 8);
+				System.out.println("Clusters = " + clusters.length);
+				for (Cluster c : clusters){
+					System.out.println(c.getItems().size());
+				}
+			}
+
+			private List<Joint> getListOfJoints(List<Body> data, JointType type) {
+				List<Joint> jointData = new ArrayList<Joint>();
+				for (Body body : data) {
+					Joint joint = body.getJoint(type);
+					//System.out.println("hoj " + joint);
+					if (joint != null) {
+						jointData.add(joint);
+					}
+				}
+				
+				return jointData;
 			}
 		});
 

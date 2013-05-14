@@ -70,8 +70,10 @@ public class FileRunner extends Runner {
 		for (String text : textData) {
 			try {
 				skeletonParserFile.parseSkeleton(text, body);
-				Body clone = body.clone();
-				data.add(clone);
+				if (body.isBodyReady() && body.isBodyChanged()) {
+					Body clone = body.clone();
+					data.add(clone);
+				}
 			} catch (CloneNotSupportedException e) {
 				logger.info(e.getLocalizedMessage());
 			}

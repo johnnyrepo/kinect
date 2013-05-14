@@ -390,6 +390,74 @@ public class Body implements Cloneable {
 		this.footRight = footRight;
 	}
 	
+	public Joint getJoint(JointType type) {
+		Joint joint = null;
+		switch (type) {
+		case ANKLE_LEFT:
+			joint = ankleLeft;
+			break;
+		case ANKLE_RIGHT:
+			joint = ankleRight;
+			break;
+		case ELBOW_LEFT:
+			joint = elbowLeft;
+			break;
+		case ELBOW_RIGHT:
+			joint = elbowRight;
+			break;
+		case FOOT_LEFT:
+			joint = footLeft;
+			break;
+		case FOOT_RIGHT:
+			joint = footRight;
+			break;
+		case HAND_LEFT:
+			joint = handLeft;
+			break;
+		case HAND_RIGHT:
+			joint = handRight;
+			break;
+		case HEAD:
+			joint = head;
+			break;
+		case HIP_CENTER:
+			joint = hipCenter;
+			break;
+		case HIP_LEFT:
+			joint = hipLeft;
+			break;
+		case HIP_RIGHT:
+			joint = hipRight;
+			break;
+		case KNEE_LEFT:
+			joint = kneeLeft;
+			break;
+		case KNEE_RIGHT:
+			joint = kneeRight;
+			break;
+		case SHOULDER_CENTER:
+			joint = shoulderCenter;
+			break;
+		case SHOULDER_LEFT:
+			joint = shoulderLeft;
+			break;
+		case SHOULDER_RIGHT:
+			joint = shoulderRight;
+			break;
+		case SPINE:
+			joint = spine;
+			break;
+		case WRIST_LEFT:
+			joint = wristLeft;
+			break;
+		case WRIST_RIGHT:
+			joint = wristRight;
+			break;
+		}
+		
+		return joint;
+	}
+	
 	public double getHeadXVelocity() {
 		return headXVelocity;
 	}

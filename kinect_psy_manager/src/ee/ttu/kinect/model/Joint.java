@@ -2,7 +2,9 @@ package ee.ttu.kinect.model;
 
 import java.util.Locale;
 
-public class Joint {
+import com.stromberglabs.cluster.Clusterable;
+
+public class Joint implements Clusterable {
 	
 	private double positionX;
 	
@@ -69,6 +71,11 @@ public class Joint {
 		line = line.append(jointType).append("ZAcceleration\t");
 		
 		return line.toString();
+	}
+	
+	@Override
+	public float[] getLocation() {
+		return new float[]{(float) positionX, (float) positionY, (float) positionZ};
 	}
 	
 	@Override

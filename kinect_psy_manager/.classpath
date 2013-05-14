@@ -6,5 +6,9 @@
 	<classpathentry kind="lib" path="lib/KinectSensorProxy.j4n.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.14.jar" sourcepath="lib/jfreechart-src.zip"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
+	<classpathentry kind="lib" path="lib/kmeansclustering.jar"/>
+	<classpathentry kind="lib" path="lib/stromberglabs-commons.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-src.zip"/>
+	<classpathentry kind="lib" path="lib/kohonen.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
