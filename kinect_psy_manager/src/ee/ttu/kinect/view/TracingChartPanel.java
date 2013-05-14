@@ -48,6 +48,8 @@ public class TracingChartPanel extends JPanel {
 	private JCheckBox accelerationZCheckbox;
 	
 	private JButton drawChartButton;
+	
+	private JButton segmentChartButton;
 
 	private JFreeChart chart;
 
@@ -89,6 +91,8 @@ public class TracingChartPanel extends JPanel {
 		accelerationZCheckbox = new JCheckBox("Acceleration Z");
 		
 		drawChartButton = new JButton("Draw chart");
+		
+		segmentChartButton = new JButton("Do segmentation");
 
 		chartSelector = new ChartSelector();
 		
@@ -104,12 +108,6 @@ public class TracingChartPanel extends JPanel {
 		accelerationYCheckbox.addActionListener(chartControlListener);
 		accelerationZCheckbox.addActionListener(chartControlListener);
 		packedModeChekbox.addActionListener(chartControlListener);
-		drawChartButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
 
 		packedModeChekbox.setSelected(true);
 		
@@ -144,6 +142,7 @@ public class TracingChartPanel extends JPanel {
 		chartControlPanel.add(accelerationYCheckbox);
 		chartControlPanel.add(accelerationZCheckbox);
 		chartControlPanel.add(drawChartButton);
+		chartControlPanel.add(segmentChartButton);
 
 		add(chartControlPanel);
 		add(chartPanel);
@@ -243,6 +242,10 @@ public class TracingChartPanel extends JPanel {
 	
 	public void addListenerForDrawChart(ActionListener listener) {
 		drawChartButton.addActionListener(listener);
+	}
+	
+	public void addListenerForSegmentChart(ActionListener listener) {
+		segmentChartButton.addActionListener(listener);
 	}
 	
 	public void openChartSelector(List<Body> data) {

@@ -187,6 +187,10 @@ public class MainView extends JFrame {
 		chartPanel.addListenerForDrawChart(listener);
 	}
 	
+	public void addListenerForSegmentChart(ActionListener listener) {
+		chartPanel.addListenerForSegmentChart(listener);
+	}
+	
 	public void showMessagePopup(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}

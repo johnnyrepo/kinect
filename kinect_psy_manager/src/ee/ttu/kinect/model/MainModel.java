@@ -23,6 +23,10 @@ public class MainModel {
 	public void setFileToPlay(File file) {
 		fileToPlay = file;
 	}
+	
+	public File getFileToPlay() {
+		return fileToPlay;
+	}
 
 	public void startRecord() {
 		stopFileRun();
