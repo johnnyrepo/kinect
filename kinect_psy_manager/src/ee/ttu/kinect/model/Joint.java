@@ -13,6 +13,20 @@ public class Joint implements Clusterable {
 	private double positionZ;
 	
 	private JointType type;
+	
+	private double velocityX;
+	
+	private double velocityY;
+	
+	private double velocityZ;
+	
+	private double accelerationX;
+	
+	private double accelerationY;
+	
+	private double accelerationZ;
+	
+	private int clusterId;
 
 	public double getPositionX() {
 		return positionX;
@@ -44,6 +58,62 @@ public class Joint implements Clusterable {
 
 	public void setType(JointType type) {
 		this.type = type;
+	}
+	
+	public double getVelocityX() {
+		return velocityX;
+	}
+
+	public void setVelocityX(double velocityX) {
+		this.velocityX = velocityX;
+	}
+
+	public double getVelocityY() {
+		return velocityY;
+	}
+
+	public void setVelocityY(double velocityY) {
+		this.velocityY = velocityY;
+	}
+
+	public double getVelocityZ() {
+		return velocityZ;
+	}
+
+	public void setVelocityZ(double velocityZ) {
+		this.velocityZ = velocityZ;
+	}
+
+	public double getAccelerationX() {
+		return accelerationX;
+	}
+
+	public void setAccelerationX(double accelerationX) {
+		this.accelerationX = accelerationX;
+	}
+
+	public double getAccelerationY() {
+		return accelerationY;
+	}
+
+	public void setAccelerationY(double accelerationY) {
+		this.accelerationY = accelerationY;
+	}
+
+	public double getAccelerationZ() {
+		return accelerationZ;
+	}
+
+	public void setAccelerationZ(double accelerationZ) {
+		this.accelerationZ = accelerationZ;
+	}
+
+	public int getClusterId() {
+		return clusterId;
+	}
+
+	public void setClusterId(int clusterId) {
+		this.clusterId = clusterId;
 	}
 	
 	public static String getHeader(JointType jointType) {
@@ -112,5 +182,5 @@ public class Joint implements Clusterable {
 			return false;
 		return true;
 	}
-	
+
 }

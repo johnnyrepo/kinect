@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.view.chart.TracingChartPanel;
 
 
 public class MainView extends JFrame {
@@ -199,8 +200,8 @@ public class MainView extends JFrame {
 		return markersPanel.getMarkersState();
 	}
 
-	public void openChartSelector(List<Body> data) {
-		chartPanel.openChartSelector(data);
+	public void openChartSelector(List<Body> data, boolean modelChart) {
+		chartPanel.openChartSelector(data, modelChart);
 	}
 	
 }

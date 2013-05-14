@@ -1,4 +1,4 @@
-package ee.ttu.kinect.view;
+package ee.ttu.kinect.view.chart;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -25,6 +25,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
 import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
 public class TracingChartPanel extends JPanel {
@@ -47,9 +48,9 @@ public class TracingChartPanel extends JPanel {
 
 	private JCheckBox accelerationZCheckbox;
 	
-	private JButton drawChartButton;
+	private JButton chartButton;
 	
-	private JButton segmentChartButton;
+	private JButton segmentationChartButton;
 
 	private JFreeChart chart;
 
@@ -71,7 +72,6 @@ public class TracingChartPanel extends JPanel {
 
 	private ChartSelector chartSelector;
 
-	//private List<Body> data = new ArrayList<Body>();
 
 	public TracingChartPanel() {
 		Border border = BorderFactory.createEtchedBorder();
@@ -90,9 +90,9 @@ public class TracingChartPanel extends JPanel {
 		accelerationYCheckbox = new JCheckBox("Acceleration Y");
 		accelerationZCheckbox = new JCheckBox("Acceleration Z");
 		
-		drawChartButton = new JButton("Draw chart");
+		chartButton = new JButton("Chart analysis");
 		
-		segmentChartButton = new JButton("Do segmentation");
+		segmentationChartButton = new JButton("Segmentation analysis");
 
 		chartSelector = new ChartSelector();
 		
@@ -141,8 +141,8 @@ public class TracingChartPanel extends JPanel {
 		chartControlPanel.add(accelerationXCheckbox);
 		chartControlPanel.add(accelerationYCheckbox);
 		chartControlPanel.add(accelerationZCheckbox);
-		chartControlPanel.add(drawChartButton);
-		chartControlPanel.add(segmentChartButton);
+		chartControlPanel.add(chartButton);
+		chartControlPanel.add(segmentationChartButton);
 
 		add(chartControlPanel);
 		add(chartPanel);
@@ -241,20 +241,18 @@ public class TracingChartPanel extends JPanel {
 	}
 	
 	public void addListenerForDrawChart(ActionListener listener) {
-		drawChartButton.addActionListener(listener);
+		chartButton.addActionListener(listener);
 	}
 	
 	public void addListenerForSegmentChart(ActionListener listener) {
-		segmentChartButton.addActionListener(listener);
+		segmentationChartButton.addActionListener(listener);
 	}
 	
-	public void openChartSelector(List<Body> data) {
-		chartSelector.open(data);
+	public void openChartSelector(List<Body> data, boolean modelChart) {
+		chartSelector.open(data, modelChart);
 	}
 
-	public void clearChart() {
-		//data = new ArrayList<Body>();
-		
+	public void clearChart() {		
 		seriesVelocityX.clear();
 		seriesVelocityY.clear();
 		seriesVelocityZ.clear();
@@ -263,9 +261,7 @@ public class TracingChartPanel extends JPanel {
 		seriesAccelerationZ.clear();
 	}
 	
-	public void updateChart(Body body, boolean seatedMode) {
-		//data.add(body);
-		
+	public void updateChart(Body body, boolean seatedMode) {		
 		if (!velocityXCheckbox.isSelected() 
 				&& !velocityYCheckbox.isSelected()
 				&& !velocityZCheckbox.isSelected()
@@ -277,230 +273,31 @@ public class TracingChartPanel extends JPanel {
 		if (body == null || !body.isBodyReady()) {
 			return;
 		}
-
+		
 		JointType selectedType = (JointType) jointCombo.getSelectedItem();
-		switch (selectedType) {
-		case ANKLE_LEFT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getAnkleLeftXVelocity(),
-						body.getAnkleLeftYVelocity(),
-						body.getAnkleLeftZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getAnkleLeftXAcceleration(),
-						body.getAnkleLeftYAcceleration(),
-						body.getAnkleLeftZAcceleration());
-			}
-			break;
-		case ANKLE_RIGHT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getAnkleRightXVelocity(),
-						body.getAnkleRightYVelocity(),
-						body.getAnkleRightZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getAnkleRightXAcceleration(),
-						body.getAnkleRightYAcceleration(),
-						body.getAnkleRightZAcceleration());
-			}
-			break;
-		case ELBOW_LEFT:
-			updateVelocity(body.getTimestamp(), 
-					body.getElbowLeftXVelocity(),
-					body.getElbowLeftYVelocity(), 
-					body.getElbowLeftZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getElbowLeftXAcceleration(),
-					body.getElbowLeftYAcceleration(),
-					body.getElbowLeftZAcceleration());
-			break;
-		case ELBOW_RIGHT:
-			updateVelocity(body.getTimestamp(), 
-					body.getElbowRightXVelocity(),
-					body.getElbowRightYVelocity(),
-					body.getElbowRightZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getElbowRightXAcceleration(),
-					body.getElbowRightYAcceleration(),
-					body.getElbowRightZAcceleration());
-			break;
-		case FOOT_LEFT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getFootLeftXVelocity(),
-						body.getFootLeftYVelocity(),
-						body.getFootLeftZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getFootLeftXAcceleration(),
-						body.getFootLeftYAcceleration(),
-						body.getFootLeftZAcceleration());
-			}
-			break;
-		case FOOT_RIGHT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getFootRightXVelocity(),
-						body.getFootRightYVelocity(),
-						body.getFootRightZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getFootRightXAcceleration(),
-						body.getFootRightYAcceleration(),
-						body.getFootRightZAcceleration());
-			}
-			break;
-		case HAND_LEFT:
-			updateVelocity(body.getTimestamp(), 
-					body.getHandLeftXVelocity(),
-					body.getHandLeftYVelocity(), 
-					body.getHandLeftZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getHandLeftXAcceleration(),
-					body.getHandLeftYAcceleration(),
-					body.getHandLeftZAcceleration());
-			break;
-		case HAND_RIGHT:
-			updateVelocity(body.getTimestamp(), 
-					body.getHandRightXVelocity(),
-					body.getHandRightYVelocity(), 
-					body.getHandRightZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getHandRightXAcceleration(),
-					body.getHandRightYAcceleration(),
-					body.getHandRightZAcceleration());
-			break;
-		case HEAD:
-			updateVelocity(body.getTimestamp(), 
-					body.getHeadXVelocity(),
-					body.getHeadYVelocity(), 
-					body.getHeadZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getHeadXAcceleration(), 
-					body.getHeadYAcceleration(),
-					body.getHeadZAcceleration());
-			break;
-		case HIP_CENTER:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getHipCenterXVelocity(),
-						body.getHipCenterYVelocity(),
-						body.getHipCenterZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getHipCenterXAcceleration(), 
-						body.getHipCenterYAcceleration(),
-						body.getHipCenterZAcceleration());
-			}
-			break;
-		case HIP_LEFT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(), 
-						body.getHipLeftXVelocity(),
-						body.getHipLeftYVelocity(), 
-						body.getHipLeftZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getHipLeftXAcceleration(), 
-						body.getHipLeftYAcceleration(),
-						body.getHipLeftZAcceleration());
-			}
-			break;
-		case HIP_RIGHT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getHipRightXVelocity(),
-						body.getHipRightYVelocity(),
-						body.getHipRightZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getHipRightXAcceleration(), 
-						body.getHipRightYAcceleration(),
-						body.getHipRightZAcceleration());
-			}
-			break;
-		case KNEE_LEFT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getKneeLeftXVelocity(),
-						body.getKneeLeftYVelocity(),
-						body.getKneeLeftZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getKneeLeftXAcceleration(), 
-						body.getKneeLeftYAcceleration(),
-						body.getKneeLeftZAcceleration());
-			}
-			break;
-		case KNEE_RIGHT:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(),
-						body.getKneeRightXVelocity(),
-						body.getKneeRightYVelocity(),
-						body.getKneeRightZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getKneeRightXAcceleration(), 
-						body.getKneeRightYAcceleration(),
-						body.getKneeRightZAcceleration());
-			}
-			break;
-		case SHOULDER_CENTER:
-			updateVelocity(body.getTimestamp(),
-					body.getShoulderCenterXVelocity(),
-					body.getShoulderCenterYVelocity(),
-					body.getShoulderCenterZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getShoulderCenterXAcceleration(), 
-					body.getShoulderCenterYAcceleration(),
-					body.getShoulderCenterZAcceleration());
-			break;
-		case SHOULDER_LEFT:
-			updateVelocity(body.getTimestamp(),
-					body.getShoulderLeftXVelocity(),
-					body.getShoulderLeftYVelocity(),
-					body.getShoulderLeftZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getShoulderLeftXAcceleration(), 
-					body.getShoulderLeftYAcceleration(),
-					body.getShoulderLeftZAcceleration());
-			break;
-		case SHOULDER_RIGHT:
-			updateVelocity(body.getTimestamp(),
-					body.getShoulderRightXVelocity(),
-					body.getShoulderRightYVelocity(),
-					body.getShoulderRightZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getShoulderRightXAcceleration(), 
-					body.getShoulderRightYAcceleration(),
-					body.getShoulderRightZAcceleration());
-			break;
-		case SPINE:
-			if (!seatedMode) {
-				updateVelocity(body.getTimestamp(), 
-						body.getSpineXVelocity(),
-						body.getSpineYVelocity(), 
-						body.getSpineZVelocity());
-				updateAcceleration(body.getTimestamp(),
-						body.getSpineXAcceleration(), 
-						body.getSpineYAcceleration(),
-						body.getSpineZAcceleration());
-			}
-			break;
-		case WRIST_LEFT:
-			updateVelocity(body.getTimestamp(), 
-					body.getWristLeftXVelocity(),
-					body.getWristLeftYVelocity(), 
-					body.getWristLeftZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getWristLeftXAcceleration(), 
-					body.getWristLeftYAcceleration(),
-					body.getWristLeftZAcceleration());
-			break;
-		case WRIST_RIGHT:
-			updateVelocity(body.getTimestamp(), 
-					body.getWristRightXVelocity(),
-					body.getWristRightYVelocity(),
-					body.getWristRightZVelocity());
-			updateAcceleration(body.getTimestamp(),
-					body.getWristRightXAcceleration(), 
-					body.getWristRightYAcceleration(),
-					body.getWristRightZAcceleration());
-			break;
+		Joint joint = body.getJoint(selectedType);
+		if (seatedMode
+				&& (joint.getType() == JointType.ANKLE_LEFT
+						|| joint.getType() == JointType.ANKLE_RIGHT
+						|| joint.getType() == JointType.FOOT_LEFT
+						|| joint.getType() == JointType.FOOT_RIGHT
+						|| joint.getType() == JointType.HIP_CENTER
+						|| joint.getType() == JointType.HIP_LEFT
+						|| joint.getType() == JointType.HIP_RIGHT
+						|| joint.getType() == JointType.KNEE_LEFT
+						|| joint.getType() == JointType.KNEE_RIGHT 
+						|| joint.getType() == JointType.SPINE)) {
+			return;
 		}
+		
+		updateVelocity(body.getTimestamp(),
+				joint.getVelocityX(),
+				joint.getVelocityY(),
+				joint.getVelocityZ());
+		updateAcceleration(body.getTimestamp(),
+				joint.getAccelerationX(),
+				joint.getAccelerationY(),
+				joint.getAccelerationZ());
 	}
 
 	private void updateVelocity(long timestamp, double velocityX,

@@ -1,4 +1,4 @@
-package ee.ttu.kinect.view;
+package ee.ttu.kinect.view.chart;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -35,8 +35,9 @@ public class ChartSelector extends JFrame {
 
 	private JPanel chartsPanel;
 
+	private boolean modelChart;
+
 	public ChartSelector() {
-		setTitle("Analysis with charts");
 		setSize(1600, 800);
 		setLayout(new BorderLayout());
 
@@ -63,8 +64,14 @@ public class ChartSelector extends JFrame {
 		add(chartsPanel, BorderLayout.CENTER);
 	}
 
-	public void open(List<Body> data) {
+	public void open(List<Body> data, boolean modelChart) {
+		if (modelChart) {
+			setTitle("Analysis with velocities/accelerations values");
+		} else {
+			setTitle("Analysis with segmentation");
+		}
 		this.data = data;
+		this.modelChart = modelChart;
 		clearCharts();
 		setVisible(true);
 	}
@@ -97,12 +104,12 @@ public class ChartSelector extends JFrame {
 			clearCharts();
 			List<JointType> selectedJoints = jointsList.getSelectedValuesList();
 			if (singleModeCheckbox.isSelected()) {
-				ChartComponent cc = new ChartComponent();
+				ChartComponent cc = modelChart ? new ModelChartComponent() : new SegmentationChartComponent();
 				cc.drawChart(data, selectedJoints, false);
 				chartsPanel.add(cc);
 			} else {
 				for (int i = 0; i < selectedJoints.size(); i++) {
-					ChartComponent cc = new ChartComponent();
+					ChartComponent cc = modelChart ? new ModelChartComponent() : new SegmentationChartComponent();
 					cc.drawChart(data, selectedJoints.get(i), false);
 					chartsPanel.add(cc);
 				}
