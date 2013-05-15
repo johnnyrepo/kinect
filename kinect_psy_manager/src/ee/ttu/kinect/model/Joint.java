@@ -26,6 +26,8 @@ public class Joint implements Clusterable {
 	
 	private double accelerationZ;
 	
+	private double velocity;
+	
 	private int clusterId;
 
 	public double getPositionX() {
@@ -108,6 +110,14 @@ public class Joint implements Clusterable {
 		this.accelerationZ = accelerationZ;
 	}
 
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
+	}
+	
 	public int getClusterId() {
 		return clusterId;
 	}
@@ -116,6 +126,66 @@ public class Joint implements Clusterable {
 		this.clusterId = clusterId;
 	}
 	
+	@Override
+	public float[] getLocation() {
+		return new float[]{(float) velocityX, (float) velocityY, (float) velocityZ};
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(roundCoord(positionX)).append(roundCoord(positionY)).append(roundCoord(positionZ));
+		
+		return sb.toString();
+	}
+	
+	private String roundCoord(double coord) {
+		return String.format(Locale.ENGLISH, "%-13.12f", coord) + "\t";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Joint other = (Joint) obj;
+		if (Double.doubleToLongBits(accelerationX) != Double
+				.doubleToLongBits(other.accelerationX))
+			return false;
+		if (Double.doubleToLongBits(accelerationY) != Double
+				.doubleToLongBits(other.accelerationY))
+			return false;
+		if (Double.doubleToLongBits(accelerationZ) != Double
+				.doubleToLongBits(other.accelerationZ))
+			return false;
+		if (clusterId != other.clusterId)
+			return false;
+		if (Double.doubleToLongBits(positionX) != Double
+				.doubleToLongBits(other.positionX))
+			return false;
+		if (Double.doubleToLongBits(positionY) != Double
+				.doubleToLongBits(other.positionY))
+			return false;
+		if (Double.doubleToLongBits(positionZ) != Double
+				.doubleToLongBits(other.positionZ))
+			return false;
+		if (type != other.type)
+			return false;
+		if (Double.doubleToLongBits(velocityX) != Double
+				.doubleToLongBits(other.velocityX))
+			return false;
+		if (Double.doubleToLongBits(velocityY) != Double
+				.doubleToLongBits(other.velocityY))
+			return false;
+		if (Double.doubleToLongBits(velocityZ) != Double
+				.doubleToLongBits(other.velocityZ))
+			return false;
+		return true;
+	}
+
 	public static String getHeader(JointType jointType) {
 		StringBuffer line = new StringBuffer();
 		line = line.append(jointType).append("X\t");
@@ -141,46 +211,6 @@ public class Joint implements Clusterable {
 		line = line.append(jointType).append("ZAcceleration\t");
 		
 		return line.toString();
-	}
-	
-	@Override
-	public float[] getLocation() {
-		return new float[]{(float) positionX, (float) positionY, (float) positionZ};
-	}
-	
-	@Override
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(roundCoord(positionX)).append(roundCoord(positionY)).append(roundCoord(positionZ));
-		
-		return sb.toString();
-	}
-	
-	private String roundCoord(double coord) {
-		return String.format(Locale.ENGLISH, "%-13.12f", coord) + "\t";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Joint other = (Joint) obj;
-		if (Double.doubleToLongBits(positionX) != Double
-				.doubleToLongBits(other.positionX))
-			return false;
-		if (Double.doubleToLongBits(positionY) != Double
-				.doubleToLongBits(other.positionY))
-			return false;
-		if (Double.doubleToLongBits(positionZ) != Double
-				.doubleToLongBits(other.positionZ))
-			return false;
-		if (type != other.type)
-			return false;
-		return true;
 	}
 
 }

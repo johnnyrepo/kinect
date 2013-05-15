@@ -2,31 +2,11 @@ package ee.ttu.kinect.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 
-import kohonen.LearningData;
-import kohonen.WTALearningFunction;
-import learningFactorFunctional.ConstantFunctionalFactor;
-import metrics.EuclidesMetric;
-import network.DefaultNetwork;
-import topology.MatrixTopology;
-
-import com.stromberglabs.cluster.Cluster;
-import com.stromberglabs.cluster.Clusterable;
-import com.stromberglabs.cluster.ElkanKMeansClusterer;
-import com.stromberglabs.cluster.KClusterer;
-import com.stromberglabs.cluster.KMeansClusterer;
-import com.stromberglabs.cluster.KMeansForestClusterer;
-import com.stromberglabs.cluster.KMeansTreeClusterer;
-
 import ee.ttu.kinect.model.Body;
-import ee.ttu.kinect.model.Joint;
-import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MainModel;
 import ee.ttu.kinect.view.MainView;
 
