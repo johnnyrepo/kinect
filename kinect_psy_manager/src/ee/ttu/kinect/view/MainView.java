@@ -56,7 +56,7 @@ public class MainView extends JFrame {
 	public MainView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setTitle("KinectPsyManager v0.8");
+		setTitle("KinectPsyManager v0.9");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -200,8 +200,8 @@ public class MainView extends JFrame {
 		return markersPanel.getMarkersState();
 	}
 
-	public void openChartSelector(List<Body> data, boolean modelChart) {
-		chartPanel.openChartSelector(data, modelChart);
+	public void openChartSelector(List<Body> data, boolean valuesCharts) {
+		chartPanel.openChartSelector(data, valuesCharts);
 	}
 	
 }

@@ -248,8 +248,8 @@ public class TracingChartPanel extends JPanel {
 		segmentationChartButton.addActionListener(listener);
 	}
 	
-	public void openChartSelector(List<Body> data, boolean modelChart) {
-		chartSelector.open(data, modelChart);
+	public void openChartSelector(List<Body> data, boolean valuesCharts) {
+		chartSelector.open(data, valuesCharts);
 	}
 
 	public void clearChart() {		

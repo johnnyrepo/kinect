@@ -19,104 +19,125 @@ import javax.swing.event.ListSelectionListener;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 
-public class ChartSelector extends JFrame {
-
-	private static final long serialVersionUID = 1L;
-
-	private List<Body> data;
-
-	private JList<JointType> jointsList;
-
-	private JCheckBox singleModeCheckbox;
-
-	private JButton drawButton;
-
-	private JPanel controlPanel;
-
-	private JPanel chartsPanel;
-
-	private boolean modelChart;
-
-	public ChartSelector() {
-		setSize(1600, 800);
-		setLayout(new BorderLayout());
-
-		jointsList = new JList<JointType>(JointType.values());
-		JScrollPane scrollPane = new JScrollPane(jointsList);
-
-		jointsList.addListSelectionListener(new JointsListChangeListener());
-
-		singleModeCheckbox = new JCheckBox("Single chart");
-
-		drawButton = new JButton("Draw model");
-		drawButton.addActionListener(new DrawButtonChangeListener());
-
-		controlPanel = new JPanel();
-		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
-		controlPanel.add(scrollPane);
-		controlPanel.add(singleModeCheckbox);
-		controlPanel.add(drawButton);
-
-		chartsPanel = new JPanel();
-		chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
-
-		add(controlPanel, BorderLayout.LINE_START);
-		add(chartsPanel, BorderLayout.CENTER);
-	}
-
-	public void open(List<Body> data, boolean modelChart) {
-		if (modelChart) {
-			setTitle("Analysis with velocities/accelerations values");
-		} else {
-			setTitle("Analysis with segmentation");
-		}
-		this.data = data;
-		this.modelChart = modelChart;
-		clearCharts();
-		setVisible(true);
-	}
-
-	private void clearCharts() {
-		for (Component comp : chartsPanel.getComponents()) {
-			if (comp instanceof ChartComponent) {
-				((ChartComponent) comp).clearChart();
-				chartsPanel.remove(comp);
-			}
-		}
-		chartsPanel.validate();
-		chartsPanel.repaint();
+public class ChartSelector {
+	
+	private ChartSelectorFrame frame;
+	
+	public void open(List<Body> data, boolean valuesCharts) {
+		this.frame = new ChartSelectorFrame(data, valuesCharts);
+		//clearCharts();
 	}
 	
-	private class JointsListChangeListener implements ListSelectionListener {
-		@Override
-		public void valueChanged(ListSelectionEvent e) {
-			int[] indexes = jointsList.getSelectedIndices();
-			if (indexes.length > 3) {
-				jointsList.removeSelectionInterval(e.getFirstIndex(),
-						e.getLastIndex());
-			}
-		}
-	}
-
-	private class DrawButtonChangeListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			clearCharts();
-			List<JointType> selectedJoints = jointsList.getSelectedValuesList();
-			if (singleModeCheckbox.isSelected()) {
-				ChartComponent cc = modelChart ? new ModelChartComponent() : new SegmentationChartComponent();
-				cc.drawChart(data, selectedJoints, false);
-				chartsPanel.add(cc);
+	private class ChartSelectorFrame extends JFrame {
+		
+		private static final long serialVersionUID = 1L;
+	
+		private List<Body> data;
+		
+		private boolean valuesCharts;
+	
+		private JList<JointType> jointsList;
+	
+		private SegmentationChartConfPanel segmentationConfPanel;
+		
+		private JCheckBox singleModeCheckbox;
+	
+		private JButton drawButton;
+	
+		private JPanel controlPanel;
+	
+		private JPanel chartsPanel;
+	
+		public ChartSelectorFrame(List<Body> data, boolean valuesCharts) {
+			this.data = data;
+			this.valuesCharts = valuesCharts;
+			
+			setSize(1600, 800);
+			setLayout(new BorderLayout());
+			
+			if (valuesCharts) {
+				setTitle("Analysis with velocities/accelerations VALUES");
 			} else {
-				for (int i = 0; i < selectedJoints.size(); i++) {
-					ChartComponent cc = modelChart ? new ModelChartComponent() : new SegmentationChartComponent();
-					cc.drawChart(data, selectedJoints.get(i), false);
-					chartsPanel.add(cc);
+				setTitle("Analysis with velocities/accelerations SEGMENTATION");
+			}
+	
+			jointsList = new JList<JointType>(JointType.values());
+			JScrollPane scrollPane = new JScrollPane(jointsList);
+	
+			jointsList.addListSelectionListener(new JointsListChangeListener());
+			
+			segmentationConfPanel = new SegmentationChartConfPanel();
+	
+			singleModeCheckbox = new JCheckBox("Single chart");
+	
+			drawButton = new JButton("Draw model");
+			drawButton.addActionListener(new DrawButtonChangeListener());
+	
+			controlPanel = new JPanel();
+			controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
+			controlPanel.add(scrollPane);
+			if (!valuesCharts) {
+				controlPanel.add(segmentationConfPanel);
+			}
+			controlPanel.add(singleModeCheckbox);
+			controlPanel.add(drawButton);
+	
+			chartsPanel = new JPanel();
+			chartsPanel.setLayout(new BoxLayout(chartsPanel, BoxLayout.Y_AXIS));
+	
+			add(controlPanel, BorderLayout.LINE_START);
+			add(chartsPanel, BorderLayout.CENTER);
+			
+			setVisible(true);
+		}
+		
+		private void clearCharts() {
+			for (Component comp : chartsPanel.getComponents()) {
+				if (comp instanceof ChartComponent) {
+					((ChartComponent) comp).clearChart();
+					chartsPanel.remove(comp);
 				}
 			}
 			chartsPanel.validate();
 			chartsPanel.repaint();
 		}
+		
+		private class JointsListChangeListener implements ListSelectionListener {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				int[] indexes = jointsList.getSelectedIndices();
+				if (indexes.length > 3) {
+					jointsList.removeSelectionInterval(e.getFirstIndex(),
+							e.getLastIndex());
+				}
+			}
+		}
+
+		private class DrawButtonChangeListener implements ActionListener {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearCharts();
+				List<JointType> selectedJoints = jointsList.getSelectedValuesList();
+				ChartComponent cc = null;
+				if (valuesCharts) {
+					cc = new ModelChartComponent();
+				} else {
+					cc = new SegmentationChartComponent(segmentationConfPanel.getClustersAmount(), 
+							segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
+				}
+				if (singleModeCheckbox.isSelected()) {
+					cc.drawChart(data, selectedJoints, false);
+				} else {
+					for (int i = 0; i < selectedJoints.size(); i++) {
+						cc.drawChart(data, selectedJoints.get(i), false);
+					}
+				}
+				chartsPanel.add(cc);
+				chartsPanel.validate();
+				chartsPanel.repaint();
+			}
+		}
+	
 	}
 
 }

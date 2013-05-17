@@ -1,9 +1,20 @@
 package ee.ttu.kinect.view.chart;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import kohonen.LearningData;
+import kohonen.WTALearningFunction;
+
+import learningFactorFunctional.ConstantFunctionalFactor;
+import metrics.EuclidesMetric;
+
+import network.DefaultNetwork;
+
+import topology.MatrixTopology;
 
 import com.stromberglabs.cluster.Cluster;
 import com.stromberglabs.cluster.Clusterable;
@@ -18,13 +29,25 @@ import ee.ttu.kinect.model.JointType;
 
 public class SegmentationChartComponent extends ChartComponent {
 
-	private static final int AMOUNT_OF_CLUSTERS = 8;
-	
 	private static final long serialVersionUID = 1L;
-
-	private static final int STEP_BETWEEN_POINTS = 7;
 	
-	private static final int AMOUNT_OF_POINTS = 7;
+	private static final int AMOUNT_OF_CLUSTERS = 5; // 8
+
+	private static final int STEP_BETWEEN_POINTS = 5; // 7
+	
+	private static final int AMOUNT_OF_POINTS = 6; // 7
+	
+	private int clustersAmount;
+	
+	private int stepBetweenPoints;
+	
+	private int pointsAmount;
+	
+	public SegmentationChartComponent(int clustersAmount, int stepBetweenPoints, int pointsAmount) {
+		this.clustersAmount = clustersAmount;
+		this.stepBetweenPoints = stepBetweenPoints;
+		this.pointsAmount = pointsAmount;
+	}
 	
 	@Override
 	public void drawChart(List<Body> data, List<JointType> selectedTypes,
@@ -41,7 +64,7 @@ public class SegmentationChartComponent extends ChartComponent {
 			
 			for (int i = 0; i < data.size(); i++) {
 				// making a big step forward:)
-				for (int k = 0; k < AMOUNT_OF_POINTS; k++) {
+				for (int k = 0; k < pointsAmount; k++) {
 					int x = i + k;
 					if (x >= data.size()) {
 						break;
@@ -54,7 +77,7 @@ public class SegmentationChartComponent extends ChartComponent {
 					
 					joint1 = data.get(x).getJoint(selectedType);
 					time1 = data.get(x).getTimestamp();
-					j = x + STEP_BETWEEN_POINTS;
+					j = x + stepBetweenPoints;
 					if (j < data.size()) {
 						Joint joint2 = data.get(j).getJoint(selectedType);
 						long time2 = data.get(j).getTimestamp();
@@ -66,7 +89,7 @@ public class SegmentationChartComponent extends ChartComponent {
 					// taking next joint on timeline			
 					joint1 = data.get(x + 1).getJoint(selectedType);
 					time1 = data.get(x + 1).getTimestamp();
-					j = x + 1 + STEP_BETWEEN_POINTS;
+					j = x + 1 + stepBetweenPoints;
 					if (j < data.size()) {
 						Joint joint2 = data.get(j).getJoint(selectedType);
 						long time2 = data.get(j).getTimestamp();
@@ -77,7 +100,7 @@ public class SegmentationChartComponent extends ChartComponent {
 					//System.out.println("hoj velocity " + velocity2 + "-" + velocity1);
 					velocityVector.addElement(velocity2 - velocity1);
 					
-					if (velocityVector.getElements().size() == AMOUNT_OF_POINTS) {
+					if (velocityVector.getElements().size() == pointsAmount) {
 						velocityVector.setTimestamp(data.get(i).getTimestamp());
 						velocityData.add(velocityVector);
 						velocityVector = new Vector();
@@ -99,7 +122,7 @@ public class SegmentationChartComponent extends ChartComponent {
 					newClusterId++;
 				}
 				
-				if (oldToNewClusterIdMap.size() == AMOUNT_OF_CLUSTERS) {
+				if (oldToNewClusterIdMap.size() == clustersAmount) {
 					break;
 				}
 			}
@@ -126,42 +149,42 @@ public class SegmentationChartComponent extends ChartComponent {
 	}
 	
 	private <T> Cluster[] calculateClusters(List<Vector> data, KClusterer clusterer) {
-		Cluster[] clusters = clusterer.cluster(data, AMOUNT_OF_CLUSTERS);
+		Cluster[] clusters = clusterer.cluster(data, clustersAmount);
 		System.out.println("Clusters = " + clusters.length);
 		for (Cluster c : clusters) {
-			System.out.println("items = " + c.getItems().size() + " id = " + c.getId());
+//			System.out.println("items = " + c.getItems().size() + " id = " + c.getId());
 			for (Clusterable cl : c.getItems()) {
 				((Vector) cl).setClusterId(c.getId());
 			}
-			System.out.print("-=Centroid=-");
-			for (float centr : c.getClusterMean()) {
-				System.out.print(centr + " ");
-			}
-			System.out.println();
+//			System.out.print("-=Centroid=-");
+//			for (float centr : c.getClusterMean()) {
+//				System.out.print(centr + " ");
+//			}
+//			System.out.println();
 		}
 		
 		return clusters;
 	}
 
-	private List<Joint> getListOfJoints(List<Body> data, JointType type) {
-		List<Joint> jointData = new ArrayList<Joint>();
-		for (Body body : data) {
-			Joint joint = body.getJoint(type);
-			jointData.add(joint);
-		}
-		
-		return jointData;
-	}
-	
-//	private void calculateKohonen(File file) {
-//		MatrixTopology topology = new MatrixTopology(10, 10, 10);
-//		double[] maxWeight = {100, 100, 100};
-//		DefaultNetwork network = new DefaultNetwork(3, maxWeight, topology);
-//		ConstantFunctionalFactor constantFactor = new ConstantFunctionalFactor(0.8);
-//		LearningData data = new LearningData(file.getAbsolutePath());
-//		WTALearningFunction learning = new WTALearningFunction(network, 20, new EuclidesMetric(), data, constantFactor);
-//		learning.learn();
-//		System.out.println(network);
+//	private List<Joint> getListOfJoints(List<Body> data, JointType type) {
+//		List<Joint> jointData = new ArrayList<Joint>();
+//		for (Body body : data) {
+//			Joint joint = body.getJoint(type);
+//			jointData.add(joint);
+//		}
+//		
+//		return jointData;
 //	}
+	
+	private void calculateKohonen(File file) {
+		MatrixTopology topology = new MatrixTopology(10, 10, 10);
+		double[] maxWeight = {100, 100, 100};
+		DefaultNetwork network = new DefaultNetwork(3, maxWeight, topology);
+		ConstantFunctionalFactor constantFactor = new ConstantFunctionalFactor(0.8);
+		LearningData data = new LearningData(file.getAbsolutePath());
+		WTALearningFunction learning = new WTALearningFunction(network, 20, new EuclidesMetric(), data, constantFactor);
+		learning.learn();
+		System.out.println(network);
+	}
 	
 }
