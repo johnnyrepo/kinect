@@ -1,20 +1,19 @@
 package ee.ttu.kinect.view.chart;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kohonen.LearningData;
 import kohonen.WTALearningFunction;
-
 import learningFactorFunctional.ConstantFunctionalFactor;
 import metrics.EuclidesMetric;
-
 import network.DefaultNetwork;
-
+import network.KohonenNeuron;
 import topology.MatrixTopology;
+
+import activationFunction.ActivationFunctionModel;
+import activationFunction.LinearActivationFunction;
 
 import com.stromberglabs.cluster.Cluster;
 import com.stromberglabs.cluster.Clusterable;
@@ -22,6 +21,7 @@ import com.stromberglabs.cluster.KClusterer;
 import com.stromberglabs.cluster.KMeansClusterer;
 
 import ee.ttu.kinect.calc.Calculator;
+import ee.ttu.kinect.calc.KohonenLearningData;
 import ee.ttu.kinect.calc.Vector;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
@@ -55,62 +55,13 @@ public class SegmentationChartComponent extends ChartComponent {
 		// draw the result
 		String chartTitle = "";
 		for (JointType selectedType : selectedTypes) {
-			// Kohonen
-			//calculateKohonen(model.getFileToPlay());
-			// K-mean
-			KClusterer clusterer = new KMeansClusterer();
-			List<Vector> velocityData = new ArrayList<Vector>();
-			Vector velocityVector = new Vector();
-			
-			for (int i = 0; i < data.size(); i++) {
-				// making a big step forward:)
-				for (int k = 0; k < pointsAmount; k++) {
-					int x = i + k;
-					if (x >= data.size()) {
-						break;
-					}
-					double velocity1;
-					double velocity2;
-					Joint joint1;
-					long time1;
-					int j;
-					
-					joint1 = data.get(x).getJoint(selectedType);
-					time1 = data.get(x).getTimestamp();
-					j = x + stepBetweenPoints;
-					if (j < data.size()) {
-						Joint joint2 = data.get(j).getJoint(selectedType);
-						long time2 = data.get(j).getTimestamp();
-						velocity1 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
-					} else {
-						break;
-					}
-					
-					// taking next joint on timeline			
-					joint1 = data.get(x + 1).getJoint(selectedType);
-					time1 = data.get(x + 1).getTimestamp();
-					j = x + 1 + stepBetweenPoints;
-					if (j < data.size()) {
-						Joint joint2 = data.get(j).getJoint(selectedType);
-						long time2 = data.get(j).getTimestamp();
-						velocity2 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
-					} else {
-						break;
-					}
-					//System.out.println("hoj velocity " + velocity2 + "-" + velocity1);
-					velocityVector.addElement(velocity2 - velocity1);
-					
-					if (velocityVector.getElements().size() == pointsAmount) {
-						velocityVector.setTimestamp(data.get(i).getTimestamp());
-						velocityData.add(velocityVector);
-						velocityVector = new Vector();
-					}
-				}
-			}
-			
+			// getting data into vectors
+			List<Vector> velocityData = organizeDataIntoVectors(data, selectedType);
 			System.out.println("hojaaaaa " + data.size() + " " + velocityData.size());
-			calculateClusters(velocityData, clusterer);
-			//calculateClusters(jointData, clusterer);
+			// K-mean
+			calculateKmean(velocityData);
+			// Kohonen
+			//calculateKohonen(velocityData);
 			
 			// getting sequence of clusterId-s
 			Map<Integer, Integer> oldToNewClusterIdMap = new HashMap<Integer, Integer>();
@@ -148,7 +99,61 @@ public class SegmentationChartComponent extends ChartComponent {
 		chart.setTitle(chartTitle);
 	}
 	
-	private <T> Cluster[] calculateClusters(List<Vector> data, KClusterer clusterer) {
+	private List<Vector> organizeDataIntoVectors(List<Body> data, JointType selectedType) {
+		List<Vector> velocityData = new ArrayList<Vector>();
+		
+		for (int i = 0; i < data.size(); i++) {
+			Vector velocityVector = new Vector();
+			// making a big step forward:)
+			for (int k = 0; k < pointsAmount; k++) {
+				int x = i + k;
+				if (x >= data.size()) {
+					break;
+				}
+				double velocity1;
+				double velocity2;
+				Joint joint1;
+				long time1;
+				int j;
+				
+				joint1 = data.get(x).getJoint(selectedType);
+				time1 = data.get(x).getTimestamp();
+				j = x + stepBetweenPoints;
+				if (j < data.size()) {
+					Joint joint2 = data.get(j).getJoint(selectedType);
+					long time2 = data.get(j).getTimestamp();
+					velocity1 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
+				} else {
+					break;
+				}
+				
+				// taking next joint on timeline			
+				joint1 = data.get(x + 1).getJoint(selectedType);
+				time1 = data.get(x + 1).getTimestamp();
+				j = x + 1 + stepBetweenPoints;
+				if (j < data.size()) {
+					Joint joint2 = data.get(j).getJoint(selectedType);
+					long time2 = data.get(j).getTimestamp();
+					velocity2 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
+				} else {
+					break;
+				}
+				//System.out.println("hoj velocity " + velocity2 + "-" + velocity1);
+				velocityVector.addElement(velocity2 - velocity1);
+				
+				if (velocityVector.getElements().size() == pointsAmount) {
+					velocityVector.setTimestamp(data.get(i).getTimestamp());
+					velocityData.add(velocityVector);
+					velocityVector = new Vector();
+				}
+			}
+		}
+		
+		return velocityData;
+	}
+	
+	private void calculateKmean(List<Vector> data) {
+		KClusterer clusterer = new KMeansClusterer();
 		Cluster[] clusters = clusterer.cluster(data, clustersAmount);
 		System.out.println("Clusters = " + clusters.length);
 		for (Cluster c : clusters) {
@@ -162,8 +167,6 @@ public class SegmentationChartComponent extends ChartComponent {
 //			}
 //			System.out.println();
 		}
-		
-		return clusters;
 	}
 
 //	private List<Joint> getListOfJoints(List<Body> data, JointType type) {
@@ -176,15 +179,25 @@ public class SegmentationChartComponent extends ChartComponent {
 //		return jointData;
 //	}
 	
-	private void calculateKohonen(File file) {
-		MatrixTopology topology = new MatrixTopology(10, 10, 10);
-		double[] maxWeight = {100, 100, 100};
+	private void calculateKohonen(List<Vector> data) {
+		MatrixTopology topology = new MatrixTopology(3, 3, 3);
+		double[] maxWeight = {8, 8, 8};
 		DefaultNetwork network = new DefaultNetwork(3, maxWeight, topology);
 		ConstantFunctionalFactor constantFactor = new ConstantFunctionalFactor(0.8);
-		LearningData data = new LearningData(file.getAbsolutePath());
-		WTALearningFunction learning = new WTALearningFunction(network, 20, new EuclidesMetric(), data, constantFactor);
+		KohonenLearningData learningData = new KohonenLearningData(data);
+		WTALearningFunction learning = new WTALearningFunction(network, 20, new EuclidesMetric(), learningData, constantFactor);
 		learning.learn();
 		System.out.println(network);
+		for (int i = 0; i < network.getNumbersOfNeurons(); i++) {
+			System.out.println("Neuron= " + network.getNeuron(i));
+			for (double d : network.getNeuron(i).getWeight()) {
+				System.out.println("weight= " + d);
+			}
+		}
+		ActivationFunctionModel function = new LinearActivationFunction();
+		KohonenNeuron neuron = new KohonenNeuron(7, maxWeight, function);
+		double d = neuron.getValue(data.get(0).getElementsAsArr());
+		System.out.println("Double d= " + d);
 	}
 	
 }

@@ -21,6 +21,14 @@ public class Vector implements Clusterable {
 		return elements;
 	}
 	
+	public double[] getElementsAsArr() {
+		double[] elementsArr = new double[elements.size()];
+		for (int i = 0; i < elements.size(); i++) {
+			elementsArr[i] = elements.get(i).doubleValue();
+		}
+		return elementsArr;
+	}
+	
 	public void setClusterId(int id) {
 		this.clusterId = id;
 	}
@@ -39,11 +47,11 @@ public class Vector implements Clusterable {
 	
 	@Override
 	public float[] getLocation() {
-		float[] velocitesArr = new float[elements.size()];
+		float[] elementsArr = new float[elements.size()];
 		for (int i = 0; i < elements.size(); i++) {
-			velocitesArr[i] = elements.get(i).floatValue();
+			elementsArr[i] = elements.get(i).floatValue();
 		}
-		return velocitesArr;
+		return elementsArr;
 	}
 
 }

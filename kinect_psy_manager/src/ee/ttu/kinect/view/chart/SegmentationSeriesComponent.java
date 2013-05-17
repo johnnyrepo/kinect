@@ -34,7 +34,7 @@ public class SegmentationSeriesComponent extends SeriesComponent {
 	}
 	
 	public void updateSeries(Vector vector, long timestamp, boolean seatedMode) {
-		System.out.println("hoj " + vector.getClusterId() + " " + vector.getLocation() + " " + timestamp);
+		//System.out.println("hoj " + vector.getClusterId() + " " + vector.getLocation() + " " + timestamp);
 		series.addOrUpdate(new TimeSeriesDataItem(
 				new FixedMillisecond(timestamp), vector.getClusterId()));
 	}
