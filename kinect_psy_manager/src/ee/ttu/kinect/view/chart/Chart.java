@@ -3,7 +3,6 @@ package ee.ttu.kinect.view.chart;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
