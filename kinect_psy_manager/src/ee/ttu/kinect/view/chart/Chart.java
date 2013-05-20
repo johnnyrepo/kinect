@@ -19,7 +19,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 
-public abstract class ChartComponent extends JPanel {
+public abstract class Chart extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,23 +27,19 @@ public abstract class ChartComponent extends JPanel {
 
 	protected JFreeChart chart;
 
-	private ChartPanel chartPanel;
-	
-	
-	public ChartComponent() {
+	public Chart() {
 		dataset = new TimeSeriesCollection();
-
 		chart = ChartFactory.createTimeSeriesChart(null, null,
 				"Velocity/Acceleration", dataset, true, true, false);
+
 		XYPlot plot = (XYPlot) chart.getPlot();
 		DateAxis axis = (DateAxis) plot.getDomainAxis();
 		axis.setDateFormatOverride(new SimpleDateFormat("mm:ss.SSS"));
 
-		chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new Dimension(1500, 260));
-
+		setPreferredSize(new Dimension(1500, 260));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(chartPanel);
+		
+		add(new ChartPanel(chart));
 	}
 
 	public void clearChart() {
@@ -53,15 +49,15 @@ public abstract class ChartComponent extends JPanel {
 			}
 		}
 	}
-	
-	public void drawChart(List<Body> data, JointType selectedType,
-			boolean seatedMode) {
-		List<JointType> types = new ArrayList<JointType>();
-		types.add(selectedType);
-		drawChart(data, types , seatedMode);
-	}
-	
-	public abstract void drawChart(List<Body> data, List<JointType> selectedTypes,
-			boolean seatedMode);
+
+//	public void drawChart(List<Body> data, JointType selectedType,
+//			boolean seatedMode) {
+//		List<JointType> types = new ArrayList<JointType>();
+//		types.add(selectedType);
+//		drawChart(data, types, seatedMode);
+//	}
+
+	public abstract void drawChart(List<Body> data,
+			List<JointType> selectedTypes, boolean seatedMode);
 
 }

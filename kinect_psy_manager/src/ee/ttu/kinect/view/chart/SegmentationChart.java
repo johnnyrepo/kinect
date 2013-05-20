@@ -11,7 +11,6 @@ import metrics.EuclidesMetric;
 import network.DefaultNetwork;
 import network.KohonenNeuron;
 import topology.MatrixTopology;
-
 import activationFunction.ActivationFunctionModel;
 import activationFunction.LinearActivationFunction;
 
@@ -27,7 +26,7 @@ import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
-public class SegmentationChartComponent extends ChartComponent {
+public class SegmentationChart extends Chart {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -43,7 +42,7 @@ public class SegmentationChartComponent extends ChartComponent {
 	
 	private int pointsAmount;
 	
-	public SegmentationChartComponent(int clustersAmount, int stepBetweenPoints, int pointsAmount) {
+	public SegmentationChart(int clustersAmount, int stepBetweenPoints, int pointsAmount) {
 		this.clustersAmount = clustersAmount;
 		this.stepBetweenPoints = stepBetweenPoints;
 		this.pointsAmount = pointsAmount;
@@ -55,51 +54,39 @@ public class SegmentationChartComponent extends ChartComponent {
 		// draw the result
 		String chartTitle = "";
 		for (JointType selectedType : selectedTypes) {
-			// getting data into vectors
-			List<Vector> velocityData = organizeDataIntoVectors(data, selectedType);
-			System.out.println("hojaaaaa " + data.size() + " " + velocityData.size());
-			// K-mean
-			calculateKmean(velocityData);
-			// Kohonen
-			//calculateKohonen(velocityData);
-			
-			// getting sequence of clusterId-s
-			Map<Integer, Integer> oldToNewClusterIdMap = new HashMap<Integer, Integer>();
-			int newClusterId = 0;
-			for (Vector vector : velocityData) {
-				Integer oldClusterId = vector.getClusterId();
-				if (!oldToNewClusterIdMap.containsKey(oldClusterId)) {
-					oldToNewClusterIdMap.put(oldClusterId, newClusterId);
-					newClusterId++;
-				}
-				
-				if (oldToNewClusterIdMap.size() == clustersAmount) {
-					break;
-				}
-			}
-			for (Integer k : oldToNewClusterIdMap.keySet()) {
-				System.out.println("newids " + k + " = " + oldToNewClusterIdMap.get(k));
-			}
-			// reassigning clusterId-s for readability
-			for (Vector vector : velocityData) {
-				vector.setClusterId(oldToNewClusterIdMap.get(vector.getClusterId()));
-			}
-			
-			
 			SegmentationSeriesComponent sc = new SegmentationSeriesComponent(dataset);
 			add(sc);
 			sc.setLabels(selectedType);
 			
-			for (Vector v : velocityData) {
-				sc.updateSeries(v, v.getTimestamp(), seatedMode);
-			}
+			drawVectorChart(sc, data, selectedType, true);
+			drawVectorChart(sc, data, selectedType, false);
 			
 			chartTitle += selectedType.getName() + " ";
 		}
 		chart.setTitle(chartTitle);
 	}
-	
-	private List<Vector> organizeDataIntoVectors(List<Body> data, JointType selectedType) {
+
+	private void drawVectorChart(SegmentationSeriesComponent sc, List<Body> data, JointType selectedType, boolean isVelocity) {
+		// getting data into vectors
+		List<Vector> vectorData = organizeDataIntoVectors(data, selectedType, isVelocity);
+		System.out.println("hojaaaaa " + data.size() + " " + vectorData.size());
+		// K-mean
+		calculateKmean(vectorData);
+		// Kohonen
+		//calculateKohonen(velocityData);
+		
+		reassignClusterIds(vectorData);
+		
+		for (Vector v : vectorData) {
+			if (isVelocity) {
+				sc.updateVelocitySeries(v, v.getTimestamp());
+			} else {
+				sc.updateAccelerationSeries(v, v.getTimestamp());
+			}
+		}
+	}
+
+	private List<Vector> organizeDataIntoVectors(List<Body> data, JointType selectedType, boolean isVelocityCalculation) {
 		List<Vector> velocityData = new ArrayList<Vector>();
 		
 		for (int i = 0; i < data.size(); i++) {
@@ -110,8 +97,8 @@ public class SegmentationChartComponent extends ChartComponent {
 				if (x >= data.size()) {
 					break;
 				}
-				double velocity1;
-				double velocity2;
+				double value1;
+				double value2;
 				Joint joint1;
 				long time1;
 				int j;
@@ -122,7 +109,11 @@ public class SegmentationChartComponent extends ChartComponent {
 				if (j < data.size()) {
 					Joint joint2 = data.get(j).getJoint(selectedType);
 					long time2 = data.get(j).getTimestamp();
-					velocity1 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
+					if (isVelocityCalculation) {
+						value1 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
+					} else {
+						value1 = Calculator.calculateAcceleration3D(joint1, joint2, time1, time2);
+					}
 				} else {
 					break;
 				}
@@ -134,12 +125,17 @@ public class SegmentationChartComponent extends ChartComponent {
 				if (j < data.size()) {
 					Joint joint2 = data.get(j).getJoint(selectedType);
 					long time2 = data.get(j).getTimestamp();
-					velocity2 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
+					if (isVelocityCalculation) {
+						value2 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
+					} else {
+						value2 = Calculator.calculateAcceleration3D(joint1, joint2, time1, time2);
+					}
 				} else {
 					break;
 				}
+				
 				//System.out.println("hoj velocity " + velocity2 + "-" + velocity1);
-				velocityVector.addElement(velocity2 - velocity1);
+				velocityVector.addElement(value2 - value1);
 				
 				if (velocityVector.getElements().size() == pointsAmount) {
 					velocityVector.setTimestamp(data.get(i).getTimestamp());
@@ -150,6 +146,30 @@ public class SegmentationChartComponent extends ChartComponent {
 		}
 		
 		return velocityData;
+	}
+	
+	private void reassignClusterIds(List<Vector> vectors) {
+		// getting sequence of clusterId-s
+		Map<Integer, Integer> oldToNewClusterIdMap = new HashMap<Integer, Integer>();
+		int newClusterId = 0;
+		for (Vector vector : vectors) {
+			Integer oldClusterId = vector.getClusterId();
+			if (!oldToNewClusterIdMap.containsKey(oldClusterId)) {
+				oldToNewClusterIdMap.put(oldClusterId, newClusterId);
+				newClusterId++;
+			}
+			
+			if (oldToNewClusterIdMap.size() == clustersAmount) {
+				break;
+			}
+		}
+		for (Integer k : oldToNewClusterIdMap.keySet()) {
+			System.out.println("newids " + k + " = " + oldToNewClusterIdMap.get(k));
+		}
+		// reassigning clusterId-s for readability
+		for (Vector vector : vectors) {
+			vector.setClusterId(oldToNewClusterIdMap.get(vector.getClusterId()));
+		}
 	}
 	
 	private void calculateKmean(List<Vector> data) {

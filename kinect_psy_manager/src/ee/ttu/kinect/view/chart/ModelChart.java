@@ -5,7 +5,7 @@ import java.util.List;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 
-public class ModelChartComponent extends ChartComponent {
+public class ModelChart extends Chart {
 
 	private static final long serialVersionUID = 1L;
 

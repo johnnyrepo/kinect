@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -93,8 +94,8 @@ public class ChartSelector {
 		
 		private void clearCharts() {
 			for (Component comp : chartsPanel.getComponents()) {
-				if (comp instanceof ChartComponent) {
-					((ChartComponent) comp).clearChart();
+				if (comp instanceof Chart) {
+					((Chart) comp).clearChart();
 					chartsPanel.remove(comp);
 				}
 			}
@@ -118,21 +119,22 @@ public class ChartSelector {
 			public void actionPerformed(ActionEvent e) {
 				clearCharts();
 				List<JointType> selectedJoints = jointsList.getSelectedValuesList();
-				ChartComponent cc = null;
-				if (valuesCharts) {
-					cc = new ModelChartComponent();
-				} else {
-					cc = new SegmentationChartComponent(segmentationConfPanel.getClustersAmount(), 
-							segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
-				}
 				if (singleModeCheckbox.isSelected()) {
+					Chart cc = valuesCharts ? new ModelChart() : new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
+							segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
 					cc.drawChart(data, selectedJoints, false);
+					chartsPanel.add(cc);
 				} else {
-					for (int i = 0; i < selectedJoints.size(); i++) {
-						cc.drawChart(data, selectedJoints.get(i), false);
+					for (JointType selectedType : selectedJoints) {
+						Chart cc = valuesCharts ? new ModelChart() : new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
+								segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
+						List<JointType> arg = new ArrayList<JointType>();
+						arg.add(selectedType);
+						cc.drawChart(data, arg, false);
+						chartsPanel.add(cc);
 					}
 				}
-				chartsPanel.add(cc);
+				
 				chartsPanel.validate();
 				chartsPanel.repaint();
 			}

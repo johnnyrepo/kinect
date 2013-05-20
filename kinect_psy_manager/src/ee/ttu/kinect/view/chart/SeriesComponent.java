@@ -9,11 +9,11 @@ import ee.ttu.kinect.model.JointType;
 
 
 public abstract class SeriesComponent extends JPanel {
-
+	
 	private static final long serialVersionUID = 1L;
 	
 	protected TimeSeriesCollection dataset;
-
+	
 	public SeriesComponent(TimeSeriesCollection dataset) {
 		this.dataset = dataset;
 	}
