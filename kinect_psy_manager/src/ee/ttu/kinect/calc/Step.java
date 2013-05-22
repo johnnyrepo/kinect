@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.stromberglabs.cluster.Clusterable;
 
-public class Vector implements Clusterable {
+public class Step implements Clusterable {
 
 	private List<Double> elements = new ArrayList<Double>();
 

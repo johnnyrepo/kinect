@@ -11,7 +11,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
-import ee.ttu.kinect.calc.Vector;
+import ee.ttu.kinect.calc.Step;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
@@ -60,14 +60,14 @@ public class SegmentationSeriesComponent extends SeriesComponent {
 //				new FixedMillisecond(timestamp), joint.getClusterId()));
 	}
 	
-	public void updateVelocitySeries(Vector vector, long timestamp) {
+	public void updateVelocitySeries(Step step, long timestamp) {
 		velocitySeries.addOrUpdate(new TimeSeriesDataItem(
-				new FixedMillisecond(timestamp), vector.getClusterId()));
+				new FixedMillisecond(timestamp), step.getClusterId()));
 	}
 	
-	public void updateAccelerationSeries(Vector vector, long timestamp) {
+	public void updateAccelerationSeries(Step step, long timestamp) {
 		accelerationSeries.addOrUpdate(new TimeSeriesDataItem(
-				new FixedMillisecond(timestamp), vector.getClusterId()));
+				new FixedMillisecond(timestamp), step.getClusterId()));
 	}
 
 	@Override

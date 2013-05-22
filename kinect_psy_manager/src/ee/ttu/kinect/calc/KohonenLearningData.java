@@ -9,8 +9,8 @@ public class KohonenLearningData implements LearningDataModel {
 
 	private ArrayList <double[]> dataList = new ArrayList<double[]>();
 	
-	public KohonenLearningData(List<Vector> data) {
-		for (Vector v : data) {
+	public KohonenLearningData(List<Step> data) {
+		for (Step v : data) {
 			dataList.add(v.getElementsAsArr());
 		}
 	}

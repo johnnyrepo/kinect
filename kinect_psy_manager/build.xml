@@ -15,7 +15,7 @@
 	</target>
 	
 	<target name="compile">
-		<javac sourcepath="" srcdir="src" destdir="bin" classpathref="lib" includeantruntime="no">
+		<javac sourcepath="" srcdir="src" destdir="bin" classpathref="lib" includeantruntime="no" target="1.6">
 			<include name="**/*.java"/>
 		</javac>
 	</target>
@@ -25,7 +25,7 @@
 			<fileset dir="bin"/>
 			<manifest>
 				<attribute name="Main-Class" value="ee.ttu.kinect.controller.MainController" />
-				<attribute name="Class-Path" value="lib/jni4net.j-0.8.6.0.jar lib/KinectSensorProxy.j4n.jar lib/jfreechart-1.0.14.jar lib/jcommon-1.0.17.jar lib/kmeansclustering.jar lib/stromberglabs-commons.jar kohonen.jar" />
+				<attribute name="Class-Path" value="lib/jni4net.j-0.8.6.0.jar lib/KinectSensorProxy.j4n.jar lib/jfreechart-1.0.14.jar lib/jcommon-1.0.17.jar lib/kmeansclustering.jar lib/stromberglabs-commons.jar lib/kohonen.jar" />
 			</manifest>
 		</jar>
 	</target>
