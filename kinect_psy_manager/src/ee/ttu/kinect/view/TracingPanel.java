@@ -1,5 +1,6 @@
 package ee.ttu.kinect.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -99,26 +100,45 @@ public abstract class TracingPanel extends JPanel {
 		repaint();
 	}
 	
-	abstract protected void drawJointLine(Joint joint1, Joint joint2);
+	protected void drawJointLine(Joint joint1, Joint joint2) {
+		if (joint1 != null && joint2 != null && graphics != null) {
+			int x1 = getXForGraph(joint1);
+			int y1 = getYForGraph(joint1);
+			int x2 = getXForGraph(joint2);
+			int y2 = getYForGraph(joint2);
+			graphics.drawLine(x1, y1, x2, y2);
+		}
+	}
+
+	protected void drawHead(Joint head)  {
+		int x = getXForGraph(head);
+		int y = getYForGraph(head);
+		graphics.drawOval(x - 10, y - 20, 20, 20);
+	}
+
+	protected void drawJoint(Joint joint) {
+		if (joint != null) {
+			int x = getXForGraph(joint);
+			int y = getYForGraph(joint);
+			graphics.setColor(new Color(0, 160, 0));
+			graphics.fillOval(x - 3, y - 3, 6, 6);
+			graphics.setColor(Color.BLACK);
+		}
+	}
+
+	abstract protected int getXForGraph(Joint joint);
+
+	abstract protected int getYForGraph(Joint joint);
 	
-	abstract protected void drawJoint(Joint joint);
-
-	abstract protected void drawHead(Joint head);
-
-	protected int getXForGraph(Joint joint) {
-		int centralPoint = getWidth() / 2;
-		return centralPoint - (int) (joint.getPositionX() * 200);
+	protected int getLongestSideSize() {
+		int height = getHeight();
+		int width = getWidth();
+		if (height > width) {
+			return (int) (height / 2);
+		}
+		return (int) (width / 2);
 	}
-
-	protected int getYForGraph(Joint joint) {
-		int centralPoint = getWidth() / 2;
-		return centralPoint - (int) (joint.getPositionY() * 200);
-	}
-
-	protected int getZForGraph(Joint joint) {
-		return (int) (joint.getPositionZ() * 200);
-	}
-
+	
 	private void updateCoordLabel(Joint joint) {
 		if (joint != null) {
 			double x = (double) Math.round(joint.getPositionX() * 100) / 100;
