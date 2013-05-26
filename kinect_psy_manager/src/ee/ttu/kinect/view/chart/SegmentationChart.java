@@ -67,7 +67,7 @@ public class SegmentationChart extends Chart {
 	}
 
 	private void drawSegmentationChart(SegmentationSeriesComponent sc, List<Body> data, JointType selectedType, boolean isVelocity) {
-		// getting data into steps
+		// organizing data into steps
 		List<Step> stepData = organizeDataIntoSteps(data, selectedType, isVelocity);
 		System.out.println("hojaaaaa " + data.size() + " " + stepData.size());
 		// K-mean

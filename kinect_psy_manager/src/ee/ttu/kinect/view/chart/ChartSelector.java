@@ -22,10 +22,8 @@ import ee.ttu.kinect.model.JointType;
 
 public class ChartSelector {
 	
-	private ChartSelectorFrame frame;
-	
 	public void open(List<Body> data, boolean valuesCharts) {
-		this.frame = new ChartSelectorFrame(data, valuesCharts);
+		new ChartSelectorFrame(data, valuesCharts);
 		//clearCharts();
 	}
 	
