@@ -1,5 +1,6 @@
 package ee.ttu.kinect.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -27,12 +28,16 @@ public abstract class TracingPanel extends JPanel {
 	private Body body;
 
 	private boolean seatedMode;
+	
+	private int[] zoom = {100, 150, 200};
+	
+	private int zoomStep = zoom.length - 1;
 
 	protected TracingPanel(String title) {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, title));
 		coordLabel = new JLabel();
-		add(coordLabel);
+		add(coordLabel, BorderLayout.NORTH);
 	}
 
 	public void redrawSkeleton(Body body, boolean seatedMode) {
@@ -119,7 +124,7 @@ public abstract class TracingPanel extends JPanel {
 	protected void drawHead(Joint head)  {
 		int x = getXForGraph(head);
 		int y = getYForGraph(head);
-		graphics.drawOval(x - 10, y - 20, 20, 20);
+		graphics.drawOval(x - 10, y - 10, 20, 20);
 	}
 
 	protected void drawJoint(Joint joint) {
@@ -138,13 +143,20 @@ public abstract class TracingPanel extends JPanel {
 
 	abstract protected int getYForGraph(Joint joint);
 	
-	protected int getLongestSideSize() {
-		int height = getHeight();
-		int width = getWidth();
-		if (height > width) {
-			return (int) (height / 2);
+	protected void zoomIn() {
+		if (++zoomStep >= zoom.length) {
+			zoomStep = zoom.length - 1;
 		}
-		return (int) (width / 2);
+	}
+	
+	protected void zoomOut() {
+		if (--zoomStep < 0) {
+			zoomStep = 0;
+		}
+	}
+	
+	protected int getZoomValue() {
+		return zoom[zoomStep];
 	}
 	
 	private void updateCoordLabel(Joint joint) {

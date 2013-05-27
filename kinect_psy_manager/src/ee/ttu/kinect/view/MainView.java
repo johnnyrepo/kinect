@@ -42,13 +42,13 @@ public class MainView extends JFrame {
 	
 	private JPanel controlPanel;
 		
-	private JPanel drawPanel;
+	private JPanel tracingPanel;
 	
-	private FrontTracingPanel frontDrawPanel;
+	private FrontTracingPanel frontTracingPanel;
 
-	private SideTracingPanel sideDrawPanel;
+	private SideTracingPanel sideTracingPanel;
 
-	private UpTracingPanel upDrawPanel;
+	private UpTracingPanel upTracingPanel;
 
 	private TracingChartPanel chartPanel;
 	
@@ -86,19 +86,34 @@ public class MainView extends JFrame {
 		controlPanel.add(markersPanel);
 		controlPanel.add(seatedModePanel);
 
-		drawPanel = new JPanel();
-		drawPanel.setLayout(new BoxLayout(drawPanel, BoxLayout.X_AXIS));
-		frontDrawPanel = new FrontTracingPanel();
-		sideDrawPanel = new SideTracingPanel();
-		upDrawPanel = new UpTracingPanel();
-		drawPanel.add(frontDrawPanel);
-		drawPanel.add(sideDrawPanel);
-		drawPanel.add(upDrawPanel);
+		tracingPanel = new JPanel();
+		tracingPanel.setLayout(new BoxLayout(tracingPanel, BoxLayout.X_AXIS));
+		frontTracingPanel = new FrontTracingPanel();
+		sideTracingPanel = new SideTracingPanel();
+		upTracingPanel = new UpTracingPanel();
+		sideTracingPanel.addZoomPanel(new ZoomPanel(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frontTracingPanel.zoomIn();
+				sideTracingPanel.zoomIn();
+				upTracingPanel.zoomIn();
+			}
+		}, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frontTracingPanel.zoomOut();
+				sideTracingPanel.zoomOut();
+				upTracingPanel.zoomOut();
+			}
+		}));
+		tracingPanel.add(frontTracingPanel);
+		tracingPanel.add(sideTracingPanel);
+		tracingPanel.add(upTracingPanel);
 
 		chartPanel = new TracingChartPanel();
 
 		getContentPane().add(controlPanel, BorderLayout.NORTH);
-		getContentPane().add(drawPanel, BorderLayout.CENTER);
+		getContentPane().add(tracingPanel, BorderLayout.CENTER);
 		getContentPane().add(chartPanel, BorderLayout.SOUTH);
 		
 		setSize(1200, 700);
@@ -122,9 +137,9 @@ public class MainView extends JFrame {
 	}
 	
 	public void redrawSkeleton(Body body, boolean seatedMode) {
-		frontDrawPanel.redrawSkeleton(body, seatedMode);
-		sideDrawPanel.redrawSkeleton(body, seatedMode);
-		upDrawPanel.redrawSkeleton(body, seatedMode);
+		frontTracingPanel.redrawSkeleton(body, seatedMode);
+		sideTracingPanel.redrawSkeleton(body, seatedMode);
+		upTracingPanel.redrawSkeleton(body, seatedMode);
 	}
 	
 	public void redrawChart(Body body, boolean seatedMode) {
@@ -136,9 +151,9 @@ public class MainView extends JFrame {
 	}
 	
 	public void clearDraw() {
-		frontDrawPanel.clear();
-		sideDrawPanel.clear();
-		upDrawPanel.clear();
+		frontTracingPanel.clear();
+		sideTracingPanel.clear();
+		upTracingPanel.clear();
 	}
 	
 	public void addListenerForMenuOpen(final ActionListener listener) {
