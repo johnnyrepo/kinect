@@ -16,6 +16,10 @@ public abstract class TracingPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	protected double spineX;
+
+	protected double spineY;
+	
 	protected Graphics2D graphics;
 
 	private JLabel coordLabel;
@@ -35,9 +39,11 @@ public abstract class TracingPanel extends JPanel {
 		this.body = body;
 		this.seatedMode = seatedMode;
 		
+		setSpinePosition(body);
+		
 		repaint();
 	}
-
+	
 	@Override
 	public synchronized void paint(Graphics g) {
 		super.paint(g);
@@ -126,6 +132,8 @@ public abstract class TracingPanel extends JPanel {
 		}
 	}
 
+	abstract protected void setSpinePosition(Body body);
+	
 	abstract protected int getXForGraph(Joint joint);
 
 	abstract protected int getYForGraph(Joint joint);
