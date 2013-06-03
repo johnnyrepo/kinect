@@ -1,12 +1,10 @@
 package ee.ttu.kinect.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -16,16 +14,10 @@ import ee.ttu.kinect.model.Joint;
 public abstract class TracingPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
-	protected double spineX;
-
-	protected double spineY;
 	
 	protected Graphics2D graphics;
 
-	private final JLabel coordLabel;
-
-	private Body body;
+	protected Body body;
 
 	private boolean seatedMode;
 	
@@ -36,15 +28,11 @@ public abstract class TracingPanel extends JPanel {
 	protected TracingPanel(String title) {
 		Border border = BorderFactory.createEtchedBorder();
 		this.setBorder(BorderFactory.createTitledBorder(border, title));
-		this.coordLabel = new JLabel();
-		this.add(this.coordLabel, BorderLayout.NORTH);
 	}
 
 	public void redrawSkeleton(Body body, boolean seatedMode) {
 		this.body = body;
 		this.seatedMode = seatedMode;
-		
-		this.setSpinePosition(body);
 		
 		this.repaint();
 	}
@@ -67,7 +55,6 @@ public abstract class TracingPanel extends JPanel {
 			
 			// draw joint
 			this.drawJoint(this.body.getShoulderCenter());
-			this.drawJoint(this.body.getShoulderLeft());
 			this.drawJoint(this.body.getShoulderLeft());
 			this.drawJoint(this.body.getShoulderRight());
 			this.drawJoint(this.body.getElbowLeft());
@@ -102,7 +89,6 @@ public abstract class TracingPanel extends JPanel {
 			}
 
 			this.drawHead(this.body.getHead());
-			this.updateCoordLabel(this.body.getHead());
 		}
 	}
 
@@ -136,8 +122,6 @@ public abstract class TracingPanel extends JPanel {
 			this.graphics.setColor(Color.BLACK);
 		}
 	}
-
-	abstract protected void setSpinePosition(Body body);
 	
 	abstract protected int getXForGraph(Joint joint);
 
@@ -157,15 +141,6 @@ public abstract class TracingPanel extends JPanel {
 	
 	protected int getZoomValue() {
 		return this.zoom[this.zoomStep];
-	}
-	
-	private void updateCoordLabel(Joint joint) {
-		if (joint != null) {
-			double x = (double) Math.round(joint.getPositionX() * 100) / 100;
-			double y = (double) Math.round(joint.getPositionY() * 100) / 100;
-			double z = (double) Math.round(joint.getPositionZ() * 100) / 100;
-			this.coordLabel.setText("X = " + x + ", Y = " + y + ", Z = " + z);
-		}
 	}
 
 }
