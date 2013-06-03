@@ -37,7 +37,7 @@ public class SideTracingPanel extends TracingPanel {
 	}
 	
 	public void addZoomPanel(ZoomPanel zoomPanel) {
-		this.add(zoomPanel, BorderLayout.SOUTH);
+		this.add(zoomPanel, BorderLayout.NORTH);
 	}
 
 }

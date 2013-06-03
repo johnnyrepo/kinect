@@ -50,7 +50,7 @@ public class MainController {
 					model.unpauseFileRun();
 				} else {
 					view.clearChart();
-					view.clearDraw();
+					view.clearTracing();
 					model.stopSensorRun();
 					model.startFileRun();
 				}

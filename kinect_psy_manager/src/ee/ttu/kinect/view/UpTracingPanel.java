@@ -1,5 +1,7 @@
 package ee.ttu.kinect.view;
 
+import java.awt.BorderLayout;
+
 import ee.ttu.kinect.model.Joint;
 
 public class UpTracingPanel extends TracingPanel {
@@ -32,6 +34,10 @@ public class UpTracingPanel extends TracingPanel {
 //		} else {
 //			return (int) (getHeight() / 2);
 //		}
+	}
+
+	public void addCorrectionPanel(CorrectionPanel correctionPanel) {
+		this.add(correctionPanel, BorderLayout.NORTH);
 	}
 
 }
