@@ -1,6 +1,7 @@
 package ee.ttu.kinect.view;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 
 import ee.ttu.kinect.model.Joint;
 
@@ -8,8 +9,14 @@ public class UpTracingPanel extends TracingPanel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private final CorrectionPanel correctionPanel;
+	
 	public UpTracingPanel() {
 		super("Up View");
+		
+		this.correctionPanel = new CorrectionPanel();
+		this.add(this.correctionPanel, BorderLayout.NORTH);
+
 	}
 
 	@Override
@@ -36,8 +43,12 @@ public class UpTracingPanel extends TracingPanel {
 //		}
 	}
 
-	public void addCorrectionPanel(CorrectionPanel correctionPanel) {
-		this.add(correctionPanel, BorderLayout.NORTH);
+	public void addStandingCorrectionListener(ActionListener listener) {
+		this.correctionPanel.addStandingCorrectionListener(listener);
+	}
+
+	public void addSittingCorrectionListener(ActionListener listener) {
+		this.correctionPanel.addSittingCorrectionListener(listener);
 	}
 
 }

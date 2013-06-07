@@ -13,123 +13,143 @@ import ee.ttu.kinect.view.MainView;
 
 public class MainController {
 
-	private MainView view;
+	private final MainView view;
 
-	private MainModel model;
+	private final MainModel model;
 
 	public MainController() {
-		model = new MainModel(this);
+		this.model = new MainModel(this);
 
-		view = new MainView();
+		this.view = new MainView();
 
 		//SwingUtilities.invokeLater(view);
 		
-		view.addListenerForMenuOpen(new ActionListener() {
+		this.view.addListenerForMenuOpen(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.setFileToPlay(view.getSelectedFile()); //TODO: fix this hack
-				view.setPlayingEnabled(true);
+				MainController.this.model.setFileToPlay(MainController.this.view.getSelectedFile()); //TODO: fix this hack
+				MainController.this.view.setPlayingEnabled(true);
 			}
 		});
-		view.addListenerForStartRecord(new ActionListener() {
+		this.view.addListenerForStartRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.startRecord();
+				MainController.this.model.startRecord();
 			}
 		});
-		view.addListenerForStopRecord(new ActionListener() {
+		this.view.addListenerForStopRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.stopRecord();
+				MainController.this.model.stopRecord();
 			}
 		});
-		view.addListenerForStartPlay(new ActionListener() {
+		this.view.addListenerForStartPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (model.isFileRunPaused()) {
-					model.unpauseFileRun();
+				if (MainController.this.model.isFileRunPaused()) {
+					MainController.this.model.unpauseFileRun();
 				} else {
-					view.clearChart();
-					view.clearTracing();
-					model.stopSensorRun();
-					model.startFileRun();
+					MainController.this.view.clearChart();
+					MainController.this.view.clearTracing();
+					MainController.this.model.stopSensorRun();
+					MainController.this.model.startFileRun();
 				}
 			}
 		});
-		view.addListenerForPause(new ActionListener() {
+		this.view.addListenerForPause(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.pauseFileRun();
+				MainController.this.model.pauseFileRun();
 			}
 		});
-		view.addListenerForStopPlay(new ActionListener() {
+		this.view.addListenerForStopPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.stopFileRun();
+				MainController.this.model.stopFileRun();
 			}
 		});
-		view.addListenerForSensorOn(new ActionListener() {
+		this.view.addListenerForSensorOn(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean sensorOn = ((JCheckBox) e.getSource()).isSelected();
-				Logger.getLogger(getClass().getName()).info("sensor mode changed: " + sensorOn);
+				Logger.getLogger(this.getClass().getName()).info("sensor mode changed: " + sensorOn);
 				if (!sensorOn) {
-					model.stopSensorRun();
+					MainController.this.model.stopSensorRun();
 				} else {
-					view.clearChart();
-					model.startSensorRun();
+					MainController.this.view.clearChart();
+					MainController.this.model.startSensorRun();
 				}
 			}
 		});
-		view.addListenerForSeatedModeCheckbox(new ActionListener() {
+		this.view.addListenerForSeatedMode(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean seatedMode = ((JCheckBox) e.getSource()).isSelected();
 				if (!seatedMode) {
-					model.setDefaultMode();
+					MainController.this.model.setDefaultMode();
 				} else {
-					model.setSeatedMode();
+					MainController.this.model.setSeatedMode();
 				}
 			}
 		});
-		view.addListenerForDrawChart(new ActionListener() {
+		this.view.addListenerForStandingCorrection(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.openChartSelector(model.getFileData(), true);
+				if (((JCheckBox) e.getSource()).isSelected()) {
+					MainController.this.model.calculateStandingCorrection();
+				} else {
+					MainController.this.model.turnStandingCorrectionOff();
+				}
+			}
+		});
+		this.view.addListenerForSittingCorrection(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (((JCheckBox) e.getSource()).isSelected()) {
+					MainController.this.model.calculateSittingCorrection();
+				} else {
+					MainController.this.model.turnSittingCorrectionOff();
+				}
+			}
+		});
+		this.view.addListenerForDrawChart(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainController.this.view.openChartSelector(MainController.this.model.getFileData(), true);
 			}
 		});
 		
-		view.addListenerForSegmentChart(new ActionListener() {
+		this.view.addListenerForSegmentChart(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.openChartSelector(model.getFileData(), false);
+				MainController.this.view.openChartSelector(MainController.this.model.getFileData(), false);
 			}
 		});
 
-		view.setRecordingEnabled(false);
-		view.setPlayingEnabled(false);
-		model.startSensorRun();
+		this.view.setRecordingEnabled(false);
+		this.view.setPlayingEnabled(false);
+		this.model.startSensorRun();
 	}
 
 	public void redrawSkeleton(Body body) {
-		view.redrawSkeleton(body, model.isSeatedMode());
+		this.view.redrawSkeleton(body, this.model.isSeatedMode(), this.model.getCoordinateCorrection());
 	}
 	
 	public void redrawChart(Body body) {
-		view.redrawChart(body, model.isSeatedMode());
+		this.view.redrawChart(body, this.model.isSeatedMode());
 	}
 	
 	public void showMessagePopup(String message) {
-		view.showMessagePopup(message);
+		this.view.showMessagePopup(message);
 	}
 	
 	public boolean[] getMarkersState() {
-		return view.getMarkersState();
+		return this.view.getMarkersState();
 	}
 	
 	public void setSensorEnabled(boolean enabled) {
-		view.setSensorEnabled(enabled);
-		view.setRecordingEnabled(enabled);
+		this.view.setSensorEnabled(enabled);
+		this.view.setRecordingEnabled(enabled);
 	}
 	
 	public static void main(String... args) {

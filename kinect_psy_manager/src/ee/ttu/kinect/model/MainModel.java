@@ -9,96 +9,119 @@ public class MainModel {
 	
 	private Runner activeRunner;
 	
-	private SensorRunner sensorRunner;
+	private final SensorRunner sensorRunner;
 	
-	private FileRunner fileRunner;
+	private final FileRunner fileRunner;
 	
 	private File fileToPlay;
+	
+	private final CoordinateCorrection coordinateCorrection;
 		
 	public MainModel(MainController controller) {
 		this.sensorRunner = new SensorRunner(controller);
 		this.fileRunner = new FileRunner(controller);
+		this.coordinateCorrection = new CoordinateCorrection();
 	}
 
 	public void setFileToPlay(File file) {
-		fileToPlay = file;
+		this.fileToPlay = file;
 	}
 	
 	public File getFileToPlay() {
-		return fileToPlay;
+		return this.fileToPlay;
 	}
-
+	
 	public void startRecord() {
-		stopFileRun();
+		this.stopFileRun();
 		
-		sensorRunner.startRecord();
+		this.sensorRunner.startRecord();
 	}
 
 	public void stopRecord() {
-		stopFileRun();
+		this.stopFileRun();
 		
-		sensorRunner.stopRecord();
+		this.sensorRunner.stopRecord();
 	}
 	
 	public void startFileRun() {
-		fileRunner.readFile(fileToPlay);
-		if (!fileRunner.isRunning()) {
-			fileRunner.start();
+		this.fileRunner.readFile(this.fileToPlay);
+		if (!this.fileRunner.isRunning()) {
+			this.fileRunner.start();
 			
-			activeRunner = fileRunner;
+			this.activeRunner = this.fileRunner;
 		}
 	}
 
 	public void pauseFileRun() {
-		if (fileRunner.isRunning()) {
-			fileRunner.pause();
+		if (this.fileRunner.isRunning()) {
+			this.fileRunner.pause();
 		}
 	}
 	
 	public void unpauseFileRun() {
-		if (fileRunner.isRunning()) {
-			fileRunner.unpause();		}
+		if (this.fileRunner.isRunning()) {
+			this.fileRunner.unpause();		}
 	}
 	
 	public void stopFileRun() {
-		if (fileRunner.isRunning()) {
-			fileRunner.stop();
+		if (this.fileRunner.isRunning()) {
+			this.fileRunner.stop();
 		}
 	}
 	
 	public void startSensorRun() {
-		if (!sensorRunner.isRunning()) {
-			sensorRunner.start();
+		if (!this.sensorRunner.isRunning()) {
+			this.sensorRunner.start();
 			
-			activeRunner = sensorRunner;
+			this.activeRunner = this.sensorRunner;
 		}
 	}
 	
 	public void stopSensorRun() {
-		if (sensorRunner.isRunning()) {
-			sensorRunner.stop();
+		if (this.sensorRunner.isRunning()) {
+			this.sensorRunner.stop();
 		}
 	}
 	
 	public boolean isFileRunPaused() {
-		return fileRunner.isPaused();
+		return this.fileRunner.isPaused();
 	}
 
 	public void setSeatedMode() {
-		activeRunner.setSeatedMode();
+		this.activeRunner.setSeatedMode();
 	}
 	
 	public void setDefaultMode() {
-		activeRunner.setDefaultMode();
+		this.activeRunner.setDefaultMode();
 	}
 
 	public boolean isSeatedMode() {
-		return activeRunner.isSeatedMode();
+		return this.activeRunner.isSeatedMode();
 	}
 
 	public List<Body> getFileData() {
-		fileRunner.readFile(fileToPlay);
-		return fileRunner.getData();
+		this.fileRunner.readFile(this.fileToPlay);
+		return this.fileRunner.getData();
+	}
+
+	public CoordinateCorrection getCoordinateCorrection() {
+		return this.coordinateCorrection;
+	}
+	
+	public void calculateSittingCorrection() {
+		this.coordinateCorrection.calculateSittingCorrection(this.activeRunner.body);
+	}
+	
+	public void calculateStandingCorrection() {
+		this.coordinateCorrection.calculateStandingCorrection(this.activeRunner.body);
+	}
+	
+	public void turnStandingCorrectionOff() {
+		this.coordinateCorrection.turnStandingCorrectionOff();
+	}
+	
+	public void turnSittingCorrectionOff() {
+		this.coordinateCorrection.turnSittingCorrectionOff();
 	}
 	
 }

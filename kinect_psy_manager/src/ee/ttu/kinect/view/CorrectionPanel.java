@@ -14,14 +14,20 @@ public class CorrectionPanel extends JPanel {
     
     private final JCheckBox sitDownCorrectionBox;
     
-    public CorrectionPanel(ActionListener standUpListener, ActionListener sitDownListener) {
+    public CorrectionPanel() {
         this.standUpCorrectionBox = new JCheckBox("Stand up correction");
         this.sitDownCorrectionBox = new JCheckBox("Sit down correction");
-        this.standUpCorrectionBox.addActionListener(standUpListener);
-        this.sitDownCorrectionBox.addActionListener(sitDownListener);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.add(this.standUpCorrectionBox);
         this.add(this.sitDownCorrectionBox);
     }
+    
+    public void addStandingCorrectionListener(ActionListener listener) {
+    	this.standUpCorrectionBox.addActionListener(listener);
+    }
+
+	public void addSittingCorrectionListener(ActionListener listener) {
+		this.sitDownCorrectionBox.addActionListener(listener);
+	}
 
 }

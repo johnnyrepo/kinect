@@ -5,9 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -18,34 +18,34 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.CoordinateCorrection;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.view.chart.TracingChartPanel;
-
 
 public class MainView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	private File selectedFile;
-	
+
 	private final JMenuBar menuBar;
-	
+
 	private final JMenu menu;
-	
+
 	private final JMenuItem menuItemOpen;
-	
+
 	private final JFileChooser fileChooser;
-	
+
 	private final ButtonPanel buttonPanel;
-	
+
 	private final MarkersPanel markersPanel;
-	
+
 	private final SeatedModePanel seatedModePanel;
-	
+
 	private final JPanel controlPanel;
-		
+
 	private final JPanel tracingPanel;
-	
+
 	private final FrontTracingPanel frontTracingPanel;
 
 	private final SideTracingPanel sideTracingPanel;
@@ -53,15 +53,10 @@ public class MainView extends JFrame {
 	private final UpTracingPanel upTracingPanel;
 
 	private final TracingChartPanel chartPanel;
-	
-	private boolean standUpCorrection;
-	
-	private boolean sitDownCorrection;
-	
-	
+
 	public MainView() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		this.setTitle("KinectPsyManager v0.9");
 
 		try {
@@ -69,46 +64,37 @@ public class MainView extends JFrame {
 		} catch (Exception e) {
 			System.exit(1);
 		}
-		
+
 		this.menuBar = new JMenuBar();
 		this.menu = new JMenu("File");
 		this.menuItemOpen = new JMenuItem("Open");
 		this.menu.add(this.menuItemOpen);
 		this.menuBar.add(this.menu);
 		this.setJMenuBar(this.menuBar);
-		
+
 		this.fileChooser = new JFileChooser();
-		
+
 		this.controlPanel = new JPanel();
-		this.controlPanel.setLayout(new BoxLayout(this.controlPanel, BoxLayout.X_AXIS));
-		
+		this.controlPanel.setLayout(new BoxLayout(this.controlPanel,
+				BoxLayout.X_AXIS));
+
 		this.buttonPanel = new ButtonPanel("Record / Play");
-				
+
 		this.markersPanel = new MarkersPanel();
-		
+
 		this.seatedModePanel = new SeatedModePanel();
-		
+
 		this.controlPanel.add(this.buttonPanel);
 		this.controlPanel.add(this.markersPanel);
 		this.controlPanel.add(this.seatedModePanel);
 
 		this.tracingPanel = new JPanel();
-		this.tracingPanel.setLayout(new BoxLayout(this.tracingPanel, BoxLayout.X_AXIS));
+		this.tracingPanel.setLayout(new BoxLayout(this.tracingPanel,
+				BoxLayout.X_AXIS));
 		this.frontTracingPanel = new FrontTracingPanel();
 		this.sideTracingPanel = new SideTracingPanel();
 		this.upTracingPanel = new UpTracingPanel();
-		this.upTracingPanel.addCorrectionPanel(new CorrectionPanel(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainView.this.standUpCorrection = ((JCheckBox) e.getSource()).isSelected();
-            }
-        }, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MainView.this.sitDownCorrection = ((JCheckBox) e.getSource()).isSelected();
-			}
-		}));
-		this.sideTracingPanel.addZoomPanel(new ZoomPanel(new ActionListener() {	
+		this.sideTracingPanel.addZoomPanel(new ZoomPanel(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MainView.this.frontTracingPanel.zoomIn();
@@ -132,11 +118,11 @@ public class MainView extends JFrame {
 		this.getContentPane().add(this.controlPanel, BorderLayout.NORTH);
 		this.getContentPane().add(this.tracingPanel, BorderLayout.CENTER);
 		this.getContentPane().add(this.chartPanel, BorderLayout.SOUTH);
-		
+
 		this.setSize(1200, 700);
 		this.setVisible(true);
 	}
-	
+
 	public void setSensorEnabled(boolean enabled) {
 		this.buttonPanel.setSensorEnabled(enabled);
 	}
@@ -144,23 +130,20 @@ public class MainView extends JFrame {
 	public void setRecordingEnabled(boolean enabled) {
 		this.buttonPanel.setRecordingEnabled(enabled);
 	}
-	
+
 	public void setPlayingEnabled(boolean enabled) {
 		this.buttonPanel.setPlayingEnabled(enabled);
 	}
-	
+
 	public File getSelectedFile() {
 		return this.selectedFile;
 	}
-	
-	public void redrawSkeleton(Body body, boolean seatedMode) {
-		if (this.standUpCorrection) {
-			this.performStandUpCorrection(body);
-		}
-		if (this.sitDownCorrection) {
-			this.performSitDownCorrection(body);
-		}
-		
+
+	public void redrawSkeleton(Body body, boolean seatedMode,
+			CoordinateCorrection correction) {
+		// perform coordinate correction, if needed
+		this.performCorrection(body, correction);
+
 		this.frontTracingPanel.redrawSkeleton(body, seatedMode);
 		this.sideTracingPanel.redrawSkeleton(body, seatedMode);
 		this.upTracingPanel.redrawSkeleton(body, seatedMode);
@@ -173,32 +156,36 @@ public class MainView extends JFrame {
 	public void clearChart() {
 		this.chartPanel.clearChart();
 	}
-	
+
 	public void clearTracing() {
 		this.frontTracingPanel.clear();
 		this.sideTracingPanel.clear();
 		this.upTracingPanel.clear();
 	}
-	
+
 	public void addListenerForMenuOpen(final ActionListener listener) {
 		this.menuItemOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainView.this.fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				MainView.this.fileChooser.setCurrentDirectory(new File(System
+						.getProperty("user.dir")));
 				int res = MainView.this.fileChooser.showDialog(null, null);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					MainView.this.selectedFile = MainView.this.fileChooser.getSelectedFile();
-					MainView.this.buttonPanel.updateSelectedFileLabel(MainView.this.selectedFile.getName());
+					MainView.this.selectedFile = MainView.this.fileChooser
+							.getSelectedFile();
+					MainView.this.buttonPanel
+							.updateSelectedFileLabel(MainView.this.selectedFile
+									.getName());
 					listener.actionPerformed(e);
 				}
 			}
 		});
 	}
-	
-	public void addListenerForSeatedModeCheckbox(ActionListener listener) {
+
+	public void addListenerForSeatedMode(ActionListener listener) {
 		this.seatedModePanel.addLsitenerForCheckbox(listener);
 	}
-	
+
 	public void addListenerForSensorOn(ActionListener listener) {
 		this.buttonPanel.addListenerForSensorOn(listener);
 	}
@@ -218,19 +205,27 @@ public class MainView extends JFrame {
 	public void addListenerForPause(ActionListener listener) {
 		this.buttonPanel.addListenerForPause(listener);
 	}
-	
+
 	public void addListenerForStopPlay(ActionListener listener) {
 		this.buttonPanel.addListenerForStopPlay(listener);
+	}
+
+	public void addListenerForStandingCorrection(ActionListener listener) {
+		this.upTracingPanel.addStandingCorrectionListener(listener);
+	}
+
+	public void addListenerForSittingCorrection(ActionListener listener) {
+		this.upTracingPanel.addSittingCorrectionListener(listener);
 	}
 
 	public void addListenerForDrawChart(ActionListener listener) {
 		this.chartPanel.addListenerForDrawChart(listener);
 	}
-	
+
 	public void addListenerForSegmentChart(ActionListener listener) {
 		this.chartPanel.addListenerForSegmentChart(listener);
 	}
-	
+
 	public void showMessagePopup(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
@@ -242,27 +237,25 @@ public class MainView extends JFrame {
 	public void openChartSelector(List<Body> data, boolean valuesCharts) {
 		this.chartPanel.openChartSelector(data, valuesCharts);
 	}
-	
-	private void performStandUpCorrection(Body body) {
-		double referenceZ = body.getJoint(JointType.SHOULDER_CENTER).getPositionZ();
-		body.getJoint(JointType.SPINE).setPositionZ(referenceZ);
-		body.getJoint(JointType.HIP_CENTER).setPositionZ(referenceZ);
-		body.getJoint(JointType.KNEE_LEFT).setPositionZ(referenceZ);
-		body.getJoint(JointType.KNEE_RIGHT).setPositionZ(referenceZ);
-		body.getJoint(JointType.ANKLE_LEFT).setPositionZ(referenceZ);
-		body.getJoint(JointType.ANKLE_RIGHT).setPositionZ(referenceZ);
+
+	private void performCorrection(Body body, CoordinateCorrection correction) {
+		if (correction.areCorrectionsZOn()) {
+			Map<JointType, Double> correctionsZ = correction.getCorrectionsZ();
+			for (JointType type : correctionsZ.keySet()) {
+				double oldPositionZ = body.getJoint(type).getPositionZ();
+				body.getJoint(type).setPositionZ(
+						oldPositionZ + correctionsZ.get(type));
+			}
+		}
+
+		if (correction.areCorrectionsYOn()) {
+			Map<JointType, Double> correctionsY = correction.getCorrectionsY();
+			for (JointType type : correctionsY.keySet()) {
+				double oldPositionY = body.getJoint(type).getPositionY();
+				body.getJoint(type).setPositionY(
+						oldPositionY + correctionsY.get(type));
+			}
+		}
 	}
-	
-	private void performSitDownCorrection(Body body) {
-		double leftHipY = body.getJoint(JointType.HIP_LEFT).getPositionY();
-		double rightHipY = body.getJoint(JointType.HIP_RIGHT).getPositionY();
-		double leftKneeX = body.getJoint(JointType.KNEE_LEFT).getPositionX();
-		double rightKneeX = body.getJoint(JointType.KNEE_RIGHT).getPositionX();
-		
-		body.getJoint(JointType.KNEE_LEFT).setPositionY(leftHipY);
-		body.getJoint(JointType.KNEE_RIGHT).setPositionY(rightHipY);
-		body.getJoint(JointType.ANKLE_LEFT).setPositionX(leftKneeX);
-		body.getJoint(JointType.ANKLE_RIGHT).setPositionX(rightKneeX);
-	}
-	
+
 }
