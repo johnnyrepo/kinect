@@ -135,6 +135,10 @@ public class MainView extends JFrame {
 		buttonPanel.setPlayingEnabled(enabled);
 	}
 
+	public void setMovementAnalysisEnabled(boolean enabled) {
+		buttonPanel.setMovementAnalysisEnabled(enabled);
+	}
+	
 	public File getSelectedFile() {
 		return selectedFile;
 	}
@@ -151,10 +155,6 @@ public class MainView extends JFrame {
 
 	public void redrawChart(Body body, boolean seatedMode) {
 		chartPanel.updateChart(body, seatedMode);
-	}
-
-	public void analyzeMovement(Body body) {
-		
 	}
 	
 	public void clearChart() {

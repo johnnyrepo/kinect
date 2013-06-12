@@ -67,6 +67,10 @@ public class ButtonPanel extends JPanel {
 		stopPlayButton.setEnabled(enabled);
 	}
 	
+	public void setMovementAnalysisEnabled(boolean enabled) {
+		movementAnalysisCheckbox.setSelected(enabled);
+	}
+	
 	public void updateSelectedFileLabel(String name) {
 		selectedFileLabel.setText(name);
 	}

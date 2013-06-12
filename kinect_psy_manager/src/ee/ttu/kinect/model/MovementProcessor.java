@@ -83,7 +83,7 @@ public class MovementProcessor {
 	}
 	
 	public boolean isMovementEnded() {
-		System.out.println(trajectorySummary);
+		//System.out.println(trajectorySummary);
 		return trajectorySummary < MovementProcessor.TRAJECTORY_MIN_VALUE;
 	}
 	
