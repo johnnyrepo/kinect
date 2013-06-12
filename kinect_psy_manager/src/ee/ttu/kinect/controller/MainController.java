@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 
 import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MainModel;
 import ee.ttu.kinect.view.MainView;
 
@@ -137,6 +138,12 @@ public class MainController {
 	
 	public void redrawChart(Body body) {
 		this.view.redrawChart(body, this.model.isSeatedMode());
+	}
+	
+	public void analyzeMovement(Body body) {
+		if (this.model.isMovementEnded(body, JointType.SPINE)) {
+			this.view.showMessagePopup("Movement for " + JointType.SPINE + " is ended!");
+		}
 	}
 	
 	public void showMessagePopup(String message) {

@@ -16,11 +16,14 @@ public class MainModel {
 	private File fileToPlay;
 	
 	private final CoordinateCorrection coordinateCorrection;
+	
+	private final MovementProcessor processor;
 		
 	public MainModel(MainController controller) {
 		this.sensorRunner = new SensorRunner(controller);
 		this.fileRunner = new FileRunner(controller);
 		this.coordinateCorrection = new CoordinateCorrection();
+		this.processor = new MovementProcessor();
 	}
 
 	public void setFileToPlay(File file) {
@@ -122,6 +125,20 @@ public class MainModel {
 	
 	public void turnSittingCorrectionOff() {
 		this.coordinateCorrection.turnSittingCorrectionOff();
+	}
+
+	public boolean isMovementEnded(Body body, JointType type) {
+		boolean isProcessed = false;
+		boolean isMovementEnded = false;
+		if (body != null && body.isBodyReady()) {
+			isProcessed = this.processor.process(body, type);
+			if (isProcessed) {
+				isMovementEnded = this.processor.isMovementEnded();
+				this.processor.clean();
+			}
+		}
+		
+		return (isProcessed && isMovementEnded);
 	}
 	
 }

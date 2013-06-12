@@ -34,47 +34,47 @@ public abstract class Runner {
 	}
 
 	public synchronized void start() {
-		logger.info("Starting " + getClass().getName());
-		running = true;
-		unpause();
-		worker = new Worker();
-		worker.execute();
+		this.logger.info("Starting " + this.getClass().getName());
+		this.running = true;
+		this.unpause();
+		this.worker = new Worker();
+		this.worker.execute();
 	}
 	
 	public synchronized void stop() {
-		logger.info("Stopping " + getClass().getName());
-		running = false;
-		unpause();
+		this.logger.info("Stopping " + this.getClass().getName());
+		this.running = false;
+		this.unpause();
 	}
 
 	public synchronized void pause() {
-		logger.info("Pausing " + getClass().getName());
-		paused = true;
+		this.logger.info("Pausing " + this.getClass().getName());
+		this.paused = true;
 	}
 	
 	public synchronized void unpause() {
-		logger.info("Unpausing " + getClass().getName());
-		paused = false;
+		this.logger.info("Unpausing " + this.getClass().getName());
+		this.paused = false;
 	}
 	
 	public boolean isRunning() {
-		return running;
+		return this.running;
 	}
 	
 	public boolean isPaused() {
-		return paused;
+		return this.paused;
 	}
 	
 	public void setSeatedMode() {
-		seatedMode = true;
+		this.seatedMode = true;
 	}
 
 	public void setDefaultMode() {
-		seatedMode = false;
+		this.seatedMode = false;
 	}
 
 	public boolean isSeatedMode() {
-		return seatedMode;
+		return this.seatedMode;
 	}
 
 	protected abstract String getSkeletonData();
@@ -89,26 +89,26 @@ public abstract class Runner {
 		public synchronized Void doInBackground() {
 			// logger.info("Running: " + getClass().getName() + " " +
 			// isCancelled());
-			while (running) {
-				if (paused) {
+			while (Runner.this.running) {
+				if (Runner.this.paused) {
 					continue;
 				}
 				// get data
 				String input = null;
-				input = getSkeletonData();
+				input = Runner.this.getSkeletonData();
 				if (input != null) {
-					parseSkeleton(input);
+					Runner.this.parseSkeleton(input);
 					// render body
-					if (body != null && body.isBodyReady()
-							&& body.isBodyChanged()) {
+					if (Runner.this.body != null && Runner.this.body.isBodyReady()
+							&& Runner.this.body.isBodyChanged()) {
 						try {
-							Body clone = body.clone();
-							publish(clone);
+							Body clone = Runner.this.body.clone();
+							this.publish(clone);
 						} catch (CloneNotSupportedException e) {
-							logger.info(e.getLocalizedMessage());
+							Runner.this.logger.info(e.getLocalizedMessage());
 						}
 						// Save skeleton, if needed
-						saveSkeleton();
+						Runner.this.saveSkeleton();
 					}
 				}
 
@@ -116,7 +116,7 @@ public abstract class Runner {
 				try {
 					Thread.sleep(30);
 				} catch (InterruptedException e) {
-					logger.info(e.getLocalizedMessage());
+					Runner.this.logger.info(e.getLocalizedMessage());
 				}
 			}
 			return null;
@@ -126,15 +126,17 @@ public abstract class Runner {
 		protected void process(List<Body> chunks) {
 			for (Body chunk : chunks) {
 				// Redraw the skeleton
-				controller.redrawSkeleton(chunk);
+				Runner.this.controller.redrawSkeleton(chunk);
 				// Redraw chart
-				controller.redrawChart(chunk);
+				Runner.this.controller.redrawChart(chunk);
+				// Analyze movement
+				Runner.this.controller.analyzeMovement(chunk);
 			}
 		}
 
 		@Override
 		protected void done() {
-			logger.info(getClass().getName() + " sucessfully stopped");
+			Runner.this.logger.info(this.getClass().getName() + " sucessfully stopped");
 		}
 
 	}

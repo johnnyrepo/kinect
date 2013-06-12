@@ -153,6 +153,10 @@ public class MainView extends JFrame {
 		this.chartPanel.updateChart(body, seatedMode);
 	}
 
+	public void analyzeMovement(Body body) {
+		
+	}
+	
 	public void clearChart() {
 		this.chartPanel.clearChart();
 	}
