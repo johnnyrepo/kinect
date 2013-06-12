@@ -72,6 +72,8 @@ public class MovementProcessor {
 
 	public void clean() {
 		trajectorySummary = 0;
+		velocitySummary = 0;
+		accelerationSummary = 0;
 	}
 	
 	public boolean process(Body body, JointType type) {
@@ -96,6 +98,8 @@ public class MovementProcessor {
 	}
 	
 	public void outputSummaryToConsole(JointType type) {
+		long frameStart = allTimeData.get(0).getFrameNumber();
+		long frameEnd = allTimeData.get(allTimeData.size() - 1).getFrameNumber();
 		double startTime = allTimeData.get(0).getTimestamp() / 1000;
 		double endTime = allTimeData.get(allTimeData.size() - 1).getTimestamp() / 1000;
 		double time = endTime - startTime;
@@ -107,13 +111,16 @@ public class MovementProcessor {
 				allTimeData.get(allTimeData.size() - 1).getJoint(type));
 		double ratio = eucledianDistance / trajectoryMass;
 		
-		System.out.println("Frame start: " + startTime);
-		System.out.println("Frame end: " + endTime);
+		System.out.println("Frame start: " + frameStart);
+		System.out.println("Frame end: " + frameEnd);
 		System.out.println("Time elapsed: " + time);
 		System.out.println("Trajectory mass: " + trajectoryMass);
 		System.out.println("Accelearation mass: " + accelerationMass);
 		System.out.println("Eucledian distance: " + eucledianDistance);
 		System.out.println("Eucl / Traj ratio: " + ratio);
+		
+		// clean da data
+		allTimeData = new ArrayList<Body>();
 	}
 	
 }
