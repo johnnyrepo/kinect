@@ -27,6 +27,7 @@ import org.jfree.data.time.TimeSeriesDataItem;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
+import ee.ttu.kinect.view.ChartType;
 
 public class TracingChartPanel extends JPanel {
 
@@ -48,9 +49,11 @@ public class TracingChartPanel extends JPanel {
 
 	private JCheckBox accelerationZCheckbox;
 	
-	private JButton chartButton;
+	private JButton valuesAnalysisButton;
 	
-	private JButton segmentationChartButton;
+	private JButton segmentationAnalysisButton;
+	
+	private JButton movementAnalysisButton;
 
 	private JFreeChart chart;
 
@@ -90,9 +93,11 @@ public class TracingChartPanel extends JPanel {
 		accelerationYCheckbox = new JCheckBox("Acceleration Y");
 		accelerationZCheckbox = new JCheckBox("Acceleration Z");
 		
-		chartButton = new JButton("Chart analysis");
+		valuesAnalysisButton = new JButton("Values analysis");
 		
-		segmentationChartButton = new JButton("Segmentation analysis");
+		segmentationAnalysisButton = new JButton("Segmentation analysis");
+		
+		movementAnalysisButton = new JButton("Movement analysis");
 
 		chartSelector = new ChartSelector();
 		
@@ -141,8 +146,9 @@ public class TracingChartPanel extends JPanel {
 		chartControlPanel.add(accelerationXCheckbox);
 		chartControlPanel.add(accelerationYCheckbox);
 		chartControlPanel.add(accelerationZCheckbox);
-		chartControlPanel.add(chartButton);
-		chartControlPanel.add(segmentationChartButton);
+		chartControlPanel.add(valuesAnalysisButton);
+		chartControlPanel.add(segmentationAnalysisButton);
+		chartControlPanel.add(movementAnalysisButton);
 
 		add(chartControlPanel);
 		add(chartPanel);
@@ -240,16 +246,20 @@ public class TracingChartPanel extends JPanel {
 		}
 	}
 	
-	public void addListenerForDrawChart(ActionListener listener) {
-		chartButton.addActionListener(listener);
+	public void addListenerForValuesAnalysis(ActionListener listener) {
+		valuesAnalysisButton.addActionListener(listener);
 	}
 	
-	public void addListenerForSegmentChart(ActionListener listener) {
-		segmentationChartButton.addActionListener(listener);
+	public void addListenerForSegmentationAnalysis(ActionListener listener) {
+		segmentationAnalysisButton.addActionListener(listener);
 	}
 	
-	public void openChartSelector(List<Body> data, boolean valuesCharts) {
-		chartSelector.open(data, valuesCharts);
+	public void addListenerForMovementAnalysis(ActionListener listener) {
+		movementAnalysisButton.addActionListener(listener);
+	}
+	
+	public void openChartSelector(List<Body> data, ChartType type) {
+		chartSelector.open(data, type);
 	}
 
 	public void clearChart() {		

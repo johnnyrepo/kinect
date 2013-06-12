@@ -55,9 +55,9 @@ public class MainView extends JFrame {
 	private final TracingChartPanel chartPanel;
 
 	public MainView() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		this.setTitle("KinectPsyManager v0.9");
+		setTitle("KinectPsyManager v1.0");
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -65,92 +65,92 @@ public class MainView extends JFrame {
 			System.exit(1);
 		}
 
-		this.menuBar = new JMenuBar();
-		this.menu = new JMenu("File");
-		this.menuItemOpen = new JMenuItem("Open");
-		this.menu.add(this.menuItemOpen);
-		this.menuBar.add(this.menu);
-		this.setJMenuBar(this.menuBar);
+		menuBar = new JMenuBar();
+		menu = new JMenu("File");
+		menuItemOpen = new JMenuItem("Open");
+		menu.add(menuItemOpen);
+		menuBar.add(menu);
+		setJMenuBar(menuBar);
 
-		this.fileChooser = new JFileChooser();
+		fileChooser = new JFileChooser();
 
-		this.controlPanel = new JPanel();
-		this.controlPanel.setLayout(new BoxLayout(this.controlPanel,
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new BoxLayout(controlPanel,
 				BoxLayout.X_AXIS));
 
-		this.buttonPanel = new ButtonPanel("Record / Play");
+		buttonPanel = new ButtonPanel("Record / Play");
 
-		this.markersPanel = new MarkersPanel();
+		markersPanel = new MarkersPanel();
 
-		this.seatedModePanel = new SeatedModePanel();
+		seatedModePanel = new SeatedModePanel();
 
-		this.controlPanel.add(this.buttonPanel);
-		this.controlPanel.add(this.markersPanel);
-		this.controlPanel.add(this.seatedModePanel);
+		controlPanel.add(buttonPanel);
+		controlPanel.add(markersPanel);
+		controlPanel.add(seatedModePanel);
 
-		this.tracingPanel = new JPanel();
-		this.tracingPanel.setLayout(new BoxLayout(this.tracingPanel,
+		tracingPanel = new JPanel();
+		tracingPanel.setLayout(new BoxLayout(tracingPanel,
 				BoxLayout.X_AXIS));
-		this.frontTracingPanel = new FrontTracingPanel();
-		this.sideTracingPanel = new SideTracingPanel();
-		this.upTracingPanel = new UpTracingPanel();
-		this.sideTracingPanel.addZoomPanel(new ZoomPanel(new ActionListener() {
+		frontTracingPanel = new FrontTracingPanel();
+		sideTracingPanel = new SideTracingPanel();
+		upTracingPanel = new UpTracingPanel();
+		sideTracingPanel.addZoomPanel(new ZoomPanel(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainView.this.frontTracingPanel.zoomIn();
-				MainView.this.sideTracingPanel.zoomIn();
-				MainView.this.upTracingPanel.zoomIn();
+				frontTracingPanel.zoomIn();
+				sideTracingPanel.zoomIn();
+				upTracingPanel.zoomIn();
 			}
 		}, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainView.this.frontTracingPanel.zoomOut();
-				MainView.this.sideTracingPanel.zoomOut();
-				MainView.this.upTracingPanel.zoomOut();
+				frontTracingPanel.zoomOut();
+				sideTracingPanel.zoomOut();
+				upTracingPanel.zoomOut();
 			}
 		}));
-		this.tracingPanel.add(this.frontTracingPanel);
-		this.tracingPanel.add(this.sideTracingPanel);
-		this.tracingPanel.add(this.upTracingPanel);
+		tracingPanel.add(frontTracingPanel);
+		tracingPanel.add(sideTracingPanel);
+		tracingPanel.add(upTracingPanel);
 
-		this.chartPanel = new TracingChartPanel();
+		chartPanel = new TracingChartPanel();
 
-		this.getContentPane().add(this.controlPanel, BorderLayout.NORTH);
-		this.getContentPane().add(this.tracingPanel, BorderLayout.CENTER);
-		this.getContentPane().add(this.chartPanel, BorderLayout.SOUTH);
+		getContentPane().add(controlPanel, BorderLayout.NORTH);
+		getContentPane().add(tracingPanel, BorderLayout.CENTER);
+		getContentPane().add(chartPanel, BorderLayout.SOUTH);
 
 		this.setSize(1200, 700);
-		this.setVisible(true);
+		setVisible(true);
 	}
 
 	public void setSensorEnabled(boolean enabled) {
-		this.buttonPanel.setSensorEnabled(enabled);
+		buttonPanel.setSensorEnabled(enabled);
 	}
 
 	public void setRecordingEnabled(boolean enabled) {
-		this.buttonPanel.setRecordingEnabled(enabled);
+		buttonPanel.setRecordingEnabled(enabled);
 	}
 
 	public void setPlayingEnabled(boolean enabled) {
-		this.buttonPanel.setPlayingEnabled(enabled);
+		buttonPanel.setPlayingEnabled(enabled);
 	}
 
 	public File getSelectedFile() {
-		return this.selectedFile;
+		return selectedFile;
 	}
 
 	public void redrawSkeleton(Body body, boolean seatedMode,
 			CoordinateCorrection correction) {
 		// perform coordinate correction, if needed
-		this.performCorrection(body, correction);
+		performCorrection(body, correction);
 
-		this.frontTracingPanel.redrawSkeleton(body, seatedMode);
-		this.sideTracingPanel.redrawSkeleton(body, seatedMode);
-		this.upTracingPanel.redrawSkeleton(body, seatedMode);
+		frontTracingPanel.redrawSkeleton(body, seatedMode);
+		sideTracingPanel.redrawSkeleton(body, seatedMode);
+		upTracingPanel.redrawSkeleton(body, seatedMode);
 	}
 
 	public void redrawChart(Body body, boolean seatedMode) {
-		this.chartPanel.updateChart(body, seatedMode);
+		chartPanel.updateChart(body, seatedMode);
 	}
 
 	public void analyzeMovement(Body body) {
@@ -158,27 +158,27 @@ public class MainView extends JFrame {
 	}
 	
 	public void clearChart() {
-		this.chartPanel.clearChart();
+		chartPanel.clearChart();
 	}
 
 	public void clearTracing() {
-		this.frontTracingPanel.clear();
-		this.sideTracingPanel.clear();
-		this.upTracingPanel.clear();
+		frontTracingPanel.clear();
+		sideTracingPanel.clear();
+		upTracingPanel.clear();
 	}
 
 	public void addListenerForMenuOpen(final ActionListener listener) {
-		this.menuItemOpen.addActionListener(new ActionListener() {
+		menuItemOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainView.this.fileChooser.setCurrentDirectory(new File(System
+				fileChooser.setCurrentDirectory(new File(System
 						.getProperty("user.dir")));
-				int res = MainView.this.fileChooser.showDialog(null, null);
+				int res = fileChooser.showDialog(null, null);
 				if (res == JFileChooser.APPROVE_OPTION) {
-					MainView.this.selectedFile = MainView.this.fileChooser
+					selectedFile = fileChooser
 							.getSelectedFile();
-					MainView.this.buttonPanel
-							.updateSelectedFileLabel(MainView.this.selectedFile
+					buttonPanel
+							.updateSelectedFileLabel(selectedFile
 									.getName());
 					listener.actionPerformed(e);
 				}
@@ -187,47 +187,55 @@ public class MainView extends JFrame {
 	}
 
 	public void addListenerForSeatedMode(ActionListener listener) {
-		this.seatedModePanel.addLsitenerForCheckbox(listener);
+		seatedModePanel.addLsitenerForCheckbox(listener);
 	}
 
 	public void addListenerForSensorOn(ActionListener listener) {
-		this.buttonPanel.addListenerForSensorOn(listener);
+		buttonPanel.addListenerForSensorOn(listener);
 	}
 
 	public void addListenerForStartRecord(ActionListener listener) {
-		this.buttonPanel.addListenerForStartRecord(listener);
+		buttonPanel.addListenerForStartRecord(listener);
 	}
 
 	public void addListenerForStopRecord(ActionListener listener) {
-		this.buttonPanel.addListenerForStopRecord(listener);
+		buttonPanel.addListenerForStopRecord(listener);
 	}
 
 	public void addListenerForStartPlay(ActionListener listener) {
-		this.buttonPanel.addListenerForStartPlay(listener);
+		buttonPanel.addListenerForStartPlay(listener);
 	}
 
 	public void addListenerForPause(ActionListener listener) {
-		this.buttonPanel.addListenerForPause(listener);
+		buttonPanel.addListenerForPause(listener);
 	}
 
 	public void addListenerForStopPlay(ActionListener listener) {
-		this.buttonPanel.addListenerForStopPlay(listener);
+		buttonPanel.addListenerForStopPlay(listener);
 	}
 
+	public void addListenerForLifeMovementAnalysis(ActionListener listener) {
+		buttonPanel.addListenerForLifeMovementAnalysis(listener);
+	}
+	
 	public void addListenerForStandingCorrection(ActionListener listener) {
-		this.upTracingPanel.addStandingCorrectionListener(listener);
+		upTracingPanel.addStandingCorrectionListener(listener);
 	}
 
 	public void addListenerForSittingCorrection(ActionListener listener) {
-		this.upTracingPanel.addSittingCorrectionListener(listener);
+		upTracingPanel.addSittingCorrectionListener(listener);
 	}
 
-	public void addListenerForDrawChart(ActionListener listener) {
-		this.chartPanel.addListenerForDrawChart(listener);
+	public void addListenerForValuesAnalysis(ActionListener listener) {
+		chartPanel.addListenerForValuesAnalysis(listener);
 	}
 
-	public void addListenerForSegmentChart(ActionListener listener) {
-		this.chartPanel.addListenerForSegmentChart(listener);
+	public void addListenerForSegmentationAnalysis(ActionListener listener) {
+		chartPanel.addListenerForSegmentationAnalysis(listener);
+	}
+	
+	public void addListenerForMovementAnalysis(ActionListener listener) {
+		chartPanel.addListenerForMovementAnalysis(listener);
 	}
 
 	public void showMessagePopup(String message) {
@@ -235,11 +243,11 @@ public class MainView extends JFrame {
 	}
 
 	public boolean[] getMarkersState() {
-		return this.markersPanel.getMarkersState();
+		return markersPanel.getMarkersState();
 	}
 
-	public void openChartSelector(List<Body> data, boolean valuesCharts) {
-		this.chartPanel.openChartSelector(data, valuesCharts);
+	public void openChartSelector(List<Body> data, ChartType type) {
+		chartPanel.openChartSelector(data, type);
 	}
 
 	private void performCorrection(Body body, CoordinateCorrection correction) {

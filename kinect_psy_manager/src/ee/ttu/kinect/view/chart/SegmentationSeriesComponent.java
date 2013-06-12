@@ -12,7 +12,6 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
 import ee.ttu.kinect.calc.Step;
-import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
 public class SegmentationSeriesComponent extends SeriesComponent {
@@ -52,12 +51,6 @@ public class SegmentationSeriesComponent extends SeriesComponent {
 		
 		velocityCheckbox.setText("Velocity " + selectedType.getName());
 		accelerationCheckbox.setText("Acceleration " + selectedType.getName());
-	}
-
-	@Override
-	public void updateSeries(Joint joint, long timestamp, boolean seatedMode) {
-//		series.addOrUpdate(new TimeSeriesDataItem(
-//				new FixedMillisecond(timestamp), joint.getClusterId()));
 	}
 	
 	public void updateVelocitySeries(Step step, long timestamp) {

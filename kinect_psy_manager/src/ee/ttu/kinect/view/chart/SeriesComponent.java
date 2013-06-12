@@ -4,7 +4,6 @@ import javax.swing.JPanel;
 
 import org.jfree.data.time.TimeSeriesCollection;
 
-import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
 
@@ -19,9 +18,6 @@ public abstract class SeriesComponent extends JPanel {
 	}
 	
 	public abstract void setLabels(JointType selectedType);
-	
-	public abstract void updateSeries(Joint joint, long timestamp,
-			boolean seatedMode);
 	
 	public abstract void clearSeries();
 

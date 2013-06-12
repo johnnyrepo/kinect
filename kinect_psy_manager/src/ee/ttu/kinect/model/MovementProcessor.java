@@ -7,7 +7,7 @@ import ee.ttu.kinect.calc.Calculator;
 
 public class MovementProcessor {
 
-	private final static double TRAJECTORY_MIN_VALUE = 0.05;
+	private final static double TRAJECTORY_MIN_VALUE = 0.15;
 	
 	private final int windowSize = 30; 
 	
@@ -17,10 +17,11 @@ public class MovementProcessor {
 	
 	private double accelerationSummary;
 	
-	private List<Body> data;
+	private final List<Body> data;
 	
 	public MovementProcessor() {
-		this.clean();
+		data = new ArrayList<Body>();
+		clean();
 	}
 	
 //	private void analyze(List<Body> data, JointType selectedType) {
@@ -50,31 +51,31 @@ public class MovementProcessor {
 //	}
 	
 	private void analyze(List<Body> data, JointType type) {
-		this.trajectorySummary = 0;
-		this.velocitySummary = 0;
-		this.accelerationSummary = 0;
+		trajectorySummary = 0;
+		velocitySummary = 0;
+		accelerationSummary = 0;
 		for (int i = 0; i < data.size(); i++) {
 			if ((i + 1) < data.size()) {
 				Joint joint1 = data.get(i).getJoint(type);
 				Joint joint2 = data.get(i + 1).getJoint(type);
 				long time1 = data.get(i).getTimestamp();
 				long time2 = data.get(i + 1).getTimestamp();
-				this.trajectorySummary += Calculator.calculateTrajectoryLength3D(joint1, joint2);
-				this.velocitySummary += Math.abs(Calculator.calculateVelocity3D(joint1, joint2, time1, time2));
-				this.accelerationSummary += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
+				trajectorySummary += Calculator.calculateTrajectoryLength3D(joint1, joint2);
+				velocitySummary += Math.abs(Calculator.calculateVelocity3D(joint1, joint2, time1, time2));
+				accelerationSummary += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
 			}
 		}
 	}
 
 	public void clean() {
-		this.data = new ArrayList<Body>();
-		this.trajectorySummary = 0;
+		trajectorySummary = 0;
 	}
 	
 	public boolean process(Body body, JointType type) {
-		this.data.add(body);
-		if (this.data.size() == this.windowSize) {
-			this.analyze(this.data, type);
+		data.add(body);
+		if (data.size() == windowSize) {
+			analyze(data, type);
+			data.remove(0);
 			return true;
 		}
 		
@@ -82,8 +83,12 @@ public class MovementProcessor {
 	}
 	
 	public boolean isMovementEnded() {
-		System.out.println(this.trajectorySummary);
-		return this.trajectorySummary < MovementProcessor.TRAJECTORY_MIN_VALUE;
+		System.out.println(trajectorySummary);
+		return trajectorySummary < MovementProcessor.TRAJECTORY_MIN_VALUE;
+	}
+	
+	public double getTrajectorySummary() {
+		return trajectorySummary;
 	}
 	
 }

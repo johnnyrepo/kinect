@@ -18,123 +18,133 @@ public class MainModel {
 	private final CoordinateCorrection coordinateCorrection;
 	
 	private final MovementProcessor processor;
+	
+	private boolean movementAnalysisMode;
 		
 	public MainModel(MainController controller) {
-		this.sensorRunner = new SensorRunner(controller);
-		this.fileRunner = new FileRunner(controller);
-		this.coordinateCorrection = new CoordinateCorrection();
-		this.processor = new MovementProcessor();
+		sensorRunner = new SensorRunner(controller);
+		fileRunner = new FileRunner(controller);
+		coordinateCorrection = new CoordinateCorrection();
+		processor = new MovementProcessor();
 	}
 
 	public void setFileToPlay(File file) {
-		this.fileToPlay = file;
+		fileToPlay = file;
 	}
 	
 	public File getFileToPlay() {
-		return this.fileToPlay;
+		return fileToPlay;
 	}
 	
 	public void startRecord() {
-		this.stopFileRun();
+		stopFileRun();
 		
-		this.sensorRunner.startRecord();
+		sensorRunner.startRecord();
 	}
 
 	public void stopRecord() {
-		this.stopFileRun();
+		stopFileRun();
 		
-		this.sensorRunner.stopRecord();
+		sensorRunner.stopRecord();
 	}
 	
 	public void startFileRun() {
-		this.fileRunner.readFile(this.fileToPlay);
-		if (!this.fileRunner.isRunning()) {
-			this.fileRunner.start();
+		fileRunner.readFile(fileToPlay);
+		if (!fileRunner.isRunning()) {
+			fileRunner.start();
 			
-			this.activeRunner = this.fileRunner;
+			activeRunner = fileRunner;
 		}
 	}
 
 	public void pauseFileRun() {
-		if (this.fileRunner.isRunning()) {
-			this.fileRunner.pause();
+		if (fileRunner.isRunning()) {
+			fileRunner.pause();
 		}
 	}
 	
 	public void unpauseFileRun() {
-		if (this.fileRunner.isRunning()) {
-			this.fileRunner.unpause();		}
+		if (fileRunner.isRunning()) {
+			fileRunner.unpause();		}
 	}
 	
 	public void stopFileRun() {
-		if (this.fileRunner.isRunning()) {
-			this.fileRunner.stop();
+		if (fileRunner.isRunning()) {
+			fileRunner.stop();
 		}
 	}
 	
 	public void startSensorRun() {
-		if (!this.sensorRunner.isRunning()) {
-			this.sensorRunner.start();
+		if (!sensorRunner.isRunning()) {
+			sensorRunner.start();
 			
-			this.activeRunner = this.sensorRunner;
+			activeRunner = sensorRunner;
 		}
 	}
 	
 	public void stopSensorRun() {
-		if (this.sensorRunner.isRunning()) {
-			this.sensorRunner.stop();
+		if (sensorRunner.isRunning()) {
+			sensorRunner.stop();
 		}
 	}
 	
 	public boolean isFileRunPaused() {
-		return this.fileRunner.isPaused();
+		return fileRunner.isPaused();
 	}
 
 	public void setSeatedMode() {
-		this.activeRunner.setSeatedMode();
+		activeRunner.setSeatedMode();
 	}
 	
 	public void setDefaultMode() {
-		this.activeRunner.setDefaultMode();
+		activeRunner.setDefaultMode();
 	}
 
 	public boolean isSeatedMode() {
-		return this.activeRunner.isSeatedMode();
+		return activeRunner.isSeatedMode();
 	}
 
 	public List<Body> getFileData() {
-		this.fileRunner.readFile(this.fileToPlay);
-		return this.fileRunner.getData();
+		fileRunner.readFile(fileToPlay);
+		return fileRunner.getData();
 	}
 
 	public CoordinateCorrection getCoordinateCorrection() {
-		return this.coordinateCorrection;
+		return coordinateCorrection;
 	}
 	
 	public void calculateSittingCorrection() {
-		this.coordinateCorrection.calculateSittingCorrection(this.activeRunner.body);
+		coordinateCorrection.calculateSittingCorrection(activeRunner.body);
 	}
 	
 	public void calculateStandingCorrection() {
-		this.coordinateCorrection.calculateStandingCorrection(this.activeRunner.body);
+		coordinateCorrection.calculateStandingCorrection(activeRunner.body);
 	}
 	
 	public void turnStandingCorrectionOff() {
-		this.coordinateCorrection.turnStandingCorrectionOff();
+		coordinateCorrection.turnStandingCorrectionOff();
 	}
 	
 	public void turnSittingCorrectionOff() {
-		this.coordinateCorrection.turnSittingCorrectionOff();
+		coordinateCorrection.turnSittingCorrectionOff();
 	}
 
+	public void setMovementAnalysisMode(boolean value) {
+		movementAnalysisMode = value;
+	}
+	
+	public boolean isMovementAnalysisMode() {
+		return movementAnalysisMode;
+	}
+	
 	public boolean isMovementEnded(Body body, JointType type) {
 		boolean isProcessed = false;
 		boolean isMovementEnded = false;
 		if (body != null && body.isBodyReady()) {
-			isProcessed = this.processor.process(body, type);
+			isProcessed = processor.process(body, type);
 			if (isProcessed) {
-				isMovementEnded = this.processor.isMovementEnded();
-				this.processor.clean();
+				isMovementEnded = processor.isMovementEnded();
+				processor.clean();
 			}
 		}
 		

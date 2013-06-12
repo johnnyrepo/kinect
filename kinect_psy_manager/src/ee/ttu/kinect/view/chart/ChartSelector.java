@@ -19,11 +19,12 @@ import javax.swing.event.ListSelectionListener;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
+import ee.ttu.kinect.view.ChartType;
 
 public class ChartSelector {
 	
-	public void open(List<Body> data, boolean valuesCharts) {
-		new ChartSelectorFrame(data, valuesCharts);
+	public void open(List<Body> data, ChartType type) {
+		new ChartSelectorFrame(data, type);
 		//clearCharts();
 	}
 	
@@ -33,7 +34,7 @@ public class ChartSelector {
 	
 		private List<Body> data;
 		
-		private boolean valuesCharts;
+		private ChartType type;
 	
 		private JList<JointType> jointsList;
 	
@@ -47,17 +48,22 @@ public class ChartSelector {
 	
 		private JPanel chartsPanel;
 	
-		public ChartSelectorFrame(List<Body> data, boolean valuesCharts) {
+		public ChartSelectorFrame(List<Body> data, ChartType type) {
 			this.data = data;
-			this.valuesCharts = valuesCharts;
+			this.type = type;
 			
 			setSize(1600, 800);
 			setLayout(new BorderLayout());
 			
-			if (valuesCharts) {
-				setTitle("Analysis with velocities/accelerations VALUES");
-			} else {
-				setTitle("Analysis with velocities/accelerations SEGMENTATION");
+			switch (type) {
+				case VALUES:
+					setTitle("Analysis with velocities/accelerations VALUES");
+					break;
+				case SEGMENTATION:
+					setTitle("Analysis with velocities/accelerations SEGMENTATION");
+					break;
+				case MOVEMENT:
+					setTitle("Analysis with movement trajectories");
 			}
 	
 			jointsList = new JList<JointType>(JointType.values());
@@ -75,7 +81,7 @@ public class ChartSelector {
 			controlPanel = new JPanel();
 			controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.Y_AXIS));
 			controlPanel.add(scrollPane);
-			if (!valuesCharts) {
+			if (type == ChartType.SEGMENTATION) {
 				controlPanel.add(segmentationConfPanel);
 			}
 			controlPanel.add(singleModeCheckbox);
@@ -118,14 +124,28 @@ public class ChartSelector {
 				clearCharts();
 				List<JointType> selectedJoints = jointsList.getSelectedValuesList();
 				if (singleModeCheckbox.isSelected()) {
-					Chart cc = valuesCharts ? new ModelChart() : new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
-							segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
+					Chart cc = null;
+					if (type == ChartType.VALUES) {
+						cc = new ModelChart();
+					} else if (type == ChartType.SEGMENTATION) {
+						cc = new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
+								segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
+					} else if (type == ChartType.MOVEMENT) {
+						cc =  new MovementChart();
+					}
 					cc.drawChart(data, selectedJoints, false);
 					chartsPanel.add(cc);
 				} else {
 					for (JointType selectedType : selectedJoints) {
-						Chart cc = valuesCharts ? new ModelChart() : new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
-								segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
+						Chart cc = null;
+						if (type == ChartType.VALUES) {
+							cc = new ModelChart();
+						} else if (type == ChartType.SEGMENTATION) {
+							cc = new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
+									segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
+						} else if (type == ChartType.MOVEMENT) {
+							cc =  new MovementChart();
+						}
 						List<JointType> arg = new ArrayList<JointType>();
 						arg.add(selectedType);
 						cc.drawChart(data, arg, false);

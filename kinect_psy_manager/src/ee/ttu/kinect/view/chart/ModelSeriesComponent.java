@@ -93,7 +93,6 @@ public class ModelSeriesComponent extends SeriesComponent {
 				+ selectedType.getName());
 	}
 
-	@Override
 	public void updateSeries(Joint joint, long timestamp, boolean seatedMode) {
 		if (joint == null) {
 			return;

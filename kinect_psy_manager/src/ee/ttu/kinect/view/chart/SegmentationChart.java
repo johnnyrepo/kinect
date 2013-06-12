@@ -69,7 +69,6 @@ public class SegmentationChart extends Chart {
 	private void drawSegmentationChart(SegmentationSeriesComponent sc, List<Body> data, JointType selectedType, boolean isVelocity) {
 		// organizing data into steps
 		List<Step> stepData = organizeDataIntoSteps(data, selectedType, isVelocity);
-		System.out.println("hojaaaaa " + data.size() + " " + stepData.size());
 		// K-mean
 		calculateKmean(stepData);
 		// Kohonen

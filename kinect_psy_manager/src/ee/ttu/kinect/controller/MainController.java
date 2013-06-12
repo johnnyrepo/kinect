@@ -9,6 +9,7 @@ import javax.swing.JCheckBox;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MainModel;
+import ee.ttu.kinect.view.ChartType;
 import ee.ttu.kinect.view.MainView;
 
 
@@ -19,148 +20,165 @@ public class MainController {
 	private final MainModel model;
 
 	public MainController() {
-		this.model = new MainModel(this);
+		model = new MainModel(this);
 
-		this.view = new MainView();
+		view = new MainView();
 
 		//SwingUtilities.invokeLater(view);
 		
-		this.view.addListenerForMenuOpen(new ActionListener() {
+		view.addListenerForMenuOpen(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.model.setFileToPlay(MainController.this.view.getSelectedFile()); //TODO: fix this hack
-				MainController.this.view.setPlayingEnabled(true);
+				model.setFileToPlay(view.getSelectedFile()); //TODO: fix this hack
+				view.setPlayingEnabled(true);
 			}
 		});
-		this.view.addListenerForStartRecord(new ActionListener() {
+		view.addListenerForStartRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.model.startRecord();
+				model.startRecord();
 			}
 		});
-		this.view.addListenerForStopRecord(new ActionListener() {
+		view.addListenerForStopRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.model.stopRecord();
+				model.stopRecord();
 			}
 		});
-		this.view.addListenerForStartPlay(new ActionListener() {
+		view.addListenerForStartPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (MainController.this.model.isFileRunPaused()) {
-					MainController.this.model.unpauseFileRun();
+				if (model.isFileRunPaused()) {
+					model.unpauseFileRun();
 				} else {
-					MainController.this.view.clearChart();
-					MainController.this.view.clearTracing();
-					MainController.this.model.stopSensorRun();
-					MainController.this.model.startFileRun();
+					view.clearChart();
+					view.clearTracing();
+					model.stopSensorRun();
+					model.startFileRun();
 				}
 			}
 		});
-		this.view.addListenerForPause(new ActionListener() {
+		view.addListenerForPause(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.model.pauseFileRun();
+				model.pauseFileRun();
 			}
 		});
-		this.view.addListenerForStopPlay(new ActionListener() {
+		view.addListenerForStopPlay(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.model.stopFileRun();
+				model.stopFileRun();
 			}
 		});
-		this.view.addListenerForSensorOn(new ActionListener() {
+		view.addListenerForSensorOn(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean sensorOn = ((JCheckBox) e.getSource()).isSelected();
 				Logger.getLogger(this.getClass().getName()).info("sensor mode changed: " + sensorOn);
 				if (!sensorOn) {
-					MainController.this.model.stopSensorRun();
+					model.stopSensorRun();
 				} else {
-					MainController.this.view.clearChart();
-					MainController.this.model.startSensorRun();
+					view.clearChart();
+					model.startSensorRun();
 				}
 			}
 		});
-		this.view.addListenerForSeatedMode(new ActionListener() {
+		view.addListenerForLifeMovementAnalysis(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setMovementAnalysisMode(((JCheckBox)e.getSource()).isSelected());
+			}
+		});
+		view.addListenerForSeatedMode(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean seatedMode = ((JCheckBox) e.getSource()).isSelected();
 				if (!seatedMode) {
-					MainController.this.model.setDefaultMode();
+					model.setDefaultMode();
 				} else {
-					MainController.this.model.setSeatedMode();
+					model.setSeatedMode();
 				}
 			}
 		});
-		this.view.addListenerForStandingCorrection(new ActionListener() {
+		view.addListenerForStandingCorrection(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (((JCheckBox) e.getSource()).isSelected()) {
-					MainController.this.model.calculateStandingCorrection();
+					model.calculateStandingCorrection();
 				} else {
-					MainController.this.model.turnStandingCorrectionOff();
+					model.turnStandingCorrectionOff();
 				}
 			}
 		});
-		this.view.addListenerForSittingCorrection(new ActionListener() {
+		view.addListenerForSittingCorrection(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (((JCheckBox) e.getSource()).isSelected()) {
-					MainController.this.model.calculateSittingCorrection();
+					model.calculateSittingCorrection();
 				} else {
-					MainController.this.model.turnSittingCorrectionOff();
+					model.turnSittingCorrectionOff();
 				}
 			}
 		});
-		this.view.addListenerForDrawChart(new ActionListener() {
+		view.addListenerForValuesAnalysis(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.view.openChartSelector(MainController.this.model.getFileData(), true);
+				view.openChartSelector(model.getFileData(), ChartType.VALUES);
 			}
 		});
 		
-		this.view.addListenerForSegmentChart(new ActionListener() {
+		view.addListenerForSegmentationAnalysis(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				MainController.this.view.openChartSelector(MainController.this.model.getFileData(), false);
+				view.openChartSelector(model.getFileData(), ChartType.SEGMENTATION);
+			}
+		});
+		
+		view.addListenerForMovementAnalysis(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				view.openChartSelector(model.getFileData(), ChartType.MOVEMENT);
 			}
 		});
 
-		this.view.setRecordingEnabled(false);
-		this.view.setPlayingEnabled(false);
-		this.model.startSensorRun();
+		view.setRecordingEnabled(false);
+		view.setPlayingEnabled(false);
+		model.startSensorRun();
 	}
 
 	public void redrawSkeleton(Body body) {
-		this.view.redrawSkeleton(body, this.model.isSeatedMode(), this.model.getCoordinateCorrection());
+		view.redrawSkeleton(body, model.isSeatedMode(), model.getCoordinateCorrection());
 	}
 	
 	public void redrawChart(Body body) {
-		this.view.redrawChart(body, this.model.isSeatedMode());
-	}
-	
-	public void analyzeMovement(Body body) {
-		if (this.model.isMovementEnded(body, JointType.SPINE)) {
-			this.view.showMessagePopup("Movement for " + JointType.SPINE + " is ended!");
-		}
+		view.redrawChart(body, model.isSeatedMode());
 	}
 	
 	public void showMessagePopup(String message) {
-		this.view.showMessagePopup(message);
+		view.showMessagePopup(message);
 	}
 	
 	public boolean[] getMarkersState() {
-		return this.view.getMarkersState();
+		return view.getMarkersState();
 	}
 	
 	public void setSensorEnabled(boolean enabled) {
-		this.view.setSensorEnabled(enabled);
-		this.view.setRecordingEnabled(enabled);
+		view.setSensorEnabled(enabled);
+		view.setRecordingEnabled(enabled);
 	}
 	
 	public static void main(String... args) {
 		new MainController();
+	}
+
+	public void analyzeMovement(Body body) {
+		if (!model.isMovementAnalysisMode()) {
+			return;
+		}
+		
+		if (model.isMovementEnded(body, JointType.SPINE)) {
+			view.showMessagePopup("Movement has ended");
+		}
 	}
 
 }
