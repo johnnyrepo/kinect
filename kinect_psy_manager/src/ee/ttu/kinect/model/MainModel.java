@@ -144,6 +144,9 @@ public class MainModel {
 			isProcessed = processor.process(body, type);
 			if (isProcessed) {
 				isMovementEnded = processor.isMovementEnded();
+				if (isMovementEnded) {
+					processor.outputSummaryToConsole(type);
+				}
 				processor.clean();
 			}
 		}

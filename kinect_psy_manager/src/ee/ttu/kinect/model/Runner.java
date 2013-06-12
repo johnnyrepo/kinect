@@ -129,6 +129,7 @@ public abstract class Runner {
 				controller.redrawSkeleton(chunk);
 				// Redraw chart
 				controller.redrawChart(chunk);
+				// analyze movement
 				controller.analyzeMovement(chunk);
 			}
 		}

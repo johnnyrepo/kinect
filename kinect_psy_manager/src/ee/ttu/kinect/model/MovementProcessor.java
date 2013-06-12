@@ -17,10 +17,13 @@ public class MovementProcessor {
 	
 	private double accelerationSummary;
 	
-	private final List<Body> data;
+	private List<Body> data;
+	
+	private List<Body> allTimeData;
 	
 	public MovementProcessor() {
 		data = new ArrayList<Body>();
+		allTimeData = new ArrayList<Body>();
 		clean();
 	}
 	
@@ -72,6 +75,7 @@ public class MovementProcessor {
 	}
 	
 	public boolean process(Body body, JointType type) {
+		allTimeData.add(body);
 		data.add(body);
 		if (data.size() == windowSize) {
 			analyze(data, type);
@@ -89,6 +93,27 @@ public class MovementProcessor {
 	
 	public double getTrajectorySummary() {
 		return trajectorySummary;
+	}
+	
+	public void outputSummaryToConsole(JointType type) {
+		double startTime = allTimeData.get(0).getTimestamp() / 1000;
+		double endTime = allTimeData.get(allTimeData.size() - 1).getTimestamp() / 1000;
+		double time = endTime - startTime;
+		
+		analyze(allTimeData, type);
+		double trajectoryMass = trajectorySummary;
+		double accelerationMass = accelerationSummary;
+		double eucledianDistance = Calculator.calculateTrajectoryLength3D(allTimeData.get(0).getJoint(type), 
+				allTimeData.get(allTimeData.size() - 1).getJoint(type));
+		double ratio = eucledianDistance / trajectoryMass;
+		
+		System.out.println("Frame start: " + startTime);
+		System.out.println("Frame end: " + endTime);
+		System.out.println("Time elapsed: " + time);
+		System.out.println("Trajectory mass: " + trajectoryMass);
+		System.out.println("Accelearation mass: " + accelerationMass);
+		System.out.println("Eucledian distance: " + eucledianDistance);
+		System.out.println("Eucl / Traj ratio: " + ratio);
 	}
 	
 }
