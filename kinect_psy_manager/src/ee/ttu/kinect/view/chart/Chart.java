@@ -26,10 +26,10 @@ public abstract class Chart extends JPanel {
 
 	protected JFreeChart chart;
 
-	public Chart() {
+	public Chart(String valueAxisLabel, String timeAxisValues) {
 		dataset = new TimeSeriesCollection();
-		chart = ChartFactory.createTimeSeriesChart(null, null,
-				"Velocity/Acceleration", dataset, true, true, false);
+		chart = ChartFactory.createTimeSeriesChart(null, timeAxisValues,
+				valueAxisLabel, dataset, true, true, false);
 
 		XYPlot plot = (XYPlot) chart.getPlot();
 		DateAxis axis = (DateAxis) plot.getDomainAxis();

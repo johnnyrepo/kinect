@@ -10,6 +10,10 @@ public class MovementChart extends Chart {
 
 	private static final long serialVersionUID = 1L;
 
+	public MovementChart() {
+		super("Trajectory", "Time");		
+	}
+	
 	@Override
 	public void drawChart(List<Body> data, List<JointType> selectedTypes,
 			boolean seatedMode) {

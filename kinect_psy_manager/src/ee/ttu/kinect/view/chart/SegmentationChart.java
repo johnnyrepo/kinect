@@ -43,6 +43,8 @@ public class SegmentationChart extends Chart {
 	private int pointsAmount;
 	
 	public SegmentationChart(int clustersAmount, int stepBetweenPoints, int pointsAmount) {
+		super("Velocity/Acceleration", "Time");
+		
 		this.clustersAmount = clustersAmount;
 		this.stepBetweenPoints = stepBetweenPoints;
 		this.pointsAmount = pointsAmount;

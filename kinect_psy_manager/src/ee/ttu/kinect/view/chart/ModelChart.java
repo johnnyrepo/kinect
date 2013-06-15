@@ -9,6 +9,10 @@ public class ModelChart extends Chart {
 
 	private static final long serialVersionUID = 1L;
 
+	public ModelChart() {
+		super("Velocity/Acceleration", "Time");
+	}
+	
 	public void drawChart(List<Body> data, List<JointType> selectedTypes,
 			boolean seatedMode) {
 		String chartTitle = "";
