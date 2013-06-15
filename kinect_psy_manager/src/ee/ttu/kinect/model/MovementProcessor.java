@@ -7,15 +7,15 @@ import ee.ttu.kinect.calc.Calculator;
 
 public class MovementProcessor {
 
-	private final static double TRAJECTORY_MIN_VALUE = 0.15;
+	private final static double TRAJECTORY_MASS_MIN_VALUE = 0.15;
 	
 	private final int windowSize = 30; 
 	
-	private double trajectorySummary;
+	private double trajectoryMass;
 	
-	private double velocitySummary;
-	
-	private double accelerationSummary;
+	private double accelerationMass;
+
+	private double velocityMass;
 	
 	private List<Body> data;
 	
@@ -27,53 +27,27 @@ public class MovementProcessor {
 		clean();
 	}
 	
-//	private void analyze(List<Body> data, JointType selectedType) {
-//		this.trajectorySummary = new ArrayList<Double>();
-//		this.velocitySummary = new ArrayList<Double>();
-//		this.accelerationSummary = new ArrayList<Double>();
-//		
-//		for (int i = 0; i < data.size(); i++) {
-//			double trajectorySummary = 0;
-//			double velocitySummary = 0;
-//			double accelerationSummary = 0;
-//			for (int j = 0; j < this.windowSize; j++) {
-//				if ((i + j) < data.size() && (i + j + 1) < data.size() && (j + 1) < this.windowSize) {
-//					Joint joint1 = data.get(i + j).getJoint(selectedType);
-//					Joint joint2 = data.get(i + j + 1).getJoint(selectedType);
-//					long time1 = data.get(i + j).getTimestamp();
-//					long time2 = data.get(i + j + 1).getTimestamp();
-//					trajectorySummary += Calculator.calculateTrajectoryLength3D(joint1, joint2);
-//					velocitySummary += Math.abs(Calculator.calculateVelocity3D(joint1, joint2, time1, time2));
-//					accelerationSummary += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
-//				}
-//			}
-//			this.trajectorySummary.add(trajectorySummary);
-//			this.velocitySummary.add(velocitySummary);
-//			this.accelerationSummary.add(accelerationSummary);
-//		}
-//	}
-	
 	private void analyze(List<Body> data, JointType type) {
-		trajectorySummary = 0;
-		velocitySummary = 0;
-		accelerationSummary = 0;
+		trajectoryMass = 0;
+		velocityMass = 0;
+		accelerationMass = 0;
 		for (int i = 0; i < data.size(); i++) {
 			if ((i + 1) < data.size()) {
 				Joint joint1 = data.get(i).getJoint(type);
 				Joint joint2 = data.get(i + 1).getJoint(type);
 				long time1 = data.get(i).getTimestamp();
 				long time2 = data.get(i + 1).getTimestamp();
-				trajectorySummary += Calculator.calculateTrajectoryLength3D(joint1, joint2);
-				velocitySummary += Math.abs(Calculator.calculateVelocity3D(joint1, joint2, time1, time2));
-				accelerationSummary += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
+				trajectoryMass += Calculator.calculateTrajectoryLength3D(joint1, joint2);
+				velocityMass += Math.abs(Calculator.calculateVelocity3D(joint1, joint2, time1, time2));
+				accelerationMass += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
 			}
 		}
 	}
 
 	public void clean() {
-		trajectorySummary = 0;
-		velocitySummary = 0;
-		accelerationSummary = 0;
+		trajectoryMass = 0;
+		velocityMass = 0;
+		accelerationMass = 0;
 	}
 	
 	public boolean process(Body body, JointType type) {
@@ -89,12 +63,11 @@ public class MovementProcessor {
 	}
 	
 	public boolean isMovementEnded() {
-		//System.out.println(trajectorySummary);
-		return trajectorySummary < MovementProcessor.TRAJECTORY_MIN_VALUE;
+		return trajectoryMass < MovementProcessor.TRAJECTORY_MASS_MIN_VALUE;
 	}
 	
-	public double getTrajectorySummary() {
-		return trajectorySummary;
+	public double getTrajectoryMass() {
+		return trajectoryMass;
 	}
 	
 	public void outputSummaryToConsole(JointType type) {
@@ -105,8 +78,6 @@ public class MovementProcessor {
 		double time = endTime - startTime;
 		
 		analyze(allTimeData, type);
-		double trajectoryMass = trajectorySummary;
-		double accelerationMass = accelerationSummary;
 		double eucledianDistance = Calculator.calculateTrajectoryLength3D(allTimeData.get(0).getJoint(type), 
 				allTimeData.get(allTimeData.size() - 1).getJoint(type));
 		double ratio = eucledianDistance / trajectoryMass;
@@ -115,7 +86,7 @@ public class MovementProcessor {
 		System.out.println("Frame end: " + frameEnd);
 		System.out.println("Time elapsed: " + time);
 		System.out.println("Trajectory mass: " + trajectoryMass);
-		System.out.println("Accelearation mass: " + accelerationMass);
+		System.out.println("Acceleration mass: " + accelerationMass);
 		System.out.println("Eucledian distance: " + eucledianDistance);
 		System.out.println("Eucl / Traj ratio: " + ratio);
 		

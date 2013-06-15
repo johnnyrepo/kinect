@@ -86,7 +86,6 @@ public class MainController {
 		view.addListenerForLifeMovementAnalysis(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Hehheej " + ((JCheckBox)e.getSource()).isSelected());
 				model.setMovementAnalysisMode(((JCheckBox)e.getSource()).isSelected());
 			}
 		});
@@ -167,10 +166,6 @@ public class MainController {
 		view.setSensorEnabled(enabled);
 		view.setRecordingEnabled(enabled);
 	}
-	
-	public static void main(String... args) {
-		new MainController();
-	}
 
 	public void analyzeMovement(Body body) {
 		if (!model.isMovementAnalysisMode()) {
@@ -182,6 +177,10 @@ public class MainController {
 			model.setMovementAnalysisMode(false);	// TODO: make the controller and model in sync
 			view.showMessagePopup("Movement has ended");
 		}
+	}
+	
+	public static void main(String... args) {
+		new MainController();
 	}
 
 }

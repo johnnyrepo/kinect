@@ -35,7 +35,7 @@ public class MovementChart extends Chart {
 		MovementProcessor processor = new MovementProcessor();
 		for (Body body : data) {
 			if (processor.process(body, selectedType)) {
-				sc.updateSeries(processor.getTrajectorySummary(), body.getTimestamp());
+				sc.updateSeries(processor.getTrajectoryMass(), body.getTimestamp());
 			}
 		}
 		
