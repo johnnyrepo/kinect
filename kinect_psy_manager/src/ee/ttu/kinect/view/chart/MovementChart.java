@@ -38,7 +38,6 @@ public class MovementChart extends Chart {
 				sc.updateSeries(processor.getTrajectoryMass(), body.getTimestamp());
 			}
 		}
-		
 	}
 	
 }

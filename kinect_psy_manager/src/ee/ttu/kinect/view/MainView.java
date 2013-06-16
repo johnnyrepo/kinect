@@ -135,8 +135,8 @@ public class MainView extends JFrame {
 		buttonPanel.setPlayingEnabled(enabled);
 	}
 
-	public void setMovementAnalysisEnabled(boolean enabled) {
-		buttonPanel.setMovementAnalysisEnabled(enabled);
+	public void setMovementDetectionEnabled(boolean enabled) {
+		buttonPanel.setMovementDetectionEnabled(enabled);
 	}
 	
 	public File getSelectedFile() {
@@ -214,8 +214,8 @@ public class MainView extends JFrame {
 		buttonPanel.addListenerForStopPlay(listener);
 	}
 
-	public void addListenerForLifeMovementAnalysis(ActionListener listener) {
-		buttonPanel.addListenerForLifeMovementAnalysis(listener);
+	public void addListenerForLifeMovementDetection(ActionListener listener) {
+		buttonPanel.addListenerForLifeMovementDetection(listener);
 	}
 	
 	public void addListenerForStandingCorrection(ActionListener listener) {

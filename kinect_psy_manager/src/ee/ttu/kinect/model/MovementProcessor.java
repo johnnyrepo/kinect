@@ -62,12 +62,12 @@ public class MovementProcessor {
 		return false;
 	}
 	
-	public boolean isMovementEnded() {
-		return trajectoryMass < MovementProcessor.TRAJECTORY_MASS_MIN_VALUE;
-	}
-	
 	public double getTrajectoryMass() {
 		return trajectoryMass;
+	}
+
+	public boolean isMovementEnded() {
+		return trajectoryMass < MovementProcessor.TRAJECTORY_MASS_MIN_VALUE;
 	}
 	
 	public void outputSummaryToConsole(JointType type) {
