@@ -147,7 +147,7 @@ public class MainModel {
 //				if (isMovementEnded) {
 //					processor.outputSummaryToConsole(type);
 //				}
-				processor.clean();
+//				processor.clean();
 			}
 		}
 		
@@ -155,15 +155,15 @@ public class MainModel {
 	}
 
 	public List<Body> getMovementData() {
-		return processor.getAllTimeData();
+		return processor.getDataSummary();
 	}
 
 	public double getTrajectoryMassSummary() {
-		return processor.getAllTimeTrajectoryMass();
+		return processor.getTrajectoryMassSummary();
 	}
 
 	public double getAccelerationMassSummary() {
-		return processor.getAllTimeAccelerationMass();
+		return processor.getAccelerationMassSummary();
 	}
 		
 }
