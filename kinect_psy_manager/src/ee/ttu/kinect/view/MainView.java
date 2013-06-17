@@ -20,6 +20,7 @@ import javax.swing.UIManager;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.CoordinateCorrection;
 import ee.ttu.kinect.model.JointType;
+import ee.ttu.kinect.view.chart.MovementDetectionAnalyzer;
 import ee.ttu.kinect.view.chart.TracingChartPanel;
 
 public class MainView extends JFrame {
@@ -28,6 +29,8 @@ public class MainView extends JFrame {
 
 	private File selectedFile;
 
+	private final MovementDetectionAnalyzer movementDetectionChartOpener;
+	
 	private final JMenuBar menuBar;
 
 	private final JMenu menu;
@@ -65,6 +68,8 @@ public class MainView extends JFrame {
 			System.exit(1);
 		}
 
+		movementDetectionChartOpener = new MovementDetectionAnalyzer();
+		
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
 		menuItemOpen = new JMenuItem("Open");
@@ -250,6 +255,11 @@ public class MainView extends JFrame {
 		chartPanel.openChartSelector(data, type);
 	}
 
+	public void openMovementDetectionChart(List<Body> data, JointType type, 
+			double trajectoryMassSummary, double accelerationMassSummary) {
+		movementDetectionChartOpener.open(data, type, trajectoryMassSummary, accelerationMassSummary);
+	}
+	
 	private void performCorrection(Body body, CoordinateCorrection correction) {
 		if (correction.areCorrectionsZOn()) {
 			Map<JointType, Double> correctionsZ = correction.getCorrectionsZ();

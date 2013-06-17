@@ -21,6 +21,12 @@ public class MovementProcessor {
 	
 	private List<Body> allTimeData;
 	
+	private double allTimeTrajectoryMass;
+	
+	private double allTimeAccelerationMass;
+	
+	private double allTimeVelocityMass;
+		
 	public MovementProcessor() {
 		data = new ArrayList<Body>();
 		allTimeData = new ArrayList<Body>();
@@ -45,6 +51,10 @@ public class MovementProcessor {
 	}
 
 	public void clean() {
+		allTimeTrajectoryMass += trajectoryMass;
+		allTimeAccelerationMass += accelerationMass;
+		allTimeVelocityMass += velocityMass;
+		
 		trajectoryMass = 0;
 		velocityMass = 0;
 		accelerationMass = 0;
@@ -65,7 +75,27 @@ public class MovementProcessor {
 	public double getTrajectoryMass() {
 		return trajectoryMass;
 	}
+	
+	public double getAccelerationMass() {
+		return accelerationMass;
+	}
 
+	public List<Body> getData() {
+		return data;
+	}
+	
+	public List<Body> getAllTimeData() {
+		return allTimeData;
+	}
+	
+	public double getAllTimeTrajectoryMass() {
+		return allTimeTrajectoryMass;
+	}
+	
+	public double getAllTimeAccelerationMass() {
+		return allTimeAccelerationMass;
+	}
+	
 	public boolean isMovementEnded() {
 		return trajectoryMass < MovementProcessor.TRAJECTORY_MASS_MIN_VALUE;
 	}

@@ -144,14 +144,26 @@ public class MainModel {
 			isProcessed = processor.process(body, type);
 			if (isProcessed) {
 				isMovementEnded = processor.isMovementEnded();
-				if (isMovementEnded) {
-					processor.outputSummaryToConsole(type);
-				}
+//				if (isMovementEnded) {
+//					processor.outputSummaryToConsole(type);
+//				}
 				processor.clean();
 			}
 		}
 		
 		return (isProcessed && isMovementEnded);
 	}
-	
+
+	public List<Body> getMovementData() {
+		return processor.getAllTimeData();
+	}
+
+	public double getTrajectoryMassSummary() {
+		return processor.getAllTimeTrajectoryMass();
+	}
+
+	public double getAccelerationMassSummary() {
+		return processor.getAllTimeAccelerationMass();
+	}
+		
 }

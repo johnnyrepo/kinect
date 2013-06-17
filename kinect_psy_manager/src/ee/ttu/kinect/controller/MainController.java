@@ -168,14 +168,17 @@ public class MainController {
 	}
 
 	public void analyzeMovement(Body body) {
+		JointType type = JointType.SPINE;
+		
 		if (!model.isMovementAnalysisMode()) {
 			return;
 		}
 		
-		if (model.isMovementEnded(body, JointType.SPINE)) {
+		if (model.isMovementEnded(body, type)) {
 			view.setMovementDetectionEnabled(false);
 			model.setMovementAnalysisMode(false);	// TODO: make the controller and model in sync
-			view.showMessagePopup("Movement has ended");
+			//view.showMessagePopup("Movement has ended");
+			view.openMovementDetectionChart(model.getMovementData(), type, model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
 		}
 	}
 	
