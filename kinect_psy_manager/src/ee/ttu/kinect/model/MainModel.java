@@ -131,6 +131,9 @@ public class MainModel {
 
 	public void setMovementAnalysisMode(boolean value) {
 		movementAnalysisMode = value;
+		if (value) {
+			processor.reset();
+		}
 	}
 	
 	public boolean isMovementAnalysisMode() {
