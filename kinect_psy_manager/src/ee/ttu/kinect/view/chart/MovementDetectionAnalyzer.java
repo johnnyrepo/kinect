@@ -117,17 +117,18 @@ public class MovementDetectionAnalyzer {
 		private double calculateAccelerationMass(List<Body> data, JointType type) {
 			double accelerationMass = 0;
 			for (int i = 0; i < data.size(); i++) {
-				if (i + 1 >= data.size()) {
+				if (i + 2 >= data.size()) {
 					break;
 				}
 				Joint joint1 = data.get(i).getJoint(type);
 				Joint joint2 = data.get(i + 1).getJoint(type);
+				Joint joint3 = data.get(i + 2).getJoint(type);
 				long time1 = data.get(i).getTimestamp();
 				long time2 = data.get(i + 1).getTimestamp();
-				System.out.print(data.get(i).getFrameNumber());
-				accelerationMass += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
-				System.out.println();
-				System.out.println("accel " + data.get(i).getFrameNumber() + " " + String.format(Locale.ENGLISH, "%-14.13f", Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2))));
+				long time3 = data.get(i + 2).getTimestamp();
+				accelerationMass += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, joint3, time1, time2, time3));
+				System.out.println("frame nr. " + data.get(i).getFrameNumber() + " accel. " + data.get(i).getFrameNumber() 
+						+ " " + String.format(Locale.ENGLISH, "%-14.13f", Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, joint3, time1, time2, time3))));
 			}
 			System.out.println("\n\n\n");
 			

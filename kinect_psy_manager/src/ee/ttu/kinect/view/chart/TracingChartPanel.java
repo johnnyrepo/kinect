@@ -81,10 +81,7 @@ public class TracingChartPanel extends JPanel {
 		setBorder(BorderFactory.createTitledBorder(border, "Chart"));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		jointCombo = new JComboBox<JointType>();
-		for (JointType jt : JointType.values()) {
-			jointCombo.addItem(jt);
-		}
+		jointCombo = new JComboBox<JointType>(JointType.values());
 		packedModeChekbox = new JCheckBox("Packed mode");
 		velocityXCheckbox = new JCheckBox("Velocity X");
 		velocityYCheckbox = new JCheckBox("Velocity Y");

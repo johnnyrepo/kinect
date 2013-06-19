@@ -4,7 +4,7 @@ import java.util.List;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
-import ee.ttu.kinect.model.MovementProcessor;
+import ee.ttu.kinect.model.MotionProcessor;
 
 public class MovementChart extends Chart {
 
@@ -32,9 +32,10 @@ public class MovementChart extends Chart {
 
 	private void drawMovementChart(MovementSeriesComponent sc, List<Body> data, JointType selectedType) {
 		// Processing movements
-		MovementProcessor processor = new MovementProcessor();
+		MotionProcessor processor = new MotionProcessor();
+		processor.setType(selectedType);
 		for (Body body : data) {
-			if (processor.process(body, selectedType)) {
+			if (processor.process(body)) {
 				sc.updateSeries(processor.getTrajectoryMass(), body.getTimestamp());
 			}
 		}

@@ -26,12 +26,10 @@ public class ButtonPanel extends JPanel {
 	private JButton stopPlayButton;
 
 	private JCheckBox sensorModeCheckbox;
-	
-	private JCheckBox movementDetectionCheckbox;
 
-	public ButtonPanel(String title) {
+	public ButtonPanel() {
 		Border border = BorderFactory.createEtchedBorder();
-		setBorder(BorderFactory.createTitledBorder(border, title));
+		setBorder(BorderFactory.createTitledBorder(border, "Record / Play"));
 
 		selectedFileLabel = new JLabel();
 		recordButton = new JButton("Record");
@@ -40,7 +38,6 @@ public class ButtonPanel extends JPanel {
 		pausePlayButton = new JButton("Pause");
 		stopPlayButton = new JButton("Stop Play");
 		sensorModeCheckbox = new JCheckBox("Sensor mode");
-		movementDetectionCheckbox = new JCheckBox("Movement detection");
 
 		add(selectedFileLabel);
 		add(sensorModeCheckbox);
@@ -49,7 +46,6 @@ public class ButtonPanel extends JPanel {
 		add(playButton);
 		add(pausePlayButton);
 		add(stopPlayButton);
-		add(movementDetectionCheckbox);
 	}
 
 	public void setSensorEnabled(boolean enabled) {
@@ -65,10 +61,6 @@ public class ButtonPanel extends JPanel {
 		playButton.setEnabled(enabled);
 		pausePlayButton.setEnabled(enabled);
 		stopPlayButton.setEnabled(enabled);
-	}
-	
-	public void setMovementDetectionEnabled(boolean enabled) {
-		movementDetectionCheckbox.setSelected(enabled);
 	}
 	
 	public void updateSelectedFileLabel(String name) {
@@ -97,10 +89,6 @@ public class ButtonPanel extends JPanel {
 	
 	public void addListenerForStopPlay(ActionListener listener) {
 		stopPlayButton.addActionListener(listener);
-	}
-	
-	public void addListenerForLifeMovementDetection(ActionListener listener) {
-		movementDetectionCheckbox.addActionListener(listener);
 	}
 
 }

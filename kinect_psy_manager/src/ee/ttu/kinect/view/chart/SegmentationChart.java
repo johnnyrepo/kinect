@@ -88,7 +88,7 @@ public class SegmentationChart extends Chart {
 	}
 
 	private List<Step> organizeDataIntoSteps(List<Body> data, JointType selectedType, boolean isVelocityCalculation) {
-		List<Step> velocityData = new ArrayList<Step>();
+		List<Step> resultData = new ArrayList<Step>();
 		
 		for (int i = 0; i < data.size(); i++) {
 			Step step = new Step();
@@ -113,13 +113,13 @@ public class SegmentationChart extends Chart {
 					if (isVelocityCalculation) {
 						value1 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
 					} else {
-						value1 = Calculator.calculateAcceleration3D(joint1, joint2, time1, time2);
+						value1 = 0;//Calculator.calculateAcceleration3D(joint1, joint2, time1, time2);
 					}
 				} else {
 					break;
 				}
 				
-				// taking next joint on timeline			
+				// taking next joint on timeline
 				joint1 = data.get(x + 1).getJoint(selectedType);
 				time1 = data.get(x + 1).getTimestamp();
 				j = x + 1 + stepBetweenPoints;
@@ -129,7 +129,7 @@ public class SegmentationChart extends Chart {
 					if (isVelocityCalculation) {
 						value2 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);
 					} else {
-						value2 = Calculator.calculateAcceleration3D(joint1, joint2, time1, time2);
+						value2 = 0;//Calculator.calculateAcceleration3D(joint1, joint2, time1, time2);
 					}
 				} else {
 					break;
@@ -140,13 +140,13 @@ public class SegmentationChart extends Chart {
 				
 				if (step.getElements().size() == pointsAmount) {
 					step.setTimestamp(data.get(i).getTimestamp());
-					velocityData.add(step);
+					resultData.add(step);
 					step = new Step();
 				}
 			}
 		}
 		
-		return velocityData;
+		return resultData;
 	}
 	
 	private void reassignClusterIds(List<Step> steps) {

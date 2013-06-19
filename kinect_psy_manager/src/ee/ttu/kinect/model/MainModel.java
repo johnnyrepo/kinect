@@ -17,15 +17,15 @@ public class MainModel {
 	
 	private final CoordinateCorrection coordinateCorrection;
 	
-	private final MovementProcessor processor;
+	private final MotionProcessor processor;
 	
-	private boolean movementAnalysisMode;
+	private boolean motionAnalysisMode;
 		
 	public MainModel(MainController controller) {
 		sensorRunner = new SensorRunner(controller);
 		fileRunner = new FileRunner(controller);
 		coordinateCorrection = new CoordinateCorrection();
-		processor = new MovementProcessor();
+		processor = new MotionProcessor();
 	}
 
 	public void setFileToPlay(File file) {
@@ -129,24 +129,30 @@ public class MainModel {
 		coordinateCorrection.turnSittingCorrectionOff();
 	}
 
-	public void setMovementAnalysisMode(boolean value) {
-		movementAnalysisMode = value;
-		if (value) {
+	public void setMotionAnalysisMode(boolean enabled, long delay, JointType type) {
+		motionAnalysisMode = enabled;
+		if (enabled) {
+			processor.setDelay(delay);
+			processor.setType(type);
 			processor.reset();
 		}
 	}
 	
-	public boolean isMovementAnalysisMode() {
-		return movementAnalysisMode;
+	public boolean isMotionAnalysisMode() {
+		return motionAnalysisMode;
 	}
 	
-	public boolean isMovementEnded(Body body, JointType type) {
+	public void setMotionAnalysisDelay(long delay) {
+		processor.setDelay(delay);
+	}
+	
+	public boolean isMotionEnded(Body body) {
 		boolean isProcessed = false;
-		boolean isMovementEnded = false;
+		boolean isMotionEnded = false;
 		if (body != null && body.isBodyReady()) {
-			isProcessed = processor.process(body, type);
+			isProcessed = processor.process(body);
 			if (isProcessed) {
-				isMovementEnded = processor.isMovementEnded();
+				isMotionEnded = processor.isMotionEnded();
 //				if (isMovementEnded) {
 //					processor.outputSummaryToConsole(type);
 //				}
@@ -154,10 +160,10 @@ public class MainModel {
 			}
 		}
 		
-		return (isProcessed && isMovementEnded);
+		return (isProcessed && isMotionEnded);
 	}
 
-	public List<Body> getMovementData() {
+	public List<Body> getMotionData() {
 		return processor.getDataSummary();
 	}
 
@@ -168,5 +174,5 @@ public class MainModel {
 	public double getAccelerationMassSummary() {
 		return processor.getAccelerationMassSummary();
 	}
-		
+	
 }

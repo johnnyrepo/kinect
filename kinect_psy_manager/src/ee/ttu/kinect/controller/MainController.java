@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
@@ -83,10 +84,11 @@ public class MainController {
 				}
 			}
 		});
-		view.addListenerForLifeMovementDetection(new ActionListener() {
+		view.addListenerForLifeMotionDetection(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.setMovementAnalysisMode(((JCheckBox)e.getSource()).isSelected());
+				model.setMotionAnalysisMode(((JCheckBox) e.getSource()).isSelected(), 
+						view.getMotionDetectionDelay(), view.getMotionDetectionJoint());
 			}
 		});
 		view.addListenerForSeatedMode(new ActionListener() {
@@ -170,15 +172,15 @@ public class MainController {
 	public void analyzeMovement(Body body) {
 		JointType type = JointType.SPINE;
 		
-		if (!model.isMovementAnalysisMode()) {
+		if (!model.isMotionAnalysisMode()) {
 			return;
 		}
 		
-		if (model.isMovementEnded(body, type)) {
-			view.setMovementDetectionEnabled(false);
-			model.setMovementAnalysisMode(false);	// TODO: make the controller and model in sync
+		if (model.isMotionEnded(body)) {
+			view.setMovementDetectionEnabled(false); // TODO: make the controller and model in sync
+			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoint());
 			//view.showMessagePopup("Movement has ended");
-			view.openMovementDetectionChart(model.getMovementData(), type, model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
+			view.openMovementDetectionChart(model.getMotionData(), type, model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
 		}
 	}
 	

@@ -40,6 +40,8 @@ public class MainView extends JFrame {
 	private final JFileChooser fileChooser;
 
 	private final ButtonPanel buttonPanel;
+	
+	private final MotionDetectionPanel motionDetectionPanel;
 
 	private final MarkersPanel markersPanel;
 
@@ -83,13 +85,16 @@ public class MainView extends JFrame {
 		controlPanel.setLayout(new BoxLayout(controlPanel,
 				BoxLayout.X_AXIS));
 
-		buttonPanel = new ButtonPanel("Record / Play");
+		buttonPanel = new ButtonPanel();
 
+		motionDetectionPanel = new MotionDetectionPanel();
+		
 		markersPanel = new MarkersPanel();
 
 		seatedModePanel = new SeatedModePanel();
 
 		controlPanel.add(buttonPanel);
+		controlPanel.add(motionDetectionPanel);
 		controlPanel.add(markersPanel);
 		controlPanel.add(seatedModePanel);
 
@@ -141,7 +146,7 @@ public class MainView extends JFrame {
 	}
 
 	public void setMovementDetectionEnabled(boolean enabled) {
-		buttonPanel.setMovementDetectionEnabled(enabled);
+		motionDetectionPanel.setMovementDetectionEnabled(enabled);
 	}
 	
 	public File getSelectedFile() {
@@ -219,8 +224,8 @@ public class MainView extends JFrame {
 		buttonPanel.addListenerForStopPlay(listener);
 	}
 
-	public void addListenerForLifeMovementDetection(ActionListener listener) {
-		buttonPanel.addListenerForLifeMovementDetection(listener);
+	public void addListenerForLifeMotionDetection(ActionListener listener) {
+		motionDetectionPanel.addListenerForCheckbox(listener);
 	}
 	
 	public void addListenerForStandingCorrection(ActionListener listener) {
@@ -249,6 +254,14 @@ public class MainView extends JFrame {
 
 	public boolean[] getMarkersState() {
 		return markersPanel.getMarkersState();
+	}
+	
+	public long getMotionDetectionDelay() {
+		return motionDetectionPanel.getDelay();
+	}
+
+	public JointType getMotionDetectionJoint() {
+		return motionDetectionPanel.getSelectedJoint();
 	}
 
 	public void openChartSelector(List<Body> data, ChartType type) {

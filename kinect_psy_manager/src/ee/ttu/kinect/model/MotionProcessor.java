@@ -5,7 +5,7 @@ import java.util.List;
 
 import ee.ttu.kinect.calc.Calculator;
 
-public class MovementProcessor {
+public class MotionProcessor {
 
 	private final static double TRAJECTORY_MASS_MIN_VALUE = 0.15;
 	
@@ -26,9 +26,23 @@ public class MovementProcessor {
 	private double accelerationMassSummary;
 	
 	private double velocityMassSummary;
+	
+	private long firstTimestamp;
+
+	private long delay;
+	
+	private JointType type;
 		
-	public MovementProcessor() {
+	public MotionProcessor() {
 		reset();
+	}
+	
+	public void setDelay(long delay) {
+		this.delay = delay;
+	}
+	
+	public void setType(JointType type) {
+		this.type = type;
 	}
 	
 	public void reset() {
@@ -42,9 +56,16 @@ public class MovementProcessor {
 		
 		dataSummary = new ArrayList<Body>();
 		data = new ArrayList<Body>();
+		
+		firstTimestamp = 0;
+		
 	}
 	
-	public boolean process(Body body, JointType type) {
+	public boolean process(Body body) {
+		// set very first timestamp if processing has been just started
+		if (data.size() == 0) {
+			firstTimestamp = body.getTimestamp();
+		}
 		// clean if left from previous processor cycle
 		if (data.size() == windowSize) {
 			clean();
@@ -64,14 +85,16 @@ public class MovementProcessor {
 		velocityMass = 0;
 		accelerationMass = 0;
 		for (int i = 0; i < data.size(); i++) {
-			if ((i + 1) < data.size()) {
+			if ((i + 2) < data.size()) {
 				Joint joint1 = data.get(i).getJoint(type);
 				Joint joint2 = data.get(i + 1).getJoint(type);
+				Joint joint3 = data.get(i + 2).getJoint(type);
 				long time1 = data.get(i).getTimestamp();
 				long time2 = data.get(i + 1).getTimestamp();
-				trajectoryMass += Calculator.calculateTrajectoryLength3D(joint1, joint2);
-				velocityMass += Math.abs(Calculator.calculateVelocity3D(joint1, joint2, time1, time2));
-				accelerationMass += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, time1, time2));
+				long time3 = data.get(i + 2).getTimestamp();
+				trajectoryMass += Calculator.calculateTrajectoryLength3D(joint2, joint3);
+				velocityMass += Math.abs(Calculator.calculateVelocity3D(joint2, joint3, time2, time3));
+				accelerationMass += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, joint3, time1, time2, time3));
 			}
 		}
 	}
@@ -112,29 +135,12 @@ public class MovementProcessor {
 		return accelerationMassSummary;
 	}
 	
-	public boolean isMovementEnded() {
-		return trajectoryMass < MovementProcessor.TRAJECTORY_MASS_MIN_VALUE;
-	}
-	
-	public void outputSummaryToConsole(JointType type) {
-		long frameStart = dataSummary.get(0).getFrameNumber();
-		long frameEnd = dataSummary.get(dataSummary.size() - 1).getFrameNumber();
-		double startTime = dataSummary.get(0).getTimestamp() / 1000;
-		double endTime = dataSummary.get(dataSummary.size() - 1).getTimestamp() / 1000;
-		double time = endTime - startTime;
+	public boolean isMotionEnded() {
+		if ((data.get(data.size() - 1).getTimestamp() - firstTimestamp) >= delay) {
+			return trajectoryMass < MotionProcessor.TRAJECTORY_MASS_MIN_VALUE;
+		}
 		
-		analyze(dataSummary, type);
-		double eucledianDistance = Calculator.calculateTrajectoryLength3D(dataSummary.get(0).getJoint(type), 
-				dataSummary.get(dataSummary.size() - 1).getJoint(type));
-		double ratio = eucledianDistance / trajectoryMass;
-		
-		System.out.println("Frame start: " + frameStart);
-		System.out.println("Frame end: " + frameEnd);
-		System.out.println("Time elapsed: " + time);
-		System.out.println("Trajectory mass: " + trajectoryMass);
-		System.out.println("Acceleration mass: " + accelerationMass);
-		System.out.println("Eucledian distance: " + eucledianDistance);
-		System.out.println("Eucl / Traj ratio: " + ratio);
+		return false;
 	}
-	
+
 }
