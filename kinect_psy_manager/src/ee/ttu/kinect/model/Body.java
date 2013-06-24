@@ -63,7 +63,7 @@ public class Body implements Cloneable {
 	
 	public void setTimestamp(Long timestamp) {
 		if (this.timestamp == null) {
-			this.veryFirstTimestamp = timestamp;
+			veryFirstTimestamp = timestamp;
 		}
 		this.timestamp = timestamp;
 	}
@@ -315,7 +315,7 @@ public class Body implements Cloneable {
 //	}
 	
 	public boolean isBodyChanged() {
-		return !this.equals(oldBody);
+		return !equals(oldBody);
 	}
 	
 	public static String getHeader(boolean seatedMode) {
@@ -483,105 +483,85 @@ public class Body implements Cloneable {
 	
 	private void calculateVelocities(boolean seatedMode) {
 		// head
-		head.setVelocity(calculateVelocity3D(head, oldBody.head, timestamp, oldBody.getTimestamp()));
 		head.setVelocityX(calculateVelocity(head.getPositionX(), oldBody.head.getPositionX(), timestamp, oldBody.getTimestamp()));
 		head.setVelocityY(calculateVelocity(head.getPositionY(), oldBody.head.getPositionY(), timestamp, oldBody.getTimestamp()));
 		head.setVelocityZ(calculateVelocity(head.getPositionZ(), oldBody.head.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// shoulderCenter
-		shoulderCenter.setVelocity(calculateVelocity3D(shoulderCenter, oldBody.shoulderCenter, timestamp, oldBody.getTimestamp()));
 		shoulderCenter.setVelocityX(calculateVelocity(shoulderCenter.getPositionX(), oldBody.shoulderCenter.getPositionX(), timestamp, oldBody.getTimestamp()));
 		shoulderCenter.setVelocityY(calculateVelocity(shoulderCenter.getPositionY(), oldBody.shoulderCenter.getPositionY(), timestamp, oldBody.getTimestamp()));
 		shoulderCenter.setVelocityZ(calculateVelocity(shoulderCenter.getPositionZ(), oldBody.shoulderCenter.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		if (!seatedMode) {
 			// spine
-			spine.setVelocity(calculateVelocity3D(spine, oldBody.spine, timestamp, oldBody.getTimestamp()));
 			spine.setVelocityX(calculateVelocity(spine.getPositionX(), oldBody.spine.getPositionX(), timestamp, oldBody.getTimestamp()));
 			spine.setVelocityY(calculateVelocity(spine.getPositionY(), oldBody.spine.getPositionY(), timestamp, oldBody.getTimestamp()));
 			spine.setVelocityZ(calculateVelocity(spine.getPositionZ(), oldBody.spine.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// hipCenter
-			hipCenter.setVelocity(calculateVelocity3D(hipCenter, oldBody.hipCenter, timestamp, oldBody.getTimestamp()));
 			hipCenter.setVelocityX(calculateVelocity(hipCenter.getPositionX(), oldBody.hipCenter.getPositionX(), timestamp, oldBody.getTimestamp()));
 			hipCenter.setVelocityY(calculateVelocity(hipCenter.getPositionY(), oldBody.hipCenter.getPositionY(), timestamp, oldBody.getTimestamp()));
 			hipCenter.setVelocityZ(calculateVelocity(hipCenter.getPositionZ(), oldBody.hipCenter.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		}
 		//shoulderLeft
-		shoulderLeft.setVelocity(calculateVelocity3D(shoulderLeft, oldBody.shoulderLeft, timestamp, oldBody.getTimestamp()));
 		shoulderLeft.setVelocityX(calculateVelocity(shoulderLeft.getPositionX(), oldBody.shoulderLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 		shoulderLeft.setVelocityY(calculateVelocity(shoulderLeft.getPositionY(), oldBody.shoulderLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 		shoulderLeft.setVelocityZ(calculateVelocity(shoulderLeft.getPositionZ(), oldBody.shoulderLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// elbowLeft
-		elbowLeft.setVelocity(calculateVelocity3D(elbowLeft, oldBody.elbowLeft, timestamp, oldBody.getTimestamp()));
 		elbowLeft.setVelocityX(calculateVelocity(elbowLeft.getPositionX(), oldBody.elbowLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 		elbowLeft.setVelocityY(calculateVelocity(elbowLeft.getPositionY(), oldBody.elbowLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 		elbowLeft.setVelocityZ(calculateVelocity(elbowLeft.getPositionZ(), oldBody.elbowLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// wristLeft
-		wristLeft.setVelocity(calculateVelocity3D(wristLeft, oldBody.wristLeft, timestamp, oldBody.getTimestamp()));
 		wristLeft.setVelocityX(calculateVelocity(wristLeft.getPositionX(), oldBody.wristLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 		wristLeft.setVelocityY(calculateVelocity(wristLeft.getPositionY(), oldBody.wristLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 		wristLeft.setVelocityZ(calculateVelocity(wristLeft.getPositionZ(), oldBody.wristLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// handLeft
-		handLeft.setVelocity(calculateVelocity3D(handLeft, oldBody.handLeft, timestamp, oldBody.getTimestamp()));
 		handLeft.setVelocityX(calculateVelocity(handLeft.getPositionX(), oldBody.handLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 		handLeft.setVelocityY(calculateVelocity(handLeft.getPositionY(), oldBody.handLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 		handLeft.setVelocityZ(calculateVelocity(handLeft.getPositionZ(), oldBody.handLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// shoulderRight
-		shoulderRight.setVelocity(calculateVelocity3D(shoulderRight, oldBody.shoulderRight, timestamp, oldBody.getTimestamp()));
 		shoulderRight.setVelocityX(calculateVelocity(shoulderRight.getPositionX(), oldBody.shoulderRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 		shoulderRight.setVelocityY(calculateVelocity(shoulderRight.getPositionY(), oldBody.shoulderRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 		shoulderRight.setVelocityZ(calculateVelocity(shoulderRight.getPositionZ(), oldBody.shoulderRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// elbowRight
-		elbowRight.setVelocity(calculateVelocity3D(elbowRight, oldBody.elbowRight, timestamp, oldBody.getTimestamp()));
 		elbowRight.setVelocityX(calculateVelocity(elbowRight.getPositionX(), oldBody.elbowRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 		elbowRight.setVelocityY(calculateVelocity(elbowRight.getPositionY(), oldBody.elbowRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 		elbowRight.setVelocityZ(calculateVelocity(elbowRight.getPositionZ(), oldBody.elbowRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// wristRight
-		wristRight.setVelocity(calculateVelocity3D(wristRight, oldBody.wristRight, timestamp, oldBody.getTimestamp()));
 		wristRight.setVelocityX(calculateVelocity(wristRight.getPositionX(), oldBody.wristRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 		wristRight.setVelocityY(calculateVelocity(wristRight.getPositionY(), oldBody.wristRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 		wristRight.setVelocityZ(calculateVelocity(wristRight.getPositionZ(), oldBody.wristRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		// handRight
-		handRight.setVelocity(calculateVelocity3D(handRight, oldBody.handRight, timestamp, oldBody.getTimestamp()));
 		handRight.setVelocityX(calculateVelocity(handRight.getPositionX(), oldBody.handRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 		handRight.setVelocityY(calculateVelocity(handRight.getPositionY(), oldBody.handRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 		handRight.setVelocityZ(calculateVelocity(handRight.getPositionZ(), oldBody.handRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		if (!seatedMode) {
 			// hipLeft
-			hipLeft.setVelocity(calculateVelocity3D(hipLeft, oldBody.hipLeft, timestamp, oldBody.getTimestamp()));
 			hipLeft.setVelocityX(calculateVelocity(hipLeft.getPositionX(), oldBody.hipLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 			hipLeft.setVelocityY(calculateVelocity(hipLeft.getPositionY(), oldBody.hipLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 			hipLeft.setVelocityZ(calculateVelocity(hipLeft.getPositionZ(), oldBody.hipLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// kneeLeft
-			kneeLeft.setVelocity(calculateVelocity3D(kneeLeft, oldBody.kneeLeft, timestamp, oldBody.getTimestamp()));
 			kneeLeft.setVelocityX(calculateVelocity(kneeLeft.getPositionX(), oldBody.kneeLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 			kneeLeft.setVelocityY(calculateVelocity(kneeLeft.getPositionY(), oldBody.kneeLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 			kneeLeft.setVelocityZ(calculateVelocity(kneeLeft.getPositionZ(), oldBody.kneeLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// ankleLeft
-			ankleLeft.setVelocity(calculateVelocity3D(ankleLeft, oldBody.ankleLeft, timestamp, oldBody.getTimestamp()));
 			ankleLeft.setVelocityX(calculateVelocity(ankleLeft.getPositionX(), oldBody.ankleLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 			ankleLeft.setVelocityY(calculateVelocity(ankleLeft.getPositionY(), oldBody.ankleLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 			ankleLeft.setVelocityZ(calculateVelocity(ankleLeft.getPositionZ(), oldBody.ankleLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// footLeft
-			footLeft.setVelocity(calculateVelocity3D(footLeft, oldBody.footLeft, timestamp, oldBody.getTimestamp()));
 			footLeft.setVelocityX(calculateVelocity(footLeft.getPositionX(), oldBody.footLeft.getPositionX(), timestamp, oldBody.getTimestamp()));
 			footLeft.setVelocityY(calculateVelocity(footLeft.getPositionY(), oldBody.footLeft.getPositionY(), timestamp, oldBody.getTimestamp()));
 			footLeft.setVelocityZ(calculateVelocity(footLeft.getPositionZ(), oldBody.footLeft.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// hipRight
-			hipRight.setVelocity(calculateVelocity3D(hipRight, oldBody.hipRight, timestamp, oldBody.getTimestamp()));
 			hipRight.setVelocityX(calculateVelocity(hipRight.getPositionX(), oldBody.hipRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 			hipRight.setVelocityY(calculateVelocity(hipRight.getPositionY(), oldBody.hipRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 			hipRight.setVelocityZ(calculateVelocity(hipRight.getPositionZ(), oldBody.hipRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// kneeRight
-			kneeRight.setVelocity(calculateVelocity3D(kneeRight, oldBody.kneeRight, timestamp, oldBody.getTimestamp()));
 			kneeRight.setVelocityX(calculateVelocity(kneeRight.getPositionX(), oldBody.kneeRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 			kneeRight.setVelocityY(calculateVelocity(kneeRight.getPositionY(), oldBody.kneeRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 			kneeRight.setVelocityZ(calculateVelocity(kneeRight.getPositionZ(), oldBody.kneeRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// ankleRight
-			ankleRight.setVelocity(calculateVelocity3D(ankleRight, oldBody.ankleRight, timestamp, oldBody.getTimestamp()));
 			ankleRight.setVelocityX(calculateVelocity(ankleRight.getPositionX(), oldBody.ankleRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 			ankleRight.setVelocityY(calculateVelocity(ankleRight.getPositionY(), oldBody.ankleRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 			ankleRight.setVelocityZ(calculateVelocity(ankleRight.getPositionZ(), oldBody.ankleRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 			// footRight
-			footRight.setVelocity(calculateVelocity3D(footRight, oldBody.footRight, timestamp, oldBody.getTimestamp()));
 			footRight.setVelocityX(calculateVelocity(footRight.getPositionX(), oldBody.footRight.getPositionX(), timestamp, oldBody.getTimestamp()));
 			footRight.setVelocityY(calculateVelocity(footRight.getPositionY(), oldBody.footRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 			footRight.setVelocityZ(calculateVelocity(footRight.getPositionZ(), oldBody.footRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
@@ -673,15 +653,6 @@ public class Body implements Cloneable {
 			footRight.setAccelerationY(calculateAcceleration(footRight.getPositionY(), oldBody.footRight.getPositionY(), timestamp, oldBody.getTimestamp()));
 			footRight.setAccelerationZ(calculateAcceleration(footRight.getPositionZ(), oldBody.footRight.getPositionZ(), timestamp, oldBody.getTimestamp()));
 		}
-	}
-
-	private double calculateVelocity3D(Joint joint1, Joint joint2, long time1, long time2) {
-		// Calculates velocity in 3D space
-		// v = sqrt((x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2) / t
-		double s1 = joint1.getPositionX() - joint2.getPositionX();
-		double s2 = joint1.getPositionY() - joint2.getPositionY();
-		double s3 = joint1.getPositionZ() - joint2.getPositionZ();
-		return Math.sqrt(s1*s1 + s2*s2 + s3*s3) / (time1 - time2);
 	}
 	
 	private double calculateVelocity(double pos1, double pos2, double time1, double time2) {

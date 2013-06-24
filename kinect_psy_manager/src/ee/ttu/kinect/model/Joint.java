@@ -5,29 +5,27 @@ import java.util.Locale;
 import com.stromberglabs.cluster.Clusterable;
 
 public class Joint implements Clusterable {
-	
+
 	private double positionX;
-	
+
 	private double positionY;
-	
+
 	private double positionZ;
-	
+
 	private JointType type;
-	
+
 	private double velocityX;
-	
+
 	private double velocityY;
-	
+
 	private double velocityZ;
-	
+
 	private double accelerationX;
-	
+
 	private double accelerationY;
-	
+
 	private double accelerationZ;
-	
-	private double velocity;
-	
+
 	private int clusterId;
 
 	public double getPositionX() {
@@ -61,7 +59,7 @@ public class Joint implements Clusterable {
 	public void setType(JointType type) {
 		this.type = type;
 	}
-	
+
 	public double getVelocityX() {
 		return velocityX;
 	}
@@ -110,14 +108,6 @@ public class Joint implements Clusterable {
 		this.accelerationZ = accelerationZ;
 	}
 
-	public double getVelocity() {
-		return velocity;
-	}
-
-	public void setVelocity(double velocity) {
-		this.velocity = velocity;
-	}
-	
 	public int getClusterId() {
 		return clusterId;
 	}
@@ -125,20 +115,22 @@ public class Joint implements Clusterable {
 	public void setClusterId(int clusterId) {
 		this.clusterId = clusterId;
 	}
-	
+
 	@Override
 	public float[] getLocation() {
-		return new float[]{(float) velocityX, (float) velocityY, (float) velocityZ};
+		return new float[] { (float) velocityX, (float) velocityY,
+				(float) velocityZ };
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append(roundCoord(positionX)).append(roundCoord(positionY)).append(roundCoord(positionZ));
-		
+		sb.append(roundCoord(positionX)).append(roundCoord(positionY))
+				.append(roundCoord(positionZ));
+
 		return sb.toString();
 	}
-	
+
 	private String roundCoord(double coord) {
 		return String.format(Locale.ENGLISH, "%-13.12f", coord) + "\t";
 	}
@@ -191,25 +183,25 @@ public class Joint implements Clusterable {
 		line = line.append(jointType).append("X\t");
 		line = line.append(jointType).append("Y\t");
 		line = line.append(jointType).append("Z\t");
-		
+
 		return line.toString();
 	}
-	
+
 	public static String getVelocityHeader(JointType jointType) {
 		StringBuffer line = new StringBuffer();
 		line = line.append(jointType).append("XVelocity\t");
 		line = line.append(jointType).append("YVelocity\t");
 		line = line.append(jointType).append("ZVelocity\t");
-		
+
 		return line.toString();
 	}
-	
+
 	public static String getAccelerationHeader(JointType jointType) {
 		StringBuffer line = new StringBuffer();
 		line = line.append(jointType).append("XAcceleration\t");
 		line = line.append(jointType).append("YAcceleration\t");
 		line = line.append(jointType).append("ZAcceleration\t");
-		
+
 		return line.toString();
 	}
 

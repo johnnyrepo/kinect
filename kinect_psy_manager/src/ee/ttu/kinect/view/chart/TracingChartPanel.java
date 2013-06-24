@@ -94,7 +94,7 @@ public class TracingChartPanel extends JPanel {
 		
 		segmentationAnalysisButton = new JButton("Segmentation analysis");
 		
-		motionAnalysisButton = new JButton("MOtion analysis");
+		motionAnalysisButton = new JButton("Motion analysis");
 
 		chartSelector = new ChartSelector();
 		
