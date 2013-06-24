@@ -15,6 +15,7 @@ public class MotionSeriesComponent extends SeriesComponent {
 
 	public MotionSeriesComponent(TimeSeriesCollection dataset) {
 		super(dataset);
+
 		trajectorySeries = new TimeSeries("Trajectory");
 		dataset.addSeries(trajectorySeries);
 	}
