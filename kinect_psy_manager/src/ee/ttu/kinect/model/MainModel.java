@@ -153,7 +153,7 @@ public class MainModel {
 			isProcessed = processor.process(body);
 			if (isProcessed) {
 				isMotionEnded = processor.isMotionEnded();
-//				if (isMovementEnded) {
+//				if (isMotionEnded) {
 //					processor.outputSummaryToConsole(type);
 //				}
 //				processor.clean();

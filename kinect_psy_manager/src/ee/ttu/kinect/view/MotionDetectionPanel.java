@@ -15,7 +15,7 @@ public class MotionDetectionPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JCheckBox movementDetectionCheckbox;
+	private JCheckBox motionDetectionCheckbox;
 
 	//private JLabel delayLabel;
 
@@ -26,27 +26,27 @@ public class MotionDetectionPanel extends JPanel {
 	public MotionDetectionPanel() {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border,
-				"Movement detection mode"));
+				"Motion detection mode"));
 
-		movementDetectionCheckbox = new JCheckBox();
+		motionDetectionCheckbox = new JCheckBox();
 		// delayLabel = new JLabel("Delay");
 		delayCombo = new JComboBox<Integer>(new Integer[] { 0, 1, 2, 3 });
 		jointCombo = new JComboBox<JointType>(JointType.values());
 
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		add(movementDetectionCheckbox);
+		add(motionDetectionCheckbox);
 		// add(delayLabel);
 		add(delayCombo);
 		add(jointCombo);
 
 	}
 
-	public void setMovementDetectionEnabled(boolean enabled) {
-		movementDetectionCheckbox.setSelected(enabled);
+	public void setMotionDetectionEnabled(boolean enabled) {
+		motionDetectionCheckbox.setSelected(enabled);
 	}
 
 	public void addListenerForCheckbox(ActionListener listener) {
-		movementDetectionCheckbox.addActionListener(listener);
+		motionDetectionCheckbox.addActionListener(listener);
 	}
 
 	public long getDelay() {

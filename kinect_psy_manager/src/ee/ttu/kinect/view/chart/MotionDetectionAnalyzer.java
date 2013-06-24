@@ -17,32 +17,32 @@ import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
 
-public class MovementDetectionAnalyzer {
+public class MotionDetectionAnalyzer {
 	
 	public void open(List<Body> data, JointType type, 
 			double trajectoryMassSummary, double accelerationMassSummary) {
-		new MovementDetectionChartFrame(data, type, trajectoryMassSummary, accelerationMassSummary);
+		new MotionDetectionChartFrame(data, type, trajectoryMassSummary, accelerationMassSummary);
 	}
 	
-	private class MovementDetectionChartFrame extends JFrame {
+	private class MotionDetectionChartFrame extends JFrame {
 
 		private static final long serialVersionUID = 1L;
 				
-		private MovementChart chart;
+		private MotionChart chart;
 
 		private JPanel chartPanel;
 		
 		private JPanel summaryPanel;
 		
-		private MovementDetectionChartFrame(List<Body> data, JointType type, 
+		private MotionDetectionChartFrame(List<Body> data, JointType type, 
 				double trajectoryMassSummary, double accelerationMassSummary) {
-			setTitle("Movement has been detected!");
+			setTitle("Motion has been detected!");
 			
 			setSize(1200, 400);
 
 			getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 			
-			chart = new MovementChart();
+			chart = new MotionChart();
 			chart.setPreferredSize(new Dimension(800, 400));
 			chartPanel = new JPanel();
 			chartPanel.add(chart);

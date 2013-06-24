@@ -6,11 +6,11 @@ import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MotionProcessor;
 
-public class MovementChart extends Chart {
+public class MotionChart extends Chart {
 
 	private static final long serialVersionUID = 1L;
 
-	public MovementChart() {
+	public MotionChart() {
 		super("Trajectory", "Time");		
 	}
 	
@@ -19,19 +19,19 @@ public class MovementChart extends Chart {
 			boolean seatedMode) {
 		String chartTitle = "";
 		for (JointType selectedType : selectedTypes) {
-			MovementSeriesComponent sc = new MovementSeriesComponent(dataset);
+			MotionSeriesComponent sc = new MotionSeriesComponent(dataset);
 			add(sc);
 			sc.setLabels(selectedType);
 			
-			drawMovementChart(sc, data, selectedType);
+			drawMotionChart(sc, data, selectedType);
 			
 			chartTitle += selectedType.getName() + " ";
 		}
 		chart.setTitle(chartTitle);
 	}
 
-	private void drawMovementChart(MovementSeriesComponent sc, List<Body> data, JointType selectedType) {
-		// Processing movements
+	private void drawMotionChart(MotionSeriesComponent sc, List<Body> data, JointType selectedType) {
+		// Processing motions
 		MotionProcessor processor = new MotionProcessor();
 		processor.setType(selectedType);
 		for (Body body : data) {

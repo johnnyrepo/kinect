@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.JointType;
@@ -136,10 +135,10 @@ public class MainController {
 			}
 		});
 		
-		view.addListenerForMovementAnalysis(new ActionListener() {
+		view.addListenerForMotionAnalysis(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.openChartSelector(model.getFileData(), ChartType.MOVEMENT);
+				view.openChartSelector(model.getFileData(), ChartType.MOTION);
 			}
 		});
 
@@ -169,7 +168,7 @@ public class MainController {
 		view.setRecordingEnabled(enabled);
 	}
 
-	public void analyzeMovement(Body body) {
+	public void analyzeMotion(Body body) {
 		JointType type = JointType.SPINE;
 		
 		if (!model.isMotionAnalysisMode()) {
@@ -177,10 +176,10 @@ public class MainController {
 		}
 		
 		if (model.isMotionEnded(body)) {
-			view.setMovementDetectionEnabled(false); // TODO: make the controller and model in sync
+			view.setMotionDetectionEnabled(false); // TODO: make the controller and model in sync
 			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoint());
-			//view.showMessagePopup("Movement has ended");
-			view.openMovementDetectionChart(model.getMotionData(), type, model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
+			//view.showMessagePopup("Motion has ended");
+			view.openMotionDetectionChart(model.getMotionData(), type, model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
 		}
 	}
 	

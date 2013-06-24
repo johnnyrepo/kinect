@@ -53,7 +53,7 @@ public class TracingChartPanel extends JPanel {
 	
 	private JButton segmentationAnalysisButton;
 	
-	private JButton movementAnalysisButton;
+	private JButton motionAnalysisButton;
 
 	private JFreeChart chart;
 
@@ -94,7 +94,7 @@ public class TracingChartPanel extends JPanel {
 		
 		segmentationAnalysisButton = new JButton("Segmentation analysis");
 		
-		movementAnalysisButton = new JButton("Movement analysis");
+		motionAnalysisButton = new JButton("MOtion analysis");
 
 		chartSelector = new ChartSelector();
 		
@@ -145,7 +145,7 @@ public class TracingChartPanel extends JPanel {
 		chartControlPanel.add(accelerationZCheckbox);
 		chartControlPanel.add(valuesAnalysisButton);
 		chartControlPanel.add(segmentationAnalysisButton);
-		chartControlPanel.add(movementAnalysisButton);
+		chartControlPanel.add(motionAnalysisButton);
 
 		add(chartControlPanel);
 		add(chartPanel);
@@ -251,8 +251,8 @@ public class TracingChartPanel extends JPanel {
 		segmentationAnalysisButton.addActionListener(listener);
 	}
 	
-	public void addListenerForMovementAnalysis(ActionListener listener) {
-		movementAnalysisButton.addActionListener(listener);
+	public void addListenerForMotionAnalysis(ActionListener listener) {
+		motionAnalysisButton.addActionListener(listener);
 	}
 	
 	public void openChartSelector(List<Body> data, ChartType type) {

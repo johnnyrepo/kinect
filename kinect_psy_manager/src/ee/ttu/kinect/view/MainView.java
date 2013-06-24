@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.CoordinateCorrection;
 import ee.ttu.kinect.model.JointType;
-import ee.ttu.kinect.view.chart.MovementDetectionAnalyzer;
+import ee.ttu.kinect.view.chart.MotionDetectionAnalyzer;
 import ee.ttu.kinect.view.chart.TracingChartPanel;
 
 public class MainView extends JFrame {
@@ -29,7 +29,7 @@ public class MainView extends JFrame {
 
 	private File selectedFile;
 
-	private final MovementDetectionAnalyzer movementDetectionChartOpener;
+	private final MotionDetectionAnalyzer motionDetectionChartOpener;
 	
 	private final JMenuBar menuBar;
 
@@ -70,7 +70,7 @@ public class MainView extends JFrame {
 			System.exit(1);
 		}
 
-		movementDetectionChartOpener = new MovementDetectionAnalyzer();
+		motionDetectionChartOpener = new MotionDetectionAnalyzer();
 		
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
@@ -145,8 +145,8 @@ public class MainView extends JFrame {
 		buttonPanel.setPlayingEnabled(enabled);
 	}
 
-	public void setMovementDetectionEnabled(boolean enabled) {
-		motionDetectionPanel.setMovementDetectionEnabled(enabled);
+	public void setMotionDetectionEnabled(boolean enabled) {
+		motionDetectionPanel.setMotionDetectionEnabled(enabled);
 	}
 	
 	public File getSelectedFile() {
@@ -244,8 +244,8 @@ public class MainView extends JFrame {
 		chartPanel.addListenerForSegmentationAnalysis(listener);
 	}
 	
-	public void addListenerForMovementAnalysis(ActionListener listener) {
-		chartPanel.addListenerForMovementAnalysis(listener);
+	public void addListenerForMotionAnalysis(ActionListener listener) {
+		chartPanel.addListenerForMotionAnalysis(listener);
 	}
 
 	public void showMessagePopup(String message) {
@@ -268,9 +268,9 @@ public class MainView extends JFrame {
 		chartPanel.openChartSelector(data, type);
 	}
 
-	public void openMovementDetectionChart(List<Body> data, JointType type, 
+	public void openMotionDetectionChart(List<Body> data, JointType type, 
 			double trajectoryMassSummary, double accelerationMassSummary) {
-		movementDetectionChartOpener.open(data, type, trajectoryMassSummary, accelerationMassSummary);
+		motionDetectionChartOpener.open(data, type, trajectoryMassSummary, accelerationMassSummary);
 	}
 	
 	private void performCorrection(Body body, CoordinateCorrection correction) {

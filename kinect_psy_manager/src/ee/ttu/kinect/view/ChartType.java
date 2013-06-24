@@ -1,5 +1,5 @@
 package ee.ttu.kinect.view;
 
 public enum ChartType {
-	VALUES, SEGMENTATION, MOVEMENT
+	VALUES, SEGMENTATION, MOTION
 }

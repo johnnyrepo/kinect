@@ -7,13 +7,13 @@ import org.jfree.data.time.TimeSeriesDataItem;
 
 import ee.ttu.kinect.model.JointType;
 
-public class MovementSeriesComponent extends SeriesComponent {
+public class MotionSeriesComponent extends SeriesComponent {
 
 	private static final long serialVersionUID = 1L;
 
 	private TimeSeries trajectorySeries;
 
-	public MovementSeriesComponent(TimeSeriesCollection dataset) {
+	public MotionSeriesComponent(TimeSeriesCollection dataset) {
 		super(dataset);
 		trajectorySeries = new TimeSeries("Trajectory");
 		dataset.addSeries(trajectorySeries);

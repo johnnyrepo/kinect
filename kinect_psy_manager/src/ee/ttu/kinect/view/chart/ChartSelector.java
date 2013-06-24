@@ -62,8 +62,8 @@ public class ChartSelector {
 				case SEGMENTATION:
 					setTitle("Analysis with velocities/accelerations SEGMENTATION");
 					break;
-				case MOVEMENT:
-					setTitle("Analysis with movement trajectories");
+				case MOTION:
+					setTitle("Analysis with motion trajectories");
 			}
 	
 			jointsList = new JList<JointType>(JointType.values());
@@ -130,8 +130,8 @@ public class ChartSelector {
 					} else if (type == ChartType.SEGMENTATION) {
 						cc = new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
 								segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
-					} else if (type == ChartType.MOVEMENT) {
-						cc =  new MovementChart();
+					} else if (type == ChartType.MOTION) {
+						cc =  new MotionChart();
 					}
 					cc.drawChart(data, selectedJoints, false);
 					chartsPanel.add(cc);
@@ -143,8 +143,8 @@ public class ChartSelector {
 						} else if (type == ChartType.SEGMENTATION) {
 							cc = new SegmentationChart(segmentationConfPanel.getClustersAmount(), 
 									segmentationConfPanel.getStepsAmount(), segmentationConfPanel.getPointsAmount());
-						} else if (type == ChartType.MOVEMENT) {
-							cc =  new MovementChart();
+						} else if (type == ChartType.MOTION) {
+							cc =  new MotionChart();
 						}
 						List<JointType> arg = new ArrayList<JointType>();
 						arg.add(selectedType);
