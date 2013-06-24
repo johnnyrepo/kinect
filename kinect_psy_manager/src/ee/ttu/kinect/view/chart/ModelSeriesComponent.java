@@ -11,7 +11,6 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
-import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
 public class ModelSeriesComponent extends SeriesComponent {
@@ -93,29 +92,9 @@ public class ModelSeriesComponent extends SeriesComponent {
 				+ selectedType.getName());
 	}
 
-	public void updateSeries(Joint joint, long timestamp, boolean seatedMode) {
-		if (joint == null) {
-			return;
-		}
-
-		if (seatedMode
-				&& (joint.getType() == JointType.ANKLE_LEFT
-						|| joint.getType() == JointType.ANKLE_RIGHT
-						|| joint.getType() == JointType.FOOT_LEFT
-						|| joint.getType() == JointType.FOOT_RIGHT
-						|| joint.getType() == JointType.HIP_CENTER
-						|| joint.getType() == JointType.HIP_LEFT
-						|| joint.getType() == JointType.HIP_RIGHT
-						|| joint.getType() == JointType.KNEE_LEFT
-						|| joint.getType() == JointType.KNEE_RIGHT 
-						|| joint.getType() == JointType.SPINE)) {
-			return;
-		}
-
-		updateVelocity(timestamp, joint.getVelocityX(), joint.getVelocityY(),
-				joint.getVelocityZ());
-		updateAcceleration(timestamp, joint.getAccelerationX(),
-				joint.getAccelerationY(), joint.getAccelerationZ());
+	public void updateSeries(double velocityX, double velocityY, double velocityZ, double accelerationX, double accelerationY, double accelerationZ, long timestamp) {
+		updateVelocity(timestamp, velocityX, velocityY, velocityZ);
+		updateAcceleration(timestamp, accelerationX, accelerationY, accelerationZ);
 	}
 
 	public void clearSeries() {

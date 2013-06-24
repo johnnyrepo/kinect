@@ -112,6 +112,9 @@ public abstract class Runner {
 					}
 				}
 
+				// archive body
+				body.archive();
+				
 				// Sleep for X ms
 				try {
 					Thread.sleep(30);

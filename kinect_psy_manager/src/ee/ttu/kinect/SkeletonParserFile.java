@@ -44,9 +44,6 @@ public class SkeletonParserFile implements SkeletonParser {
 				parseJoint(body, jointTypes.get(jointCounter), coordX, coordY, coordZ);
 				jointCounter++;
 			}
-			
-			// trigger BodyUpdated action
-			body.updated(isSeatedMode());
 		}
 	}
 

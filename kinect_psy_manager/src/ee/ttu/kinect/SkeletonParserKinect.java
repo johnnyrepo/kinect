@@ -33,7 +33,7 @@ public class SkeletonParserKinect implements SkeletonParser {
 
 	public void reset() {
 		//this.oldNumSkeletons = -1;
-		this.frame = -1;
+		frame = -1;
 	}
 
 	public SkeletonParserKinect() {
@@ -50,11 +50,11 @@ public class SkeletonParserKinect implements SkeletonParser {
 				if (streamReader.isStartElement()) {
 					if (streamReader.getLocalName().equals("frameId")) {
 						int currentFrame = Integer.parseInt(streamReader.getElementText());
-						if (currentFrame > this.frame) { // TODO I receive the same document multiple times
-							this.frame = currentFrame;
+						if (currentFrame > frame) { // TODO I receive the same document multiple times
+							frame = currentFrame;
 							streamReader.next();
 							if (streamReader.getLocalName().equals("timestamp")) {
-								this.timestamp = Long.parseLong(streamReader.getElementText());
+								timestamp = Long.parseLong(streamReader.getElementText());
 								body.setTimestamp(timestamp);
 								body.setFrameNumber(frame);
 								streamReader.nextTag(); // moving to 'skeletonData' tag
@@ -108,9 +108,6 @@ public class SkeletonParserKinect implements SkeletonParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// trigger BodyUpdated action
-		body.updated(false);
 	}
 
 	private Joint parseJoint(String jointId, String positionX, String positionY, String positionZ) {
