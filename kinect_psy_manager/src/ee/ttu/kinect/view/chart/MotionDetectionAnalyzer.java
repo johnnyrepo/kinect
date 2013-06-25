@@ -37,7 +37,7 @@ public class MotionDetectionAnalyzer {
 		private MotionDetectionChartFrame(List<Body> data, JointType type, 
 				double trajectoryMassSummary, double accelerationMassSummary) {
 			setTitle("Motion has been detected!");
-			
+			System.out.println("hoho " + type);
 			setSize(1200, 400);
 
 			getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));

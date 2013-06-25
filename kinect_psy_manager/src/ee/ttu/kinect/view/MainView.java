@@ -261,7 +261,7 @@ public class MainView extends JFrame {
 	}
 
 	public JointType getMotionDetectionJoint() {
-		return motionDetectionPanel.getSelectedJoint();
+		return motionDetectionPanel.getSelectedJoints().get(0);
 	}
 
 	public void openChartSelector(List<Body> data, ChartType type) {

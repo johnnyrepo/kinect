@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 
 import ee.ttu.kinect.model.Body;
-import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MainModel;
 import ee.ttu.kinect.view.ChartType;
 import ee.ttu.kinect.view.MainView;
@@ -168,9 +167,7 @@ public class MainController {
 		view.setRecordingEnabled(enabled);
 	}
 
-	public void analyzeMotion(Body body) {
-		JointType type = JointType.SPINE;
-		
+	public void analyzeMotion(Body body) {		
 		if (!model.isMotionAnalysisMode()) {
 			return;
 		}
@@ -179,7 +176,7 @@ public class MainController {
 			view.setMotionDetectionEnabled(false); // TODO: make the controller and model in sync
 			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoint());
 			//view.showMessagePopup("Motion has ended");
-			view.openMotionDetectionChart(model.getMotionData(), type, model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
+			view.openMotionDetectionChart(model.getMotionData(), view.getMotionDetectionJoint(), model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
 		}
 	}
 	
