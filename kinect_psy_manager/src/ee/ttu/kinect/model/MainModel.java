@@ -129,11 +129,11 @@ public class MainModel {
 		coordinateCorrection.turnSittingCorrectionOff();
 	}
 
-	public void setMotionAnalysisMode(boolean enabled, long delay, JointType type) {
+	public void setMotionAnalysisMode(boolean enabled, long delay, List<JointType> types) {
 		motionAnalysisMode = enabled;
 		if (enabled) {
 			processor.setDelay(delay);
-			processor.setType(type);
+			processor.setTypes(types);
 			processor.reset();
 		}
 	}

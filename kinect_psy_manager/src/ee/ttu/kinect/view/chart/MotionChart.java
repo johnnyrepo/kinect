@@ -1,5 +1,6 @@
 package ee.ttu.kinect.view.chart;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ee.ttu.kinect.model.Body;
@@ -15,14 +16,15 @@ public class MotionChart extends Chart {
 	}
 	
 	@Override
-	public void drawChart(List<Body> data, List<JointType> selectedTypes,
+	public void drawChart(List<Body> data, List<JointType> types,
 			boolean seatedMode) {
 		String chartTitle = "";
-		for (JointType selectedType : selectedTypes) {
+		for (JointType selectedType : types) {
 			MotionSeriesComponent sc = new MotionSeriesComponent(dataset);
 			add(sc);
 			sc.setLabels(selectedType);
 			
+			// drawing chart
 			drawMotionChart(sc, data, selectedType);
 			
 			chartTitle += selectedType.getName() + " ";
@@ -30,10 +32,12 @@ public class MotionChart extends Chart {
 		chart.setTitle(chartTitle);
 	}
 
-	private void drawMotionChart(MotionSeriesComponent sc, List<Body> data, JointType selectedType) {
+	private void drawMotionChart(MotionSeriesComponent sc, List<Body> data, JointType type) {
 		// Processing motions
+		List<JointType> types = new ArrayList<JointType>();
+		types.add(type);
 		MotionProcessor processor = new MotionProcessor();
-		processor.setType(selectedType);
+		processor.setTypes(types);
 		for (Body body : data) {
 			if (processor.process(body)) {
 				sc.updateSeries(processor.getTrajectoryMass(), body.getTimestamp());

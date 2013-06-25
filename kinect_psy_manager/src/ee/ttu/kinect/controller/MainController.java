@@ -86,7 +86,7 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.setMotionAnalysisMode(((JCheckBox) e.getSource()).isSelected(), 
-						view.getMotionDetectionDelay(), view.getMotionDetectionJoint());
+						view.getMotionDetectionDelay(), view.getMotionDetectionJoints());
 			}
 		});
 		view.addListenerForSeatedMode(new ActionListener() {
@@ -174,9 +174,9 @@ public class MainController {
 		
 		if (model.isMotionEnded(body)) {
 			view.setMotionDetectionEnabled(false); // TODO: make the controller and model in sync
-			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoint());
+			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoints());
 			//view.showMessagePopup("Motion has ended");
-			view.openMotionDetectionChart(model.getMotionData(), view.getMotionDetectionJoint(), model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
+			view.openMotionDetectionChart(model.getMotionData(), view.getMotionDetectionJoints(), model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
 		}
 	}
 	

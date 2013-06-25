@@ -2,7 +2,6 @@ package ee.ttu.kinect.view.chart;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,9 +18,9 @@ import ee.ttu.kinect.model.JointType;
 
 public class MotionDetectionAnalyzer {
 	
-	public void open(List<Body> data, JointType type, 
+	public void open(List<Body> data, List<JointType> types, 
 			double trajectoryMassSummary, double accelerationMassSummary) {
-		new MotionDetectionChartFrame(data, type, trajectoryMassSummary, accelerationMassSummary);
+		new MotionDetectionChartFrame(data, types, trajectoryMassSummary, accelerationMassSummary);
 	}
 	
 	private class MotionDetectionChartFrame extends JFrame {
@@ -34,10 +33,9 @@ public class MotionDetectionAnalyzer {
 		
 		private JPanel summaryPanel;
 		
-		private MotionDetectionChartFrame(List<Body> data, JointType type, 
+		private MotionDetectionChartFrame(List<Body> data, List<JointType> types, 
 				double trajectoryMassSummary, double accelerationMassSummary) {
 			setTitle("Motion has been detected!");
-			System.out.println("hoho " + type);
 			setSize(1200, 400);
 
 			getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
@@ -49,30 +47,33 @@ public class MotionDetectionAnalyzer {
 			
 			summaryPanel = new JPanel();
 			
-			getContentPane().add(summaryPanel);//, BorderLayout.SOUTH);
-			getContentPane().add(chartPanel);//, BorderLayout.CENTER);
+			getContentPane().add(summaryPanel);
+			getContentPane().add(chartPanel);
 			
-			drawChart(data, type);
-			outputSummary(data, type);
+			drawChart(data, types);
+			outputSummary(data, types);
 			
 			setVisible(true);
 		}
 		
-		private void drawChart(List<Body> data, JointType type) {
-			List<JointType> types = new ArrayList<JointType>();
-			types.add(type);
+		private void drawChart(List<Body> data, List<JointType> types) {
 			chart.drawChart(data, types, false);
 		}
 		
-		private void outputSummary(List<Body> data, JointType type) {
+		private void outputSummary(List<Body> data, List<JointType> types) {
 			long frameStart = data.get(0).getFrameNumber();
 			long frameEnd = data.get(data.size() - 1).getFrameNumber();
 			double startTime = data.get(0).getTimestamp();
 			double endTime = data.get(data.size() - 1).getTimestamp();
 			double time = (endTime - startTime) / 1000;
-			double trajectoryMassSummary = calculateTrajectoryMass(data, type);
-			double accelerationMassSummary = calculateAccelerationMass(data, type);
-			double eucledianDistance = calculateEucledianDistance(data, type);
+			double trajectoryMassSummary = 0;
+			double accelerationMassSummary = 0;
+			double eucledianDistance = 0;
+			for (JointType type : types) {
+				trajectoryMassSummary += calculateTrajectoryMass(data, type);
+				accelerationMassSummary += calculateAccelerationMass(data, type);
+				eucledianDistance += calculateEucledianDistance(data, type);
+			}
 			double ratio = eucledianDistance / trajectoryMassSummary;
 			
 			summaryPanel.setLayout(new BoxLayout(summaryPanel, BoxLayout.Y_AXIS));

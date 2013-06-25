@@ -260,17 +260,17 @@ public class MainView extends JFrame {
 		return motionDetectionPanel.getDelay();
 	}
 
-	public JointType getMotionDetectionJoint() {
-		return motionDetectionPanel.getSelectedJoints().get(0);
+	public List<JointType> getMotionDetectionJoints() {
+		return motionDetectionPanel.getSelectedJoints();
 	}
 
 	public void openChartSelector(List<Body> data, ChartType type) {
 		chartPanel.openChartSelector(data, type);
 	}
 
-	public void openMotionDetectionChart(List<Body> data, JointType type, 
+	public void openMotionDetectionChart(List<Body> data, List<JointType> types, 
 			double trajectoryMassSummary, double accelerationMassSummary) {
-		motionDetectionChartOpener.open(data, type, trajectoryMassSummary, accelerationMassSummary);
+		motionDetectionChartOpener.open(data, types, trajectoryMassSummary, accelerationMassSummary);
 	}
 	
 	private void performCorrection(Body body, CoordinateCorrection correction) {

@@ -31,7 +31,7 @@ public class MotionProcessor {
 
 	private long delay;
 
-	private JointType type;
+	private List<JointType> types;
 
 	public MotionProcessor() {
 		reset();
@@ -41,8 +41,8 @@ public class MotionProcessor {
 		this.delay = delay;
 	}
 
-	public void setType(JointType type) {
-		this.type = type;
+	public void setTypes(List<JointType> types) {
+		this.types = types;
 	}
 
 	public void reset() {
@@ -73,32 +73,34 @@ public class MotionProcessor {
 		data.add(body);
 		dataSummary.add(body);
 		if (data.size() == windowSize) {
-			analyze(data, type);
+			analyze();
 			return true;
 		}
 
 		return false;
 	}
 
-	private void analyze(List<Body> data, JointType type) {
+	private void analyze() {
 		trajectoryMass = 0;
 		velocityMass = 0;
 		accelerationMass = 0;
 		for (int i = 0; i < data.size(); i++) {
 			if ((i + 2) < data.size()) {
-				Joint joint1 = data.get(i).getJoint(type);
-				Joint joint2 = data.get(i + 1).getJoint(type);
-				Joint joint3 = data.get(i + 2).getJoint(type);
-				long time1 = data.get(i).getTimestamp();
-				long time2 = data.get(i + 1).getTimestamp();
-				long time3 = data.get(i + 2).getTimestamp();
-				trajectoryMass += Calculator.calculateTrajectoryLength3D(
-						joint2, joint3);
-				velocityMass += Math.abs(Calculator.calculateVelocity3D(joint2,
-						joint3, time2, time3));
-				accelerationMass += Math.abs(Calculator
-						.calculateAcceleration3D(joint1, joint2, joint3, time1,
-								time2, time3));
+				for (JointType type : types) {
+					Joint joint1 = data.get(i).getJoint(type);
+					Joint joint2 = data.get(i + 1).getJoint(type);
+					Joint joint3 = data.get(i + 2).getJoint(type);
+					long time1 = data.get(i).getTimestamp();
+					long time2 = data.get(i + 1).getTimestamp();
+					long time3 = data.get(i + 2).getTimestamp();
+					trajectoryMass += Calculator.calculateTrajectoryLength3D(
+							joint2, joint3);
+					velocityMass += Math.abs(Calculator.calculateVelocity3D(joint2,
+							joint3, time2, time3));
+					accelerationMass += Math.abs(Calculator
+							.calculateAcceleration3D(joint1, joint2, joint3, time1,
+									time2, time3));
+				}
 			}
 		}
 	}
