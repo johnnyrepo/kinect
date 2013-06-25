@@ -27,7 +27,7 @@ public class MotionDetectionAnalyzer {
 
 		private static final long serialVersionUID = 1L;
 				
-		private MotionChart chart;
+		private MotionDetectionChart chart;
 
 		private JPanel chartPanel;
 		
@@ -36,11 +36,12 @@ public class MotionDetectionAnalyzer {
 		private MotionDetectionChartFrame(List<Body> data, List<JointType> types, 
 				double trajectoryMassSummary, double accelerationMassSummary) {
 			setTitle("Motion has been detected!");
-			setSize(1200, 400);
+			setSize(1200, 450);
+			setResizable(false);
 
 			getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
 			
-			chart = new MotionChart();
+			chart = new MotionDetectionChart();
 			chart.setPreferredSize(new Dimension(800, 400));
 			chartPanel = new JPanel();
 			chartPanel.add(chart);

@@ -32,7 +32,8 @@ public class JointSelector {
 			add(scrollPane);
 			
 			setTitle("Select joint for analysis");
-			setSize(150, 400);
+			setSize(250, 400);
+			setResizable(false);
 			setVisible(false);
 		}
 

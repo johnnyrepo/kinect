@@ -25,8 +25,8 @@ public class Calculator {
 	// Calculates acceleration in 3D space (m/s^2)
 	// a = (v2 - v1) / (t2 - t1)
 	public static double calculateAcceleration3D(Joint joint1, Joint joint2, Joint joint3, long time1, long time2, long time3) {
-		double v1 = (Calculator.calculateVelocity3D(joint1, joint2, time1, time2) / (time2 - time1) * 1000);
-		double v2 = (Calculator.calculateVelocity3D(joint2, joint3, time2, time3) / (time3 - time2) * 1000);
+		double v1 = Calculator.calculateVelocity3D(joint1, joint2, time1, time2);// / (time2 - time1) * 1000;
+		double v2 = Calculator.calculateVelocity3D(joint2, joint3, time2, time3);// / (time3 - time2) * 1000;
 		
 		return (v2 - v1) / (time3 - time2);
 	}
