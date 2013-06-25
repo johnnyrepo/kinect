@@ -24,16 +24,19 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
-import ee.ttu.kinect.calc.Calculator;
 import ee.ttu.kinect.model.Body;
-import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
+import ee.ttu.kinect.model.ModelProcessor;
 import ee.ttu.kinect.view.ChartType;
 
 public class TracingChartPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	private ModelProcessor processor;
+	
+	private JointType selectedJoint;
+	
 	private JComboBox<JointType> jointCombo;
 
 	private JCheckBox packedModeChekbox;
@@ -72,10 +75,7 @@ public class TracingChartPanel extends JPanel {
 	private TimeSeries seriesAccelerationY;
 	private TimeSeries seriesAccelerationZ;
 
-	private JointType selectedJoint;
-
 	private ChartSelector chartSelector;
-
 
 	public TracingChartPanel() {
 		Border border = BorderFactory.createEtchedBorder();
@@ -83,6 +83,9 @@ public class TracingChartPanel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		jointCombo = new JComboBox<JointType>(JointType.values());
+		selectedJoint = (JointType) jointCombo.getSelectedItem();
+		processor = new ModelProcessor(selectedJoint);
+		
 		packedModeChekbox = new JCheckBox("Packed mode");
 		velocityXCheckbox = new JCheckBox("Velocity X");
 		velocityYCheckbox = new JCheckBox("Velocity Y");
@@ -97,9 +100,7 @@ public class TracingChartPanel extends JPanel {
 		
 		motionAnalysisButton = new JButton("Motion analysis");
 
-		chartSelector = new ChartSelector();
-		
-		selectedJoint = (JointType) jointCombo.getSelectedItem();
+		chartSelector = new ChartSelector();		
 
 		// listeners for controls
 		ChartControlChangeListener chartControlListener = new ChartControlChangeListener();
@@ -267,6 +268,8 @@ public class TracingChartPanel extends JPanel {
 		seriesAccelerationX.clear();
 		seriesAccelerationY.clear();
 		seriesAccelerationZ.clear();
+		
+		processor.reset();
 	}
 	
 	public void updateChart(Body body, boolean seatedMode) {		
@@ -278,40 +281,48 @@ public class TracingChartPanel extends JPanel {
 				&& !accelerationZCheckbox.isSelected()) {
 			return;
 		}
-		Body oldBody = body.getOldBody();
-		Body oldOldBody = (oldBody == null) ? null : oldBody.getOldBody();
-		if (body == null || !body.isBodyReady() 
-				|| oldBody == null || !oldBody.isBodyReady() 
-				|| oldOldBody == null || !oldOldBody.isBodyReady()) {
+		if (body == null || !body.isBodyReady()) {
 			return;
 		}
+//		Body oldBody = body.getOldBody();
+//		Body oldOldBody = (oldBody == null) ? null : oldBody.getOldBody();
+//		if (body == null || !body.isBodyReady() 
+//				|| oldBody == null || !oldBody.isBodyReady() 
+//				|| oldOldBody == null || !oldOldBody.isBodyReady()) {
+//			return;
+//		}
 		
 		JointType type = (JointType) jointCombo.getSelectedItem();
-		Joint joint = body.getJoint(type);
 		if (seatedMode
-				&& (joint.getType() == JointType.ANKLE_LEFT
-						|| joint.getType() == JointType.ANKLE_RIGHT
-						|| joint.getType() == JointType.FOOT_LEFT
-						|| joint.getType() == JointType.FOOT_RIGHT
-						|| joint.getType() == JointType.HIP_CENTER
-						|| joint.getType() == JointType.HIP_LEFT
-						|| joint.getType() == JointType.HIP_RIGHT
-						|| joint.getType() == JointType.KNEE_LEFT
-						|| joint.getType() == JointType.KNEE_RIGHT 
-						|| joint.getType() == JointType.SPINE)) {
+				&& (type == JointType.ANKLE_LEFT
+						|| type == JointType.ANKLE_RIGHT
+						|| type == JointType.FOOT_LEFT
+						|| type == JointType.FOOT_RIGHT
+						|| type == JointType.HIP_CENTER
+						|| type == JointType.HIP_LEFT
+						|| type == JointType.HIP_RIGHT
+						|| type == JointType.KNEE_LEFT
+						|| type == JointType.KNEE_RIGHT 
+						|| type == JointType.SPINE)) {
 			return;
 		}
 		
-		System.out.printf("hoj1 %f %f %f \n", joint.getVelocityX(), joint.getVelocityY(), joint.getVelocityZ());
+		processor.setType(type);
 		
-		updateVelocity(body.getTimestamp(),
-				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionX(), body.getJoint(type).getPositionX(), oldBody.getTimestamp(), body.getTimestamp()),
-				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionY(), body.getJoint(type).getPositionY(), oldBody.getTimestamp(), body.getTimestamp()),
-				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionZ(), body.getJoint(type).getPositionZ(), oldBody.getTimestamp(), body.getTimestamp()));
-		updateAcceleration(body.getTimestamp(),
-				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionX(), oldBody.getJoint(type).getPositionX(), body.getJoint(type).getPositionX(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()),
-				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionY(), oldBody.getJoint(type).getPositionY(), body.getJoint(type).getPositionY(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()),
-				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionZ(), oldBody.getJoint(type).getPositionZ(), body.getJoint(type).getPositionZ(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()));
+		if (processor.process(body)) {
+			updateVelocity(body.getTimestamp(), processor.getVelocityX(), processor.getVelocityY(), processor.getVelocityZ());
+			updateAcceleration(body.getTimestamp(), processor.getAccelerationX(), processor.getAccelerationY(), processor.getAccelerationZ());
+		}
+		
+		
+//		updateVelocity(body.getTimestamp(),
+//				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionX(), body.getJoint(type).getPositionX(), oldBody.getTimestamp(), body.getTimestamp()),
+//				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionY(), body.getJoint(type).getPositionY(), oldBody.getTimestamp(), body.getTimestamp()),
+//				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionZ(), body.getJoint(type).getPositionZ(), oldBody.getTimestamp(), body.getTimestamp()));
+//		updateAcceleration(body.getTimestamp(),
+//				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionX(), oldBody.getJoint(type).getPositionX(), body.getJoint(type).getPositionX(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()),
+//				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionY(), oldBody.getJoint(type).getPositionY(), body.getJoint(type).getPositionY(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()),
+//				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionZ(), oldBody.getJoint(type).getPositionZ(), body.getJoint(type).getPositionZ(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()));
 	}
 
 	private void updateVelocity(long timestamp, double velocityX,
