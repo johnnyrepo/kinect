@@ -129,11 +129,12 @@ public class MainModel {
 		coordinateCorrection.turnSittingCorrectionOff();
 	}
 
-	public void setMotionAnalysisMode(boolean enabled, long delay, List<JointType> types) {
+	public void setMotionAnalysisMode(boolean enabled, long delay, List<JointType> types, double trajectoryMassMinValue) {
 		motionAnalysisMode = enabled;
 		if (enabled) {
 			processor.setDelay(delay);
 			processor.setTypes(types);
+			processor.setTrajectoryMassMinValue(trajectoryMassMinValue);
 			processor.reset();
 		}
 	}
@@ -167,6 +168,10 @@ public class MainModel {
 		return processor.getDataSummary();
 	}
 
+	public List<JointType> getMotionDetectionJointTypes() {
+		return processor.getTypes();
+	}
+	
 	public double getTrajectoryMassSummary() {
 		return processor.getTrajectoryMassSummary();
 	}

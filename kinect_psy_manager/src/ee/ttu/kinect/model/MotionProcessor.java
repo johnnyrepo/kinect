@@ -7,8 +7,6 @@ import ee.ttu.kinect.calc.Calculator;
 
 public class MotionProcessor {
 
-	private final static double TRAJECTORY_MASS_MIN_VALUE = 0.15;
-
 	private final int windowSize = 30;
 
 	private double trajectoryMass;
@@ -30,6 +28,8 @@ public class MotionProcessor {
 	private long firstTimestamp;
 
 	private long delay;
+	
+	private double trajectoryMassMinValue;
 
 	private List<JointType> types;
 
@@ -45,6 +45,10 @@ public class MotionProcessor {
 		this.types = types;
 	}
 
+	public void setTrajectoryMassMinValue(double value) {
+		trajectoryMassMinValue = value;
+	}
+	
 	public void reset() {
 		trajectoryMassSummary = 0;
 		accelerationMassSummary = 0;
@@ -125,8 +129,8 @@ public class MotionProcessor {
 		return accelerationMass;
 	}
 
-	public List<Body> getData() {
-		return data;
+	public List<JointType> getTypes() {
+		return types;
 	}
 
 	public List<Body> getDataSummary() {
@@ -143,7 +147,7 @@ public class MotionProcessor {
 
 	public boolean isMotionEnded() {
 		if ((data.get(data.size() - 1).getTimestamp() - firstTimestamp) >= delay) {
-			return trajectoryMass < MotionProcessor.TRAJECTORY_MASS_MIN_VALUE;
+			return trajectoryMass < trajectoryMassMinValue;
 		}
 
 		return false;

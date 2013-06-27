@@ -1,5 +1,6 @@
 package ee.ttu.kinect.view;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import ee.ttu.kinect.model.JointType;
@@ -21,7 +23,9 @@ public class MotionDetectionPanel extends JPanel {
 	private JCheckBox motionDetectionCheckbox;
 
 	private JComboBox<Integer> delayCombo;
-		
+	
+	private JTextField trajectoryMassMinValueField;
+	
 	private JButton jointSelectorButton;
 	
 	private JointSelector jointSelector;
@@ -35,6 +39,9 @@ public class MotionDetectionPanel extends JPanel {
 		
 		motionDetectionCheckbox = new JCheckBox();
 		delayCombo = new JComboBox<Integer>(new Integer[] { 0, 1, 2, 3 });
+		delayCombo.setMaximumSize(new Dimension(50, 25));
+		trajectoryMassMinValueField = new JTextField(5);
+		trajectoryMassMinValueField.setMaximumSize(new Dimension(50, 25));
 		jointSelectorButton = new JButton("Joints");
 		jointSelectorButton.addActionListener(new ActionListener() {
 			@Override
@@ -46,9 +53,16 @@ public class MotionDetectionPanel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		add(motionDetectionCheckbox);
 		add(delayCombo);
+		add(trajectoryMassMinValueField);
 		add(jointSelectorButton);
+		
+		init();
 	}
 
+	private void init() {
+		trajectoryMassMinValueField.setText("0.15");
+	}
+	
 	public void setMotionDetectionEnabled(boolean enabled) {
 		motionDetectionCheckbox.setSelected(enabled);
 	}
@@ -59,6 +73,15 @@ public class MotionDetectionPanel extends JPanel {
 
 	public long getDelay() {
 		return delayCombo.getItemAt(delayCombo.getSelectedIndex()) * 1000;
+	}
+	
+	public double getTrajectoryMassMinValue() {
+		double value = 0;
+		try {
+			value = Double.parseDouble(trajectoryMassMinValueField.getText());
+		} catch (NumberFormatException nfe) {}
+		
+		return value;
 	}
 	
 	public List<JointType> getSelectedJoints() {

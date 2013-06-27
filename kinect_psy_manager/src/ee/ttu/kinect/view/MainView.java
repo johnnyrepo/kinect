@@ -260,6 +260,10 @@ public class MainView extends JFrame {
 		return motionDetectionPanel.getDelay();
 	}
 
+	public double getTrajectoryMassMinValue() {
+		return motionDetectionPanel.getTrajectoryMassMinValue();
+	}
+	
 	public List<JointType> getMotionDetectionJoints() {
 		return motionDetectionPanel.getSelectedJoints();
 	}
