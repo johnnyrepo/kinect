@@ -309,6 +309,7 @@ public class TracingChartPanel extends JPanel {
 		
 		processor.setType(type);
 		
+		//System.out.print("frame nr. " + body.getFrameNumber() + " ");
 		if (processor.process(body)) {
 			updateVelocity(body.getTimestamp(), processor.getVelocityX(), processor.getVelocityY(), processor.getVelocityZ());
 			updateAcceleration(body.getTimestamp(), processor.getAccelerationX(), processor.getAccelerationY(), processor.getAccelerationZ());
@@ -338,6 +339,7 @@ public class TracingChartPanel extends JPanel {
 
 	private void updateAcceleration(long timestamp, double accelerationX,
 			double accelerationY, double accelerationZ) {
+//		System.out.printf("hoj2 %f %f %f \n", accelerationX, accelerationY, accelerationZ);
 		seriesAccelerationX.addOrUpdate(new TimeSeriesDataItem(
 				new FixedMillisecond(timestamp), accelerationX));
 		seriesAccelerationY.addOrUpdate(new TimeSeriesDataItem(
