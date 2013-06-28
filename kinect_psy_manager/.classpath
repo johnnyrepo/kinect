@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
 	<classpathentry kind="lib" path="lib/kmeansclustering.jar" sourcepath="/KMeansClustering/src"/>
 	<classpathentry kind="lib" path="lib/stromberglabs-commons.jar" sourcepath="/KMeansClustering/src"/>
-	<classpathentry kind="lib" path="lib/jfreechart-src.zip"/>
 	<classpathentry kind="lib" path="lib/kohonen.jar" sourcepath="/Kohonen/src"/>
+	<classpathentry kind="lib" path="lib/OpenForecast-0.5.0.jar" sourcepath="lib/OpenForecast-0.5.0-src.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
