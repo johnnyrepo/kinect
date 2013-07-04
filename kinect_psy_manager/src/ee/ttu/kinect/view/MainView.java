@@ -274,7 +274,7 @@ public class MainView extends JFrame {
 
 	public void openMotionDetectionChart(List<Body> data, List<JointType> types, 
 			double trajectoryMassSummary, double accelerationMassSummary) {
-		motionDetectionChartOpener.open(data, types, trajectoryMassSummary, accelerationMassSummary);
+		motionDetectionChartOpener.open(data, types);
 	}
 	
 	private void performCorrection(Body body, CoordinateCorrection correction) {

@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ee.ttu.kinect.SkeletonParserFile;
 import ee.ttu.kinect.controller.MainController;
+import ee.ttu.kinect.model.parser.SkeletonParserFile;
 
 public class FileRunner extends Runner {
 

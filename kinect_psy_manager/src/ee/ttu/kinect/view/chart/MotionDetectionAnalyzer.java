@@ -18,9 +18,8 @@ import ee.ttu.kinect.model.JointType;
 
 public class MotionDetectionAnalyzer {
 	
-	public void open(List<Body> data, List<JointType> types, 
-			double trajectoryMassSummary, double accelerationMassSummary) {
-		new MotionDetectionChartFrame(data, types, trajectoryMassSummary, accelerationMassSummary);
+	public void open(List<Body> data, List<JointType> types) {
+		new MotionDetectionChartFrame(data, types);
 	}
 	
 	private class MotionDetectionChartFrame extends JFrame {
@@ -33,8 +32,7 @@ public class MotionDetectionAnalyzer {
 		
 		private JPanel summaryPanel;
 		
-		private MotionDetectionChartFrame(List<Body> data, List<JointType> types, 
-				double trajectoryMassSummary, double accelerationMassSummary) {
+		private MotionDetectionChartFrame(List<Body> data, List<JointType> types) {
 			setTitle("Motion has been detected!");
 			setSize(1200, 450);
 			setResizable(false);

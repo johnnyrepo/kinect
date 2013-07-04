@@ -8,7 +8,7 @@
  * Contributors:
  *     Eugen Neufeld - initial API and implementation
  *******************************************************************************/
-package ee.ttu.kinect;
+package ee.ttu.kinect.model.parser;
 
 import java.io.StringReader;
 

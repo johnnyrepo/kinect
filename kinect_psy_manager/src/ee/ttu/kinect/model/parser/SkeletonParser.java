@@ -1,4 +1,4 @@
-package ee.ttu.kinect;
+package ee.ttu.kinect.model.parser;
 
 import ee.ttu.kinect.model.Body;
 

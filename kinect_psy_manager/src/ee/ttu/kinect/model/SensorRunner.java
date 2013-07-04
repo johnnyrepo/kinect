@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import kinectsensorproxy.KinectSensorProxy;
 import net.sf.jni4net.Bridge;
-import ee.ttu.kinect.SkeletonParserKinect;
 import ee.ttu.kinect.controller.MainController;
+import ee.ttu.kinect.model.parser.SkeletonParserKinect;
 
 public class SensorRunner extends Runner {
 
