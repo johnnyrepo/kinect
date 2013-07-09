@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 
-import ee.ttu.kinect.PolynomialExperimentAnalyzer;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.MainModel;
+import ee.ttu.kinect.model.experiment.PolynomialExperimentAnalyzer;
 import ee.ttu.kinect.view.ChartType;
 import ee.ttu.kinect.view.MainView;
 

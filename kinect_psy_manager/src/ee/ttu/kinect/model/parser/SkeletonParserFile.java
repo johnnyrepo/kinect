@@ -148,6 +148,7 @@ public class SkeletonParserFile implements SkeletonParser {
 		List<JointType> types = new ArrayList<JointType>();
 		String typesArr[] = input.split("\\s+");
 		typesArr = Arrays.copyOfRange(typesArr, 2, (2 + 3 * typesAmount));
+
 		for (int i = 0; i < typesArr.length; i+=3) {
 			String typeHeader = typesArr[i].substring(0, typesArr[i].length() - 1);
 			types.add(JointType.getValueOf(typeHeader));

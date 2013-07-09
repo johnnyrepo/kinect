@@ -1,15 +1,17 @@
-package ee.ttu.kinect;
+package ee.ttu.kinect.model.experiment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.openforecast.DataSet;
+import net.sourceforge.openforecast.Observation;
+import net.sourceforge.openforecast.models.PolynomialRegressionModel;
 import ee.ttu.kinect.model.Body;
-import ee.ttu.kinect.model.Experiment;
 import ee.ttu.kinect.model.Markers;
 import ee.ttu.kinect.model.parser.SkeletonParserFile;
 import ee.ttu.kinect.util.FileUtil;
@@ -20,9 +22,9 @@ public class PolynomialExperimentAnalyzer {
 	
 	private static SkeletonParserFile parser = new SkeletonParserFile();
 	
-	private static Map<String, Experiment> experiments = new HashMap<String, Experiment>();
+	private static Map<String, Experiment> experiments = new LinkedHashMap<String, Experiment>();
 	
-	private static Map<String, List<Boolean>> experimentsCorrectness = new HashMap<String, List<Boolean>>();
+	private static Map<String, List<Boolean>> experimentsCorrectness = new LinkedHashMap<String, List<Boolean>>();
 	
 	static {
 		// init experiments 
@@ -54,25 +56,23 @@ public class PolynomialExperimentAnalyzer {
 			try {
 				fileUtil.readFile(file);
 				List<String> data = fileUtil.readAllLines();
-				analyzeExperiment(file.getName(), data);
+				Experiment experiment = prepareExperiment(file.getName(), data);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		analyzeExperiments();
 	}
 
-	private static void analyzeExperiment(String experimentId, List<String> data) {
+	private static Experiment prepareExperiment(String experimentId, List<String> data) {
 		Experiment experiment = experiments.get(experimentId);
 		List<Body> motionData = null;
 		int motionCounter = 0;
 		Body body = new Body();
 		Markers markers = new Markers();
 		for (String item : data) {
-			try {
 			parser.parseSkeleton(item, body);
-			} catch (Exception e) {
-				System.out.println("exc: " + item);
-			}
 			parser.parseMarkers(item, markers);
 			
 			if (markers.getState()[0]) {
@@ -93,8 +93,34 @@ public class PolynomialExperimentAnalyzer {
 					motionData = null;
 				}
 			}
-			//System.out.println("hoj " + body.getJointString(false));
 		}
+		
+		return experiment;
+	}
+	
+	private static void analyzeExperiments() {
+		DataSet ds = new DataSet();
+		String firstExperimentId = null;
+		int i = 1;
+		for (Experiment experiment : experiments.values()) {
+			if (firstExperimentId == null) {
+				firstExperimentId = experiment.getId();
+			}
+			
+//			ExperimentDataPoint edp = new ExperimentDataPoint();
+			Observation edp = new Observation(experiment.getAverageTrajectoryMass());
+			edp.setIndependentValue("Ind", i);
+//			edp.setDependentValue(experiment.getAverageTrajectoryMass());
+			
+			ds.add(edp);
+			i++;
+		}
+		System.out.println("hoj " + experiments.values().size() + " " + firstExperimentId);
+		PolynomialRegressionModel model = new PolynomialRegressionModel("Ind", 5);
+		model.init(ds);
+		System.out.println(model);
+		
+		//model.forecast(ds.getIndependentVariables()[0]);
 	}
 	
 }
