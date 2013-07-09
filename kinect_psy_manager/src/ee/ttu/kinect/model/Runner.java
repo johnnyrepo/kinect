@@ -88,7 +88,6 @@ public abstract class Runner {
 		@Override
 		public synchronized Void doInBackground() {
 			// logger.info("Running: " + getClass().getName() + " " +
-			// isCancelled());
 			while (running) {
 				if (paused) {
 					continue;

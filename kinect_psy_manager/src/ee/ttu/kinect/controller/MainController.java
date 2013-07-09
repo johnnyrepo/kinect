@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 
+import ee.ttu.kinect.PolynomialExperimentAnalyzer;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.MainModel;
 import ee.ttu.kinect.view.ChartType;
@@ -28,8 +29,14 @@ public class MainController {
 		view.addListenerForMenuOpen(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.setFileToPlay(view.getSelectedFile()); //TODO: fix this hack
+				model.setFileToPlay(view.getFileToPlay()); //TODO: fix this hack
 				view.setPlayingEnabled(true);
+			}
+		});
+		view.addListenerForMenuPolynomialAnalyzer(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PolynomialExperimentAnalyzer.analyze(view.getFilesForAnalysis());
 			}
 		});
 		view.addListenerForStartRecord(new ActionListener() {

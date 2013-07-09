@@ -7,6 +7,7 @@ import java.util.List;
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
+import ee.ttu.kinect.model.Markers;
 
 
 public class SkeletonParserFile implements SkeletonParser {
@@ -15,13 +16,28 @@ public class SkeletonParserFile implements SkeletonParser {
 	
 	private List<JointType> jointTypes = new ArrayList<JointType>();
 	
+	public synchronized void parseMarkers(String input, Markers markers) {
+		if (input.length() > 50) {
+			String markersState[] = input.split("\\s+");
+			if (!isDataString(input)) {
+				return;
+			}
+			
+			// Parsing markers state
+			markersState = Arrays.copyOfRange(markersState, (2 + 3 * jointsAmount), markersState.length); // markers are taken
+			boolean[] markersBool = new boolean[markersState.length];
+			for (int i = 0; i < markersState.length; i++) {
+				markersBool[i] = Integer.parseInt(markersState[i]) == 1 ? true : false;
+			}
+			markers.setState(markersBool);
+		}
+	}
+	
 	@Override
 	public synchronized void parseSkeleton(String input, Body body) {
 		if (input.length() > 50) {
 			String jointCoords[] = input.split("\\s+");
-			try {
-				Double.parseDouble(jointCoords[2]);
-			} catch(NumberFormatException e) {
+			if (!isDataString(input)) {
 				// We are dealing with header(not a row with coords)
 				jointsAmount = (jointCoords.length - 2 - 5) / 3; // -FrameId -Timestamp -5x markers
 				jointTypes = parseJointTypes(input, jointsAmount);
@@ -45,6 +61,17 @@ public class SkeletonParserFile implements SkeletonParser {
 				jointCounter++;
 			}
 		}
+	}
+
+	private boolean isDataString(String input) {
+		String splitStr[] = input.split("\\s+");
+		try {
+			Double.parseDouble(splitStr[2]);
+		} catch(Exception e) {
+			// We are dealing with header(not a row with coords)
+			return false;
+		}
+		return true;
 	}
 
 	private void parseJoint(Body body, JointType type, double positionX, double positionY, double positionZ) {

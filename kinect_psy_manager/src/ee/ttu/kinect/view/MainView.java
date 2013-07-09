@@ -27,7 +27,9 @@ public class MainView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private File selectedFile;
+	private File fileToPlay;
+	
+	private File[] filesForAnalysis;
 
 	private final MotionDetectionAnalyzer motionDetectionChartOpener;
 	
@@ -36,6 +38,8 @@ public class MainView extends JFrame {
 	private final JMenu menu;
 
 	private final JMenuItem menuItemOpen;
+
+	private final JMenuItem menuItemPolynomialAnalyzer;
 
 	private final JFileChooser fileChooser;
 
@@ -75,7 +79,9 @@ public class MainView extends JFrame {
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
 		menuItemOpen = new JMenuItem("Open");
+		menuItemPolynomialAnalyzer = new JMenuItem("Polynomial experiment analyzer");
 		menu.add(menuItemOpen);
+		menu.add(menuItemPolynomialAnalyzer);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
 
@@ -149,8 +155,12 @@ public class MainView extends JFrame {
 		motionDetectionPanel.setMotionDetectionEnabled(enabled);
 	}
 	
-	public File getSelectedFile() {
-		return selectedFile;
+	public File getFileToPlay() {
+		return fileToPlay;
+	}
+	
+	public File[] getFilesForAnalysis() {
+		return filesForAnalysis;
 	}
 
 	public void redrawSkeleton(Body body, boolean seatedMode,
@@ -181,21 +191,42 @@ public class MainView extends JFrame {
 		menuItemOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileChooser.setCurrentDirectory(new File(System
-						.getProperty("user.dir")));
-				int res = fileChooser.showDialog(null, null);
-				if (res == JFileChooser.APPROVE_OPTION) {
-					selectedFile = fileChooser
-							.getSelectedFile();
-					buttonPanel
-							.updateSelectedFileLabel(selectedFile
-									.getName());
+				File[] files = retrieveSelectedFiles(false);
+				if (files != null) {
+					fileToPlay = files[0];
+					buttonPanel.updateSelectedFileLabel(fileToPlay.getName());
 					listener.actionPerformed(e);
 				}
 			}
 		});
 	}
 
+	public void addListenerForMenuPolynomialAnalyzer(final ActionListener listener) {
+		menuItemPolynomialAnalyzer.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filesForAnalysis = retrieveSelectedFiles(true);
+				listener.actionPerformed(e);
+			}
+		});
+	}
+	
+	private File[] retrieveSelectedFiles(boolean multiSelection) {
+		fileChooser.setMultiSelectionEnabled(multiSelection);
+		fileChooser.setCurrentDirectory(new File(System
+				.getProperty("user.dir")));
+		int res = fileChooser.showDialog(null, null);
+		if (res == JFileChooser.APPROVE_OPTION) {
+			if (multiSelection) {
+				return fileChooser.getSelectedFiles();
+			} else {
+				return new File[] {fileChooser.getSelectedFile()};
+			}
+		}
+		
+		return null;
+	}
+	
 	public void addListenerForSeatedMode(ActionListener listener) {
 		seatedModePanel.addLsitenerForCheckbox(listener);
 	}
