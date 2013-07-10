@@ -135,9 +135,7 @@ public class PolynomialExperimentAnalyzer {
 			double real = getExperimentRealValue(exp, measure);
 			System.out.println("Forecast with indepent variable " + dp.getIndependentValue("Ind") + ": " 
 					+ forecast + ", but Real: " + real + " and Diff(Forecast-Real): " + (forecast-real));
-		}
-		
-		//model.forecast();
+		}		
 	}
 	
 	private static double getExperimentRealValue(Experiment experiment, ExperimentMeasure measure) {
