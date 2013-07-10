@@ -121,7 +121,7 @@ public class PolynomialExperimentAnalyzer {
 			i++;
 		}
 		
-		PolynomialRegressionModel model = new PolynomialRegressionModel("Ind", 5);
+		PolynomialRegressionModel model = new PolynomialRegressionModel("Ind", 7);
 		model.init(ds);
 		
 		System.out.println(model);
@@ -135,7 +135,8 @@ public class PolynomialExperimentAnalyzer {
 			double real = getExperimentRealValue(exp, measure);
 			System.out.println("Forecast with indepent variable " + dp.getIndependentValue("Ind") + ": " 
 					+ forecast + ", but Real: " + real + " and Diff(Forecast-Real): " + (forecast-real));
-		}		
+		}
+		System.out.println("==============================\n");
 	}
 	
 	private static double getExperimentRealValue(Experiment experiment, ExperimentMeasure measure) {
