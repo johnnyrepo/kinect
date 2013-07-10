@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.openforecast.DataPoint;
 import net.sourceforge.openforecast.DataSet;
 import net.sourceforge.openforecast.Observation;
 import net.sourceforge.openforecast.models.PolynomialRegressionModel;
@@ -17,6 +19,11 @@ import ee.ttu.kinect.model.parser.SkeletonParserFile;
 import ee.ttu.kinect.util.FileUtil;
 
 public class PolynomialExperimentAnalyzer {
+	
+	private static enum ExperimentMeasure {
+		AVG_TRAJECTORY_MASS, AVG_ACCELERATION_MASS, 
+		BEST_TRAJECTORY_MASS, BEST_ACCELERATION_MASS
+	};
 	
 	private static FileUtil fileUtil = new FileUtil();
 	
@@ -62,7 +69,10 @@ public class PolynomialExperimentAnalyzer {
 			}
 		}
 		
-		analyzeExperiments();
+		analyzeExperiments(ExperimentMeasure.AVG_TRAJECTORY_MASS);
+		analyzeExperiments(ExperimentMeasure.BEST_TRAJECTORY_MASS);
+		analyzeExperiments(ExperimentMeasure.AVG_ACCELERATION_MASS);
+		analyzeExperiments(ExperimentMeasure.BEST_ACCELERATION_MASS);
 	}
 
 	private static Experiment prepareExperiment(String experimentId, List<String> data) {
@@ -98,29 +108,56 @@ public class PolynomialExperimentAnalyzer {
 		return experiment;
 	}
 	
-	private static void analyzeExperiments() {
+	private static void analyzeExperiments(ExperimentMeasure measure) {
+		System.out.println("Analyzing with " + measure);
+		
 		DataSet ds = new DataSet();
-		String firstExperimentId = null;
 		int i = 1;
-		for (Experiment experiment : experiments.values()) {
-			if (firstExperimentId == null) {
-				firstExperimentId = experiment.getId();
-			}
+		for (Experiment experiment : experiments.values()) {			
+			Observation obs = new Observation(getExperimentRealValue(experiment, measure));
+			obs.setIndependentValue("Ind", i);
 			
-//			ExperimentDataPoint edp = new ExperimentDataPoint();
-			Observation edp = new Observation(experiment.getAverageTrajectoryMass());
-			edp.setIndependentValue("Ind", i);
-//			edp.setDependentValue(experiment.getAverageTrajectoryMass());
-			
-			ds.add(edp);
+			ds.add(obs);
 			i++;
 		}
-		System.out.println("hoj " + experiments.values().size() + " " + firstExperimentId);
+		
 		PolynomialRegressionModel model = new PolynomialRegressionModel("Ind", 5);
 		model.init(ds);
-		System.out.println(model);
 		
-		//model.forecast(ds.getIndependentVariables()[0]);
+		System.out.println(model);
+		System.out.println(ds);
+		Iterator<DataPoint> dpIterator = ds.iterator();
+		Iterator<Experiment> expIterator = experiments.values().iterator();
+		while (dpIterator.hasNext()) {
+			DataPoint dp = dpIterator.next();
+			Experiment exp = expIterator.next();
+			double forecast = model.forecast(dp);
+			double real = getExperimentRealValue(exp, measure);
+			System.out.println("Forecast with indepent variable " + dp.getIndependentValue("Ind") + ": " 
+					+ forecast + ", but Real: " + real + " and Diff(Forecast-Real): " + (forecast-real));
+		}
+		
+		//model.forecast();
+	}
+	
+	private static double getExperimentRealValue(Experiment experiment, ExperimentMeasure measure) {
+		double value = 0;
+		switch (measure) {
+			case AVG_TRAJECTORY_MASS:
+				value = experiment.getAverageTrajectoryMass();
+				break;
+			case BEST_TRAJECTORY_MASS:
+				value = experiment.getBestTrajectoryMass();
+				break;
+			case AVG_ACCELERATION_MASS:
+				value = experiment.getAverageAccelerationMass();
+				break;
+			case BEST_ACCELERATION_MASS:
+				value = experiment.getBestAccelerationMass();
+				break;
+		}
+		
+		return value;
 	}
 	
 }
