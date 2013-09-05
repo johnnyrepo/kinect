@@ -22,6 +22,10 @@ public class Experiment {
 		return id;
 	}
 	
+	public List<Motion> getMotions() {
+		return motions;
+	}
+	
 	public void addMotion(List<Body> motionData) {
 		Motion motion = new Motion(motionData);
 		motions.add(motion);
@@ -75,7 +79,7 @@ public class Experiment {
 		return best;
 	}
 	
-	private class Motion {
+	class Motion {
 		
 		private List<Body> data;
 		

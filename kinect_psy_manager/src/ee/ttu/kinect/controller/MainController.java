@@ -8,7 +8,7 @@ import javax.swing.JCheckBox;
 
 import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.MainModel;
-import ee.ttu.kinect.model.experiment.PolynomialExperimentAnalyzer;
+import ee.ttu.kinect.model.experiment.SegmentationExperimentAnalyzer;
 import ee.ttu.kinect.view.ChartType;
 import ee.ttu.kinect.view.MainView;
 
@@ -36,7 +36,8 @@ public class MainController {
 		view.addListenerForMenuPolynomialAnalyzer(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PolynomialExperimentAnalyzer.analyze(view.getFilesForAnalysis());
+				//PolynomialExperimentAnalyzer.analyze(view.getFilesForAnalysis());
+				SegmentationExperimentAnalyzer.analyze(view.getFilesForAnalysis());
 			}
 		});
 		view.addListenerForStartRecord(new ActionListener() {
