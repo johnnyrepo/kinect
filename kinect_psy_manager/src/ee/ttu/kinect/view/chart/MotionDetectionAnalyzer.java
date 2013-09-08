@@ -2,10 +2,19 @@ package ee.ttu.kinect.view.chart;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.List;
 import java.util.Locale;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,91 +24,122 @@ import ee.ttu.kinect.model.Body;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
-
 public class MotionDetectionAnalyzer {
-	
+
 	public void open(List<Body> data, List<JointType> types) {
 		new MotionDetectionChartFrame(data, types);
 	}
-	
+
 	private class MotionDetectionChartFrame extends JFrame {
 
 		private static final long serialVersionUID = 1L;
-				
+
+		private MotionDetectionChartFrame self;
+		
+		// Summaries
+		private Summaries summaries = new Summaries(); 
+		
+		private MotionDetectionPrinter printer;
+
 		private MotionDetectionChart chart;
 
 		private JPanel chartPanel;
-		
+
 		private JPanel summaryPanel;
-		
+
+		private JButton printButton;
+
 		private MotionDetectionChartFrame(List<Body> data, List<JointType> types) {
 			setTitle("Motion has been detected!");
 			setSize(1200, 450);
 			setResizable(false);
 
-			getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+			getContentPane().setLayout(
+					new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+
+			self = this;
 			
+			summaries = new Summaries();
+			
+			printer = new MotionDetectionPrinter();
+
 			chart = new MotionDetectionChart();
 			chart.setPreferredSize(new Dimension(800, 400));
 			chartPanel = new JPanel();
 			chartPanel.add(chart);
-			
+
 			summaryPanel = new JPanel();
-			
+
+			printButton = new JButton("Print");
+			printButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					printer.startPrint(self);
+				}
+			});
+
 			getContentPane().add(summaryPanel);
 			getContentPane().add(chartPanel);
-			
+
+			calculateSummaries(data, types);
 			drawChart(data, types);
-			outputSummary(data, types);
-			
+			outputSummary();
+
 			setVisible(true);
 		}
 		
+		private void calculateSummaries(List<Body> data, List<JointType> types) {
+			summaries.frameStart = data.get(0).getFrameNumber();
+			summaries.frameEnd = data.get(data.size() - 1).getFrameNumber();
+			summaries.startTime = data.get(0).getTimestamp();
+			summaries.endTime = data.get(data.size() - 1).getTimestamp();
+			summaries.time = (summaries.endTime - summaries.startTime) / 1000;
+			summaries.trajectoryMassSummary = 0;
+			summaries.accelerationMassSummary = 0;
+			summaries.eucledianDistance = 0;
+			for (JointType type : types) {
+				summaries.trajectoryMassSummary += calculateTrajectoryMass(data, type);
+				summaries.accelerationMassSummary += calculateAccelerationMass(data, type);
+				summaries.eucledianDistance += calculateEucledianDistance(data, type);
+			}
+			summaries.ratio = summaries.eucledianDistance / summaries.trajectoryMassSummary;
+		}
+
 		private void drawChart(List<Body> data, List<JointType> types) {
 			chart.drawChart(data, types, false);
 		}
-		
-		private void outputSummary(List<Body> data, List<JointType> types) {
-			long frameStart = data.get(0).getFrameNumber();
-			long frameEnd = data.get(data.size() - 1).getFrameNumber();
-			double startTime = data.get(0).getTimestamp();
-			double endTime = data.get(data.size() - 1).getTimestamp();
-			double time = (endTime - startTime) / 1000;
-			double trajectoryMassSummary = 0;
-			double accelerationMassSummary = 0;
-			double eucledianDistance = 0;
-			for (JointType type : types) {
-				trajectoryMassSummary += calculateTrajectoryMass(data, type);
-				accelerationMassSummary += calculateAccelerationMass(data, type);
-				eucledianDistance += calculateEucledianDistance(data, type);
-			}
-			double ratio = eucledianDistance / trajectoryMassSummary;
-			
-			summaryPanel.setLayout(new BoxLayout(summaryPanel, BoxLayout.Y_AXIS));
-			summaryPanel.add(createLabel("Frame start: " + frameStart));
-			summaryPanel.add(createLabel("Frame end: " + frameEnd));
-			summaryPanel.add(createLabel("Time elapsed: " + time));
-			summaryPanel.add(createLabel("Eucledian distance: " + String.format(Locale.ENGLISH, "%-6.3f", eucledianDistance)));
-			summaryPanel.add(createLabel("Trajectory mass: " + String.format(Locale.ENGLISH, "%-6.3f", trajectoryMassSummary)));
-			summaryPanel.add(createLabel("Acceleration mass: " + String.format(Locale.ENGLISH, "%-6.3f", accelerationMassSummary)));
-			summaryPanel.add(createLabel("Ratio (Eucl. dist. / Traj. mass): " + String.format(Locale.ENGLISH, "%-6.3f", ratio)));
-			
-			System.out.println("Frame start: " + frameStart);
-			System.out.println("Frame end: " + frameEnd);
-			System.out.println("Time elapsed: " + time);
-			System.out.println("Eucledian distance: " + eucledianDistance);
-			System.out.println("Trajectory mass: " + trajectoryMassSummary);
-			System.out.println("Acceleration mass: " + accelerationMassSummary);
-			System.out.println("Eucl / Traj ratio: " + ratio);
-		}
 
+		private void outputSummary() {
+			summaryPanel
+					.setLayout(new BoxLayout(summaryPanel, BoxLayout.Y_AXIS));
+			summaryPanel.add(createLabel("Frame start: " + summaries.frameStart));
+			summaryPanel.add(createLabel("Frame end: " + summaries.frameEnd));
+			summaryPanel.add(createLabel("Time elapsed: " + summaries.time));
+			summaryPanel
+					.add(createLabel("Eucledian distance: "
+							+ String.format(Locale.ENGLISH, "%-6.3f",
+									summaries.eucledianDistance)));
+			summaryPanel.add(createLabel("Trajectory mass: "
+					+ String.format(Locale.ENGLISH, "%-6.3f",
+							summaries.trajectoryMassSummary)));
+			summaryPanel.add(createLabel("Acceleration mass: "
+					+ String.format(Locale.ENGLISH, "%-6.3f",
+							summaries.accelerationMassSummary)));
+			summaryPanel.add(createLabel("Ratio (Eucl. dist. / Traj. mass): "
+					+ String.format(Locale.ENGLISH, "%-6.3f", summaries.ratio)));
+			
+			summaryPanel.add(printButton);
+
+			System.out.println(summaries);
+		}
+		
 		private JLabel createLabel(String text) {
 			JLabel label = new JLabel(text);
 			label.setFont(new Font("Serif", Font.BOLD, 16));
-			
+
 			return label;
 		}
-		
+
 		private double calculateTrajectoryMass(List<Body> data, JointType type) {
 			double trajectoryMass = 0;
 			for (int i = 0; i < data.size(); i++) {
@@ -108,12 +148,13 @@ public class MotionDetectionAnalyzer {
 				}
 				Joint joint1 = data.get(i).getJoint(type);
 				Joint joint2 = data.get(i + 1).getJoint(type);
-				trajectoryMass += Calculator.calculateTrajectoryLength3D(joint1, joint2);
+				trajectoryMass += Calculator.calculateTrajectoryLength3D(
+						joint1, joint2);
 			}
-			
+
 			return trajectoryMass;
 		}
-		
+
 		private double calculateAccelerationMass(List<Body> data, JointType type) {
 			double accelerationMass = 0;
 			for (int i = 0; i < data.size(); i++) {
@@ -126,19 +167,110 @@ public class MotionDetectionAnalyzer {
 				long time1 = data.get(i).getTimestamp();
 				long time2 = data.get(i + 1).getTimestamp();
 				long time3 = data.get(i + 2).getTimestamp();
-				accelerationMass += Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, joint3, time1, time2, time3));
-				System.out.println("frame nr. " + data.get(i).getFrameNumber() + " accel. " + data.get(i).getFrameNumber() 
-						+ " " + String.format(Locale.ENGLISH, "%-14.13f", Math.abs(Calculator.calculateAcceleration3D(joint1, joint2, joint3, time1, time2, time3))));
+				accelerationMass += Math.abs(Calculator
+						.calculateAcceleration3D(joint1, joint2, joint3, time1,
+								time2, time3));
+				System.out.println("frame nr. "
+						+ data.get(i).getFrameNumber()
+						+ " accel. "
+						+ data.get(i).getFrameNumber()
+						+ " "
+						+ String.format(Locale.ENGLISH, "%-14.13f", Math
+								.abs(Calculator.calculateAcceleration3D(joint1,
+										joint2, joint3, time1, time2, time3))));
 			}
 			System.out.println("\n\n\n");
-			
+
 			return accelerationMass;
 		}
-		
+
 		private double calculateEucledianDistance(List<Body> data,
 				JointType type) {
-			return Calculator.calculateTrajectoryLength3D(data.get(0).getJoint(type), 
-					data.get(data.size() - 1).getJoint(type));
+			System.out.println("eucl size " + data.size());
+			return Calculator.calculateTrajectoryLength3D(
+					data.get(0).getJoint(type), data.get(data.size() - 1)
+							.getJoint(type));
+		}
+
+	}
+
+	private class MotionDetectionPrinter implements Printable {
+
+		private MotionDetectionChartFrame frame;
+		
+		public void startPrint(MotionDetectionChartFrame frame) {
+			this.frame = frame;
+			PrinterJob job = PrinterJob.getPrinterJob();
+			job.setPrintable(this);
+
+			boolean isPrint = job.printDialog();
+			if (isPrint) {
+				try {
+					job.print();
+				} catch (PrinterException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		@Override
+		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
+				throws PrinterException {
+			// We have only one page, and 'page'
+		    // is zero-based
+		    if (pageIndex > 0) {
+		         return NO_SUCH_PAGE;
+		    }
+
+		    // User (0,0) is typically outside the
+		    // imageable area, so we must translate
+		    // by the X and Y values in the PageFormat
+		    // to avoid clipping.
+		    Graphics2D g2d = (Graphics2D)graphics;
+		    g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+		    // Now we perform our rendering
+		    frame.printAll(g2d);
+
+		    // tell the caller that this page is part
+		    // of the printed document
+		    return PAGE_EXISTS;
+		}
+
+	}
+	
+	private class Summaries {
+		
+		public long frameStart;
+
+		public long frameEnd;
+
+		public long startTime;
+
+		public long endTime;
+
+		public long time;
+
+		public double trajectoryMassSummary;
+
+		public double accelerationMassSummary;
+
+		public double eucledianDistance;
+
+		public double ratio;
+		
+		@Override
+		public String toString() {
+			StringBuffer sb = new StringBuffer();
+			sb.append("Frame start: " + frameStart + "\r\n");
+			sb.append("Frame end: " + frameEnd + "\n\r");
+			sb.append("Time elapsed: " + time + "\n");
+			sb.append("Eucledian distance: " + eucledianDistance + "\n");
+			sb.append("Trajectory mass: " + trajectoryMassSummary + "\n");
+			sb.append("Acceleration mass: " + accelerationMassSummary + "\n");
+			sb.append("Eucl / Traj ratio: " + ratio + "\n");
+			
+			return sb.toString();
 		}
 		
 	}
