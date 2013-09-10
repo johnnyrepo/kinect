@@ -4,15 +4,26 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Transparency;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import javax.imageio.ImageIO;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.standard.Copies;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.print.attribute.standard.PageRanges;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -48,14 +59,16 @@ public class MotionDetectionAnalyzer {
 		private JPanel summaryPanel;
 
 		private JButton printButton;
+		
+		private JButton saveImgButton;
 
 		private MotionDetectionChartFrame(List<Body> data, List<JointType> types) {
 			setTitle("Motion has been detected!");
-			setSize(1200, 450);
+			setSize(800, 600);
 			setResizable(false);
 
 			getContentPane().setLayout(
-					new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
+					new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 			self = this;
 			
@@ -77,9 +90,17 @@ public class MotionDetectionAnalyzer {
 					printer.startPrint(self);
 				}
 			});
+			
+			saveImgButton = new JButton("Save");
+			saveImgButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					saveImage("screen.png");
+				}
+			});
 
-			getContentPane().add(summaryPanel);
 			getContentPane().add(chartPanel);
+			getContentPane().add(summaryPanel);
 
 			calculateSummaries(data, types);
 			drawChart(data, types);
@@ -129,8 +150,9 @@ public class MotionDetectionAnalyzer {
 					+ String.format(Locale.ENGLISH, "%-6.3f", summaries.ratio)));
 			
 			summaryPanel.add(printButton);
+			summaryPanel.add(saveImgButton);
 
-			System.out.println(summaries);
+			System.out.println(summaries.toString());
 		}
 		
 		private JLabel createLabel(String text) {
@@ -191,6 +213,19 @@ public class MotionDetectionAnalyzer {
 					data.get(0).getJoint(type), data.get(data.size() - 1)
 							.getJoint(type));
 		}
+		
+		private void saveImage(String name) {
+			Rectangle rec = this.getBounds();
+			BufferedImage bi = new BufferedImage(rec.width, rec.height, Transparency.TRANSLUCENT);
+			this.paint(bi.getGraphics());
+			
+			File file = new File(name);
+			try {
+				ImageIO.write(bi, "png", file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -203,7 +238,13 @@ public class MotionDetectionAnalyzer {
 			PrinterJob job = PrinterJob.getPrinterJob();
 			job.setPrintable(this);
 
-			boolean isPrint = job.printDialog();
+			HashPrintRequestAttributeSet attrSet = new HashPrintRequestAttributeSet();
+			attrSet.add(new PageRanges(1));
+			attrSet.add(new Copies(1));
+			attrSet.add(OrientationRequested.LANDSCAPE);
+			attrSet.add(MediaSizeName.ISO_A4);
+			
+			boolean isPrint = job.printDialog(attrSet);
 			if (isPrint) {
 				try {
 					job.print();
