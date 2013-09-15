@@ -87,11 +87,16 @@ public class Experiment {
 		
 		private double trajectoryMass;
 		
+		private double velocityMass;
+		
 		private double accelerationMass;
+		
+		private long time;
 
 		public Motion(List<Body> data) {
 			this.data = data;
 			calculateMasses();
+			time = (data.get(data.size() - 1)).getTimestamp() - data.get(0).getTimestamp();
 		}
 		
 		private void calculateMasses() {
@@ -102,9 +107,11 @@ public class Experiment {
 					if (i + 2 < data.size()) {
 						trajectoryMass += Calculator.calculateTrajectoryLength3D(data.get(i).getJoint(type), 
 								data.get(i + 1).getJoint(type));
-						accelerationMass += Calculator.calculateAcceleration3D(data.get(i).getJoint(type), 
+						velocityMass += Math.abs(Calculator.calculateVelocity3D(data.get(i).getJoint(type), data.get(i + 1).getJoint(type), 
+								data.get(i).getTimestamp(), data.get(i + 1).getTimestamp()));
+						accelerationMass += Math.abs(Calculator.calculateAcceleration3D(data.get(i).getJoint(type), 
 								data.get(i + 1).getJoint(type), data.get(i + 2).getJoint(type), 
-								data.get(i).getTimestamp(), data.get(i + 1).getTimestamp(), data.get(i + 2).getTimestamp());
+								data.get(i).getTimestamp(), data.get(i + 1).getTimestamp(), data.get(i + 2).getTimestamp()));
 						
 					}
 				}
@@ -123,8 +130,16 @@ public class Experiment {
 			return trajectoryMass;
 		}
 
+		public double getVelocityMass() {
+			return velocityMass;
+		}
+		
 		public double getAccelerationMass() {
 			return accelerationMass;
+		}
+		
+		public long getDurationTime() {
+			return time;
 		}
 		
 	}

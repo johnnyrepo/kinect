@@ -25,6 +25,8 @@ public class SegmentationExperimentAnalyzer {
 				Step step = new Step();
 				step.addElement(motion.getTrajectoryMass());
 				step.addElement(motion.getAccelerationMass());
+				//step.addElement(motion.getVelocityMass());
+				//step.addElement(motion.getDurationTime());
 				step.setTimestamp(i);
 				steps.add(step);
 				i++;
@@ -42,9 +44,9 @@ public class SegmentationExperimentAnalyzer {
 			System.out.println("items = " + c.getItems().size() + " id = " + c.getId());
 			for (Clusterable cl : c.getItems()) {
 				((Step) cl).setClusterId(c.getId());
-				System.out.println(((Step) cl).getTimestamp());
+				System.out.println(((Step) cl).getTimestamp() + " = " + ((Step) cl).getElements().get(1));
 			}
-			System.out.print("-=Centroid=-");
+			System.out.print("=Centroid=");
 			for (float centr : c.getClusterMean()) {
 				System.out.print(centr + " ");
 			}

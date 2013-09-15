@@ -182,7 +182,7 @@ public class SegmentationChart extends Chart {
 			for (Clusterable cl : c.getItems()) {
 				((Step) cl).setClusterId(c.getId());
 			}
-//			System.out.print("-=Centroid=-");
+//			System.out.print("=Centroid=");
 //			for (float centr : c.getClusterMean()) {
 //				System.out.print(centr + " ");
 //			}
