@@ -98,6 +98,12 @@ public class MainController {
 						view.getTrajectoryMassMinValue());
 			}
 		});
+		view.addListenerForMarkerStateChange(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.setMarkersState(view.getMarkersState());
+			}
+		});
 		view.addListenerForSeatedMode(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -168,7 +174,7 @@ public class MainController {
 	}
 	
 	public boolean[] getMarkersState() {
-		return view.getMarkersState();
+		return model.getMarkersState();
 	}
 	
 	public void setSensorEnabled(boolean enabled) {

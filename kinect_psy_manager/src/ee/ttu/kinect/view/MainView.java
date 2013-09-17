@@ -259,6 +259,10 @@ public class MainView extends JFrame {
 		motionDetectionPanel.addListenerForCheckbox(listener);
 	}
 	
+	public void addListenerForMarkerStateChange(ActionListener listener) {
+		markersPanel.addListenerForStateChange(listener);
+	}
+	
 	public void addListenerForStandingCorrection(ActionListener listener) {
 		upTracingPanel.addStandingCorrectionListener(listener);
 	}
@@ -282,10 +286,6 @@ public class MainView extends JFrame {
 	public void showMessagePopup(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
-
-	public boolean[] getMarkersState() {
-		return markersPanel.getMarkersState();
-	}
 	
 	public long getMotionDetectionDelay() {
 		return motionDetectionPanel.getDelay();
@@ -299,6 +299,10 @@ public class MainView extends JFrame {
 		return motionDetectionPanel.getSelectedJoints();
 	}
 
+	public boolean[] getMarkersState() {
+		return markersPanel.getMarkersState();
+	}
+	
 	public void openChartSelector(List<Body> data, ChartType type) {
 		chartPanel.openChartSelector(data, type);
 	}

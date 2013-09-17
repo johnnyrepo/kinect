@@ -15,15 +15,18 @@ public class MainModel {
 	
 	private File fileToPlay;
 	
-	private final CoordinateCorrection coordinateCorrection;
+	private Markers markers;
 	
-	private final MotionProcessor processor;
+	private CoordinateCorrection coordinateCorrection;
+	
+	private MotionProcessor processor;
 	
 	private boolean motionAnalysisMode;
 		
 	public MainModel(MainController controller) {
 		sensorRunner = new SensorRunner(controller);
 		fileRunner = new FileRunner(controller);
+		markers = new Markers();
 		coordinateCorrection = new CoordinateCorrection();
 		processor = new MotionProcessor();
 	}
@@ -109,6 +112,14 @@ public class MainModel {
 		return fileRunner.getData();
 	}
 
+	public boolean[] getMarkersState() {
+		return markers.getState();
+	}
+	
+	public void setMarkersState(boolean[] state) {
+		markers.setState(state);
+	}
+	
 	public CoordinateCorrection getCoordinateCorrection() {
 		return coordinateCorrection;
 	}
