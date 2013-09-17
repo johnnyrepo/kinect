@@ -114,7 +114,7 @@ public class ExperimentPreparator {
 		initExperiments(files);
 		
 		for (File file : files) {
-			System.out.println("Analyzing file: " + file.getName());
+			System.out.println("Preparing experiment from file: \n" + file.getName());
 			try {
 				fileUtil.readFile(file);
 				List<String> data = fileUtil.readAllLines();

@@ -32,7 +32,7 @@ public class FileUtil {
 		emptyCache();
 		try {
 			String input = fileReader.readLine();
-			logger.info("opening... " + input);
+			//logger.info("opening... " + input);
 			while ((input = fileReader.readLine()) != null) {
 				addCachedString(input);
 			}
