@@ -2,7 +2,7 @@ package ee.ttu.kinect.model;
 
 public class Markers {
 
-	private boolean[] state;
+	private boolean[] state = new boolean[0];
 
 	public boolean[] getState() {
 		return state;

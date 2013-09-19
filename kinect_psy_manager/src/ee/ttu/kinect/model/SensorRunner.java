@@ -106,21 +106,11 @@ public class SensorRunner extends Runner {
 	protected void saveSkeleton() {
 		if (savingToFile) {
 			try {
-				fileUtil.addToSave(body.getJointString(seatedMode) + getMarkers());
+				fileUtil.addToSave(FrameUtil.getData(body, seatedMode, controller.getMarkersState()));
 			} catch (IOException e) {
 				logger.info(e.getLocalizedMessage());
 			}
 		}
-	}
-
-	private String getMarkers() {
-		StringBuffer markers = new StringBuffer();
-		boolean[] markersBool = controller.getMarkersState();
-		for (boolean mb : markersBool) {
-			markers = markers.append((mb ? 1 : 0)).append("\t");
-		}
-
-		return markers.toString();
 	}
 	
 	public void startRecord() {
@@ -133,7 +123,7 @@ public class SensorRunner extends Runner {
 		try {
 			savingToFile = false;
 
-			fileUtil.dumpFile(seatedMode);
+			fileUtil.dumpFile(FrameUtil.getHeader(seatedMode, controller.getMarkersState().length));
 		} catch (IOException e) {
 			logger.info(e.getLocalizedMessage());
 		}

@@ -14,59 +14,67 @@ public class SkeletonParserFile implements SkeletonParser {
 	
 	private int jointsAmount = 0;
 	
-	private List<JointType> jointTypes = new ArrayList<JointType>();
+	private int markersAmount = 0;
 	
-	public synchronized void parseMarkers(String input, Markers markers) {
-		if (input.length() > 50) {
-			String markersState[] = input.split("\\s+");
-			if (!isDataString(input)) {
-				return;
-			}
-			
-			// Parsing markers state
-			markersState = Arrays.copyOfRange(markersState, (2 + 3 * jointsAmount), markersState.length); // markers are taken
-			boolean[] markersBool = new boolean[markersState.length];
-			for (int i = 0; i < markersState.length; i++) {
-				markersBool[i] = Integer.parseInt(markersState[i]) == 1 ? true : false;
-			}
-			markers.setState(markersBool);
-		}
-	}
+	private List<JointType> jointTypes = new ArrayList<JointType>();
 	
 	@Override
 	public synchronized void parseSkeleton(String input, Body body) {
 		if (input.length() > 50) {
-			String jointCoords[] = input.split("\\s+");
-			if (!isDataString(input)) {
+			String[] data = input.split("\\s+");
+			if (!isDataString(data)) {
 				// We are dealing with header(not a row with coords)
-				jointsAmount = (jointCoords.length - 2 - 5) / 3; // -FrameId -Timestamp -5x markers
+				markersAmount = countMarkers(data);
+				jointsAmount = (data.length - 2 - markersAmount) / 3; // -FrameId -Timestamp - markers
 				jointTypes = parseJointTypes(input, jointsAmount);
 				return;
 			}
 			
-			body.setFrameNumber(Long.parseLong(jointCoords[0]));
-			body.setTimestamp(Long.parseLong(jointCoords[1]));
+			body.setFrameNumber(Long.parseLong(data[0]));
+			body.setTimestamp(Long.parseLong(data[1]));
 			
 			// Joints coords starting from third column
-			jointCoords = Arrays.copyOfRange(jointCoords, 2, (2 + 3 * jointsAmount)); // markers are ignored
+			data = Arrays.copyOfRange(data, 2, (data.length - markersAmount)); // markers are ignored
 			int jointCounter = 0;
 			double coordX = 0;
 			double coordY = 0;
 			double coordZ = 0;
-			for (int i = 0; i < jointCoords.length; i += 3) {
-				coordX = Double.parseDouble(jointCoords[i]);
-				coordY = Double.parseDouble(jointCoords[i + 1]);
-				coordZ = Double.parseDouble(jointCoords[i + 2]);
+			for (int i = 0; i < data.length; i += 3) {
+				coordX = Double.parseDouble(data[i]);
+				coordY = Double.parseDouble(data[i + 1]);
+				coordZ = Double.parseDouble(data[i + 2]);
 				parseJoint(body, jointTypes.get(jointCounter), coordX, coordY, coordZ);
 				jointCounter++;
 			}
 		}
 	}
-
-	private boolean isDataString(String input) {
-		String splitStr[] = input.split("\\s+");
+	
+	public synchronized void parseMarkers(String input, Markers markers) {
+		if (input.length() > 50) {
+			String[] data = input.split("\\s+");
+			if (!isDataString(data)) {
+				return;
+			}
+			
+			// Parsing markers state
+			data = Arrays.copyOfRange(data, (2 + 3 * jointsAmount), data.length); // markers are taken
+			boolean[] markersBool = new boolean[data.length];
+			for (int i = 0; i < data.length; i++) {
+				markersBool[i] = Integer.parseInt(data[i]) == 1 ? true : false;
+			}
+			markers.setState(markersBool);
+		}
+	}
+	
+	public void reset() {
+		jointsAmount = 0;
+		markersAmount = 0;
+		jointTypes = new ArrayList<JointType>();
+	}
+	
+	private boolean isDataString(String[] data) {
 		try {
-			Double.parseDouble(splitStr[2]);
+			Double.parseDouble(data[2]);
 		} catch(Exception e) {
 			// We are dealing with header(not a row with coords)
 			return false;
@@ -74,6 +82,16 @@ public class SkeletonParserFile implements SkeletonParser {
 		return true;
 	}
 
+	private int countMarkers(String[] data) {
+		int counter = 0;
+		for (String d : data) {
+			if (d.startsWith("Marker")) {
+				counter++;
+			}
+		}
+		return counter;
+	}
+	
 	private void parseJoint(Body body, JointType type, double positionX, double positionY, double positionZ) {
 		Joint joint = new Joint();
 		joint.setPositionX(positionX);

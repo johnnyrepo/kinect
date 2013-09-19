@@ -67,6 +67,7 @@ public class FileRunner extends Runner {
 		List<Body> data = new ArrayList<Body>();
 		Body body = new Body();
 		List<String> textData = fileUtil.readAllLines();
+		skeletonParserFile.reset();
 		for (String text : textData) {
 			try {
 				skeletonParserFile.parseSkeleton(text, body);

@@ -67,6 +67,10 @@ public class Body implements Cloneable {
 		this.timestamp = timestamp;
 	}
 	
+	public long getVeryFirstTimestamp() {
+		return veryFirstTimestamp;
+	}
+	
 	public Joint getHead() {
 		return head;
 	}
@@ -315,81 +319,6 @@ public class Body implements Cloneable {
 	
 	public boolean isBodyChanged() {
 		return !equals(oldBody);
-	}
-	
-	public static String getHeader(boolean seatedMode) {
-		StringBuffer line = new StringBuffer();
-		line = line.append("FrameId\t");
-		line = line.append("Timestamp\t");
-		
-		line = line.append(Joint.getHeader(JointType.HEAD));
-		line = line.append(Joint.getHeader(JointType.SHOULDER_CENTER));
-		if (!seatedMode) {
-			line = line.append(Joint.getHeader(JointType.SPINE));
-			line = line.append(Joint.getHeader(JointType.HIP_CENTER));
-		}
-		line = line.append(Joint.getHeader(JointType.SHOULDER_LEFT));
-		line = line.append(Joint.getHeader(JointType.ELBOW_LEFT));
-		line = line.append(Joint.getHeader(JointType.WRIST_LEFT));
-		line = line.append(Joint.getHeader(JointType.HAND_LEFT));
-		line = line.append(Joint.getHeader(JointType.SHOULDER_RIGHT));
-		line = line.append(Joint.getHeader(JointType.ELBOW_RIGHT));
-		line = line.append(Joint.getHeader(JointType.WRIST_RIGHT));
-		line = line.append(Joint.getHeader(JointType.HAND_RIGHT));
-		if (!seatedMode) {
-			line = line.append(Joint.getHeader(JointType.HIP_LEFT));
-			line = line.append(Joint.getHeader(JointType.KNEE_LEFT));
-			line = line.append(Joint.getHeader(JointType.ANKLE_LEFT));
-			line = line.append(Joint.getHeader(JointType.FOOT_LEFT));
-			line = line.append(Joint.getHeader(JointType.HIP_RIGHT));
-			line = line.append(Joint.getHeader(JointType.KNEE_RIGHT));
-			line = line.append(Joint.getHeader(JointType.ANKLE_RIGHT));
-			line = line.append(Joint.getHeader(JointType.FOOT_RIGHT));
-		}
-		
-		// Markers
-		line = line.append("Marker1\t");
-		line = line.append("Marker2\t");
-		line = line.append("Marker3\t");
-		line = line.append("Marker4\t");
-		line = line.append("Marker5\t");
-		
-		return line.toString();
-	}
-	
-	public String getJointString(boolean seatedMode) {
-		StringBuffer line = new StringBuffer();
-		if (isBodyReady()) {
-			line = line.append(frameNumber).append("\t");
-			line = line.append((timestamp - veryFirstTimestamp)).append("\t");
-			
-			line = line.append(head.toString());
-			line = line.append(shoulderCenter.toString());
-			if (!seatedMode) {
-				line = line.append(spine.toString());
-				line = line.append(hipCenter.toString());
-			}
-			line = line.append(shoulderLeft.toString());
-			line = line.append(elbowLeft.toString());
-			line = line.append(wristLeft.toString());
-			line = line.append(handLeft.toString());
-			line = line.append(shoulderRight.toString());
-			line = line.append(elbowRight.toString());
-			line = line.append(wristRight.toString());
-			line = line.append(handRight.toString());
-			if (!seatedMode) {
-				line = line.append(hipLeft.toString());
-				line = line.append(kneeLeft.toString());
-				line = line.append(ankleLeft.toString());
-				line = line.append(footLeft.toString());
-				line = line.append(hipRight.toString());
-				line = line.append(kneeRight.toString());
-				line = line.append(ankleRight.toString());
-				line = line.append(footRight.toString());
-			}
-		}
-		
-		return line.toString();
 	}
 	
 	@Override

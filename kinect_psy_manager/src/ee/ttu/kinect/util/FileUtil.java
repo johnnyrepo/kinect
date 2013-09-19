@@ -13,8 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import ee.ttu.kinect.model.Body;
-
 public class FileUtil {
 
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -42,7 +40,7 @@ public class FileUtil {
 		}
 	}
 
-	public synchronized void dumpFile(boolean seatedMode) throws IOException {
+	public synchronized void dumpFile(String header) throws IOException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd_HH-mm-ss");
 		File file = new File(System.getProperty("user.dir") + "/"
 				+ sdf.format(new Date()) + ".csv");
@@ -53,7 +51,7 @@ public class FileUtil {
 		sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		fileWriter.write(sdf.format(new Date()));
 		fileWriter.newLine();
-		fileWriter.write(Body.getHeader(seatedMode));
+		fileWriter.write(header);
 		fileWriter.newLine();
 
 		fileWriter.write(getCachedText());
