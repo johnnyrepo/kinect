@@ -40,8 +40,6 @@ public class MotionDetectionAnalyzer {
 		private JPanel chartPanel;
 
 		private JPanel summaryPanel;
-
-		private JButton printButton;
 		
 		private JButton saveImgButton;
 
@@ -63,14 +61,6 @@ public class MotionDetectionAnalyzer {
 			chartPanel.add(chart);
 
 			summaryPanel = new JPanel();
-
-			printButton = new JButton("Print");
-			printButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					printer.printToPaper();
-				}
-			});
 			
 			saveImgButton = new JButton("Save");
 			saveImgButton.addActionListener(new ActionListener() {
@@ -133,7 +123,6 @@ public class MotionDetectionAnalyzer {
 			summaryPanel.add(createLabel("Ratio (Eucl. dist. / Traj. mass): "
 					+ String.format(Locale.ENGLISH, "%-6.3f", summary.ratio)));
 			
-			summaryPanel.add(printButton);
 			summaryPanel.add(saveImgButton);
 
 			System.out.println(summary.toString());
