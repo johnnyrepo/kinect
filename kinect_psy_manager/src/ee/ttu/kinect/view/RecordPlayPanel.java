@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public class ButtonPanel extends JPanel {
+public class RecordPlayPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class ButtonPanel extends JPanel {
 
 	private JCheckBox sensorModeCheckbox;
 
-	public ButtonPanel() {
+	public RecordPlayPanel() {
 		Border border = BorderFactory.createEtchedBorder();
 		setBorder(BorderFactory.createTitledBorder(border, "Record / Play"));
 

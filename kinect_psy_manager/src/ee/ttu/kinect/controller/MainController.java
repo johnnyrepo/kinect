@@ -44,12 +44,14 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.startRecord();
+				view.setMarkersAmountChangeEnabled(false);
 			}
 		});
 		view.addListenerForStopRecord(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.stopRecord();
+				view.setMarkersAmountChangeEnabled(true);
 			}
 		});
 		view.addListenerForStartPlay(new ActionListener() {

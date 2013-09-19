@@ -28,11 +28,11 @@ public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private File fileToPlay;
-	
+
 	private File[] filesForAnalysis;
 
 	private final MotionDetectionAnalyzer motionDetectionChartOpener;
-	
+
 	private final JMenuBar menuBar;
 
 	private final JMenu menu;
@@ -43,8 +43,8 @@ public class MainView extends JFrame {
 
 	private final JFileChooser fileChooser;
 
-	private final ButtonPanel buttonPanel;
-	
+	private final RecordPlayPanel buttonPanel;
+
 	private final MotionDetectionPanel motionDetectionPanel;
 
 	private final MarkersPanel markersPanel;
@@ -75,11 +75,12 @@ public class MainView extends JFrame {
 		}
 
 		motionDetectionChartOpener = new MotionDetectionAnalyzer();
-		
+
 		menuBar = new JMenuBar();
 		menu = new JMenu("File");
 		menuItemOpen = new JMenuItem("Open");
-		menuItemPolynomialAnalyzer = new JMenuItem("Polynomial experiment analyzer");
+		menuItemPolynomialAnalyzer = new JMenuItem(
+				"Polynomial experiment analyzer");
 		menu.add(menuItemOpen);
 		menu.add(menuItemPolynomialAnalyzer);
 		menuBar.add(menu);
@@ -88,13 +89,12 @@ public class MainView extends JFrame {
 		fileChooser = new JFileChooser();
 
 		controlPanel = new JPanel();
-		controlPanel.setLayout(new BoxLayout(controlPanel,
-				BoxLayout.X_AXIS));
+		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 
-		buttonPanel = new ButtonPanel();
+		buttonPanel = new RecordPlayPanel();
 
 		motionDetectionPanel = new MotionDetectionPanel();
-		
+
 		markersPanel = new MarkersPanel();
 
 		seatedModePanel = new SeatedModePanel();
@@ -105,8 +105,7 @@ public class MainView extends JFrame {
 		controlPanel.add(seatedModePanel);
 
 		tracingPanel = new JPanel();
-		tracingPanel.setLayout(new BoxLayout(tracingPanel,
-				BoxLayout.X_AXIS));
+		tracingPanel.setLayout(new BoxLayout(tracingPanel, BoxLayout.X_AXIS));
 		frontTracingPanel = new FrontTracingPanel();
 		sideTracingPanel = new SideTracingPanel();
 		upTracingPanel = new UpTracingPanel();
@@ -154,11 +153,15 @@ public class MainView extends JFrame {
 	public void setMotionDetectionEnabled(boolean enabled) {
 		motionDetectionPanel.setMotionDetectionEnabled(enabled);
 	}
-	
+
+	public void setMarkersAmountChangeEnabled(boolean enabled) {
+		markersPanel.setAmountOfMarkersChangeEnabled(enabled);
+	}
+
 	public File getFileToPlay() {
 		return fileToPlay;
 	}
-	
+
 	public File[] getFilesForAnalysis() {
 		return filesForAnalysis;
 	}
@@ -176,7 +179,7 @@ public class MainView extends JFrame {
 	public void redrawChart(Body body, boolean seatedMode) {
 		chartPanel.updateChart(body, seatedMode);
 	}
-	
+
 	public void clearChart() {
 		chartPanel.clearChart();
 	}
@@ -201,7 +204,8 @@ public class MainView extends JFrame {
 		});
 	}
 
-	public void addListenerForMenuPolynomialAnalyzer(final ActionListener listener) {
+	public void addListenerForMenuPolynomialAnalyzer(
+			final ActionListener listener) {
 		menuItemPolynomialAnalyzer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -210,23 +214,23 @@ public class MainView extends JFrame {
 			}
 		});
 	}
-	
+
 	private File[] retrieveSelectedFiles(boolean multiSelection) {
 		fileChooser.setMultiSelectionEnabled(multiSelection);
-		fileChooser.setCurrentDirectory(new File(System
-				.getProperty("user.dir")));
+		fileChooser
+				.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		int res = fileChooser.showDialog(null, null);
 		if (res == JFileChooser.APPROVE_OPTION) {
 			if (multiSelection) {
 				return fileChooser.getSelectedFiles();
 			} else {
-				return new File[] {fileChooser.getSelectedFile()};
+				return new File[] { fileChooser.getSelectedFile() };
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	public void addListenerForSeatedMode(ActionListener listener) {
 		seatedModePanel.addLsitenerForCheckbox(listener);
 	}
@@ -258,11 +262,11 @@ public class MainView extends JFrame {
 	public void addListenerForLifeMotionDetection(ActionListener listener) {
 		motionDetectionPanel.addListenerForCheckbox(listener);
 	}
-	
+
 	public void addListenerForMarkerStateChange(ActionListener listener) {
 		markersPanel.addListenerForStateChange(listener);
 	}
-	
+
 	public void addListenerForStandingCorrection(ActionListener listener) {
 		upTracingPanel.addStandingCorrectionListener(listener);
 	}
@@ -278,7 +282,7 @@ public class MainView extends JFrame {
 	public void addListenerForSegmentationAnalysis(ActionListener listener) {
 		chartPanel.addListenerForSegmentationAnalysis(listener);
 	}
-	
+
 	public void addListenerForMotionAnalysis(ActionListener listener) {
 		chartPanel.addListenerForMotionAnalysis(listener);
 	}
@@ -286,7 +290,7 @@ public class MainView extends JFrame {
 	public void showMessagePopup(String message) {
 		JOptionPane.showMessageDialog(this, message);
 	}
-	
+
 	public long getMotionDetectionDelay() {
 		return motionDetectionPanel.getDelay();
 	}
@@ -294,7 +298,7 @@ public class MainView extends JFrame {
 	public double getTrajectoryMassMinValue() {
 		return motionDetectionPanel.getTrajectoryMassMinValue();
 	}
-	
+
 	public List<JointType> getMotionDetectionJoints() {
 		return motionDetectionPanel.getSelectedJoints();
 	}
@@ -302,16 +306,17 @@ public class MainView extends JFrame {
 	public boolean[] getMarkersState() {
 		return markersPanel.getMarkersState();
 	}
-	
+
 	public void openChartSelector(List<Body> data, ChartType type) {
 		chartPanel.openChartSelector(data, type);
 	}
 
-	public void openMotionDetectionChart(List<Body> data, List<JointType> types, 
-			double trajectoryMassSummary, double accelerationMassSummary) {
+	public void openMotionDetectionChart(List<Body> data,
+			List<JointType> types, double trajectoryMassSummary,
+			double accelerationMassSummary) {
 		motionDetectionChartOpener.open(data, types);
 	}
-	
+
 	private void performCorrection(Body body, CoordinateCorrection correction) {
 		if (correction.areCorrectionsZOn()) {
 			Map<JointType, Double> correctionsZ = correction.getCorrectionsZ();
