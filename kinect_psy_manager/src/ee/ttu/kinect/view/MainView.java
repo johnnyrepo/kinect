@@ -137,7 +137,7 @@ public class MainView extends JFrame {
 		this.setSize(1200, 700);
 		setVisible(true);
 	}
-
+	
 	public void setSensorEnabled(boolean enabled) {
 		buttonPanel.setSensorEnabled(enabled);
 	}

@@ -3,13 +3,18 @@ package ee.ttu.kinect.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
 public class MarkersPanel extends JPanel {
@@ -40,10 +45,16 @@ public class MarkersPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					markersAmount = Integer.parseInt(markersAmountField
+					int parsed = Integer.parseInt(markersAmountField
 							.getText());
+					if (parsed < 0) {
+						markersAmountField.setText("");
+						return;
+					}
+					markersAmount = parsed;
 					initMarkersCombo(markersAmount);
 				} catch (NumberFormatException nfe) {
+					markersAmountField.setText("");
 				}
 			}
 		});
@@ -60,8 +71,9 @@ public class MarkersPanel extends JPanel {
 
 	public void addListenerForStateChange(ActionListener listener) {
 		markersCombo.addActionListener(listener);
+		addKeyBidings();
 	}
-
+	
 	public boolean[] getMarkersState() {
 		boolean[] state = new boolean[markersAmount];
 		try {
@@ -74,6 +86,26 @@ public class MarkersPanel extends JPanel {
 		return state;
 	}
 
+	private void addKeyBidings() {
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0, false), "PAGE_DOWN");
+		getActionMap().put("PAGE_DOWN", new AbstractAction() {
+	        @Override
+	        public void actionPerformed(ActionEvent ae) {
+	        	markersCombo.setSelectedIndex(getNextMarkerIndex());
+	            System.out.println("PAGE_DOWN pressed");
+	        }
+	    });
+		
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0, false), "PAGE_UP");
+		getActionMap().put("PAGE_UP", new AbstractAction() {
+	        @Override
+	        public void actionPerformed(ActionEvent ae) {
+	        	markersCombo.setSelectedIndex(getPreviousMarkerIndex());
+	            System.out.println("PAGE_UP pressed");
+	        }
+	    });
+	}
+	
 	private void initMarkersCombo(int markersAmount) {
 		markersCombo.removeAllItems();
 
@@ -81,6 +113,24 @@ public class MarkersPanel extends JPanel {
 		for (int i = 0; i < markersAmount; i++) {
 			markersCombo.addItem("" + (i + 1));
 		}
+	}
+	
+	private int getNextMarkerIndex() {
+		int newIndex = markersCombo.getSelectedIndex() + 1;
+		if (newIndex == markersCombo.getItemCount()) {
+			newIndex = 0;
+		}
+		
+		return newIndex;
+	}
+	
+	private int getPreviousMarkerIndex() {
+		int newIndex = markersCombo.getSelectedIndex() - 1;
+		if (newIndex < 0) {
+			newIndex = markersCombo.getItemCount() - 1;
+		}
+		
+		return newIndex;
 	}
 
 }
