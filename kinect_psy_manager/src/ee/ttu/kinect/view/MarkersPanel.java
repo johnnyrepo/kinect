@@ -92,7 +92,6 @@ public class MarkersPanel extends JPanel {
 	        @Override
 	        public void actionPerformed(ActionEvent ae) {
 	        	markersCombo.setSelectedIndex(getNextMarkerIndex());
-	            System.out.println("PAGE_DOWN pressed");
 	        }
 	    });
 		
@@ -101,7 +100,6 @@ public class MarkersPanel extends JPanel {
 	        @Override
 	        public void actionPerformed(ActionEvent ae) {
 	        	markersCombo.setSelectedIndex(getPreviousMarkerIndex());
-	            System.out.println("PAGE_UP pressed");
 	        }
 	    });
 	}
