@@ -23,7 +23,7 @@ public class SensorRunner extends Runner {
 
 	@Override
 	public synchronized void start() {
-		body = new Body();
+		frame = new Frame();
 		
 		initKinectSensor();
 
@@ -91,14 +91,14 @@ public class SensorRunner extends Runner {
 			// Found skeleton
 			for (int i = 0; i < inputParts.length; i++) {
 				if (inputParts[i].contains("skeletonData")) {
-					skeletonParserKinect.parseSkeleton(inputParts[i], body);
+					skeletonParserKinect.parseSkeleton(inputParts[i], frame);
 					break; // TODO Do we want all skeleton frames
 					// collected
 					// in 50ms or only one frame?
 				}
 			}
 		} else { // Lost skeleton
-			skeletonParserKinect.parseSkeleton(inputParts[0], body);
+			skeletonParserKinect.parseSkeleton(inputParts[0], frame);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class SensorRunner extends Runner {
 	protected void saveSkeleton() {
 		if (savingToFile) {
 			try {
-				fileUtil.addToSave(FrameUtil.getData(body, seatedMode, controller.getMarkersState()));
+				fileUtil.addToSave(FrameUtil.getData(frame, seatedMode, controller.getMarkersState()));
 			} catch (IOException e) {
 				logger.info(e.getLocalizedMessage());
 			}
@@ -116,7 +116,7 @@ public class SensorRunner extends Runner {
 	public void startRecord() {
 		savingToFile = true;
 
-		body = new Body();
+		frame = new Frame();
 	}
 
 	public void stopRecord() {

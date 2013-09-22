@@ -2,7 +2,7 @@ package ee.ttu.kinect.view.chart;
 
 import java.util.List;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.MotionProcessor;
 
@@ -15,7 +15,7 @@ public class MotionDetectionChart extends Chart{
 	}
 
 	@Override
-	public void drawChart(List<Body> data, List<JointType> types,
+	public void drawChart(List<Frame> data, List<JointType> types,
 			boolean seatedMode) {
 		String chartTitle = "";
 		MotionSeriesComponent sc = new MotionSeriesComponent(dataset);
@@ -32,13 +32,13 @@ public class MotionDetectionChart extends Chart{
 		chart.setTitle(chartTitle);
 	}
 
-	private void drawMotionChart(MotionSeriesComponent sc, List<Body> data, List<JointType> types) {
+	private void drawMotionChart(MotionSeriesComponent sc, List<Frame> data, List<JointType> types) {
 		// Processing motions
 		MotionProcessor processor = new MotionProcessor();
 		processor.setTypes(types);
-		for (Body body : data) {
-			if (processor.process(body)) {
-				sc.updateSeries(processor.getTrajectoryMass(), body.getTimestamp());
+		for (Frame frame : data) {
+			if (processor.process(frame)) {
+				sc.updateSeries(processor.getTrajectoryMass(), frame.getTimestamp());
 			}
 		}
 	}

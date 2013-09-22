@@ -8,7 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Joint;
 
 public abstract class TracingPanel extends JPanel {
@@ -17,7 +17,7 @@ public abstract class TracingPanel extends JPanel {
 	
 	protected Graphics2D graphics;
 
-	protected Body body;
+	protected Frame frame;
 
 	private boolean seatedMode;
 	
@@ -30,8 +30,8 @@ public abstract class TracingPanel extends JPanel {
 		this.setBorder(BorderFactory.createTitledBorder(border, title));
 	}
 
-	public void redrawSkeleton(Body body, boolean seatedMode) {
-		this.body = body;
+	public void redrawSkeleton(Frame frame, boolean seatedMode) {
+		this.frame = frame;
 		this.seatedMode = seatedMode;
 		
 		this.repaint();
@@ -40,60 +40,60 @@ public abstract class TracingPanel extends JPanel {
 	@Override
 	public synchronized void paint(Graphics g) {
 		super.paint(g);
-		if (this.body != null && this.body.isBodyReady()) {
+		if (this.frame != null && this.frame.isFrameReady()) {
 			// draw joint connection
 			this.graphics = (Graphics2D) g;
-			this.drawJointLine(this.body.getHead(), this.body.getShoulderCenter());
-			this.drawJointLine(this.body.getShoulderCenter(), this.body.getShoulderLeft());
-			this.drawJointLine(this.body.getShoulderLeft(), this.body.getElbowLeft());
-			this.drawJointLine(this.body.getElbowLeft(), this.body.getWristLeft());
-			this.drawJointLine(this.body.getWristLeft(), this.body.getHandLeft());
-			this.drawJointLine(this.body.getShoulderCenter(), this.body.getShoulderRight());
-			this.drawJointLine(this.body.getShoulderRight(), this.body.getElbowRight());
-			this.drawJointLine(this.body.getElbowRight(), this.body.getWristRight());
-			this.drawJointLine(this.body.getWristRight(), this.body.getHandRight());
+			this.drawJointLine(this.frame.getHead(), this.frame.getShoulderCenter());
+			this.drawJointLine(this.frame.getShoulderCenter(), this.frame.getShoulderLeft());
+			this.drawJointLine(this.frame.getShoulderLeft(), this.frame.getElbowLeft());
+			this.drawJointLine(this.frame.getElbowLeft(), this.frame.getWristLeft());
+			this.drawJointLine(this.frame.getWristLeft(), this.frame.getHandLeft());
+			this.drawJointLine(this.frame.getShoulderCenter(), this.frame.getShoulderRight());
+			this.drawJointLine(this.frame.getShoulderRight(), this.frame.getElbowRight());
+			this.drawJointLine(this.frame.getElbowRight(), this.frame.getWristRight());
+			this.drawJointLine(this.frame.getWristRight(), this.frame.getHandRight());
 			
 			// draw joint
-			this.drawJoint(this.body.getShoulderCenter());
-			this.drawJoint(this.body.getShoulderLeft());
-			this.drawJoint(this.body.getShoulderRight());
-			this.drawJoint(this.body.getElbowLeft());
-			this.drawJoint(this.body.getElbowRight());
-			this.drawJoint(this.body.getWristLeft());
-			this.drawJoint(this.body.getWristRight());
-			this.drawJoint(this.body.getHandLeft());
-			this.drawJoint(this.body.getHandRight());
+			this.drawJoint(this.frame.getShoulderCenter());
+			this.drawJoint(this.frame.getShoulderLeft());
+			this.drawJoint(this.frame.getShoulderRight());
+			this.drawJoint(this.frame.getElbowLeft());
+			this.drawJoint(this.frame.getElbowRight());
+			this.drawJoint(this.frame.getWristLeft());
+			this.drawJoint(this.frame.getWristRight());
+			this.drawJoint(this.frame.getHandLeft());
+			this.drawJoint(this.frame.getHandRight());
 			
 			if (!this.seatedMode) {
-				this.drawJointLine(this.body.getShoulderCenter(), this.body.getSpine());
-				this.drawJointLine(this.body.getSpine(), this.body.getHipCenter());
-				this.drawJointLine(this.body.getHipCenter(), this.body.getHipLeft());
-				this.drawJointLine(this.body.getHipLeft(), this.body.getKneeLeft());
-				this.drawJointLine(this.body.getKneeLeft(), this.body.getAnkleLeft());
-				this.drawJointLine(this.body.getAnkleLeft(), this.body.getFootLeft());
-				this.drawJointLine(this.body.getHipCenter(), this.body.getHipRight());
-				this.drawJointLine(this.body.getHipRight(), this.body.getKneeRight());
-				this.drawJointLine(this.body.getKneeRight(), this.body.getAnkleRight());
-				this.drawJointLine(this.body.getAnkleRight(), this.body.getFootRight());
+				this.drawJointLine(this.frame.getShoulderCenter(), this.frame.getSpine());
+				this.drawJointLine(this.frame.getSpine(), this.frame.getHipCenter());
+				this.drawJointLine(this.frame.getHipCenter(), this.frame.getHipLeft());
+				this.drawJointLine(this.frame.getHipLeft(), this.frame.getKneeLeft());
+				this.drawJointLine(this.frame.getKneeLeft(), this.frame.getAnkleLeft());
+				this.drawJointLine(this.frame.getAnkleLeft(), this.frame.getFootLeft());
+				this.drawJointLine(this.frame.getHipCenter(), this.frame.getHipRight());
+				this.drawJointLine(this.frame.getHipRight(), this.frame.getKneeRight());
+				this.drawJointLine(this.frame.getKneeRight(), this.frame.getAnkleRight());
+				this.drawJointLine(this.frame.getAnkleRight(), this.frame.getFootRight());
 				
-				this.drawJoint(this.body.getSpine());
-				this.drawJoint(this.body.getHipCenter());
-				this.drawJoint(this.body.getHipLeft());
-				this.drawJoint(this.body.getHipRight());
-				this.drawJoint(this.body.getKneeLeft());
-				this.drawJoint(this.body.getKneeRight());
-				this.drawJoint(this.body.getAnkleLeft());
-				this.drawJoint(this.body.getAnkleRight());
-				this.drawJoint(this.body.getFootLeft());
-				this.drawJoint(this.body.getFootRight());
+				this.drawJoint(this.frame.getSpine());
+				this.drawJoint(this.frame.getHipCenter());
+				this.drawJoint(this.frame.getHipLeft());
+				this.drawJoint(this.frame.getHipRight());
+				this.drawJoint(this.frame.getKneeLeft());
+				this.drawJoint(this.frame.getKneeRight());
+				this.drawJoint(this.frame.getAnkleLeft());
+				this.drawJoint(this.frame.getAnkleRight());
+				this.drawJoint(this.frame.getFootLeft());
+				this.drawJoint(this.frame.getFootRight());
 			}
 
-			this.drawHead(this.body.getHead());
+			this.drawHead(this.frame.getHead());
 		}
 	}
 
 	public void clear() {
-		this.body = null;
+		this.frame = null;
 		this.repaint();
 	}
 	

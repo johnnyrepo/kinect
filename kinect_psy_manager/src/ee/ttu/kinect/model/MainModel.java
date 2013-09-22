@@ -107,7 +107,7 @@ public class MainModel {
 		return activeRunner.isSeatedMode();
 	}
 
-	public List<Body> getFileData() {
+	public List<Frame> getFileData() {
 		fileRunner.readFile(fileToPlay);
 		return fileRunner.getData();
 	}
@@ -125,11 +125,11 @@ public class MainModel {
 	}
 	
 	public void calculateSittingCorrection() {
-		coordinateCorrection.calculateSittingCorrection(activeRunner.body);
+		coordinateCorrection.calculateSittingCorrection(activeRunner.frame);
 	}
 	
 	public void calculateStandingCorrection() {
-		coordinateCorrection.calculateStandingCorrection(activeRunner.body);
+		coordinateCorrection.calculateStandingCorrection(activeRunner.frame);
 	}
 	
 	public void turnStandingCorrectionOff() {
@@ -158,11 +158,11 @@ public class MainModel {
 		processor.setDelay(delay);
 	}
 	
-	public boolean isMotionEnded(Body body) {
+	public boolean isMotionEnded(Frame frame) {
 		boolean isProcessed = false;
 		boolean isMotionEnded = false;
-		if (body != null && body.isBodyReady()) {
-			isProcessed = processor.process(body);
+		if (frame != null && frame.isFrameReady()) {
+			isProcessed = processor.process(frame);
 			if (isProcessed) {
 				isMotionEnded = processor.isMotionEnded();
 //				if (isMotionEnded) {
@@ -175,7 +175,7 @@ public class MainModel {
 		return (isProcessed && isMotionEnded);
 	}
 
-	public List<Body> getMotionData() {
+	public List<Frame> getMotionData() {
 		return processor.getDataSummary();
 	}
 

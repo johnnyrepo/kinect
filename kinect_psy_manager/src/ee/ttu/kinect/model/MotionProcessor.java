@@ -15,9 +15,9 @@ public class MotionProcessor {
 
 	private double velocityMass;
 
-	private List<Body> data;
+	private List<Frame> data;
 
-	private List<Body> dataSummary;
+	private List<Frame> dataSummary;
 
 	private double trajectoryMassSummary;
 
@@ -58,24 +58,24 @@ public class MotionProcessor {
 		accelerationMass = 0;
 		velocityMass = 0;
 
-		dataSummary = new ArrayList<Body>();
-		data = new ArrayList<Body>();
+		dataSummary = new ArrayList<Frame>();
+		data = new ArrayList<Frame>();
 
 		firstTimestamp = 0;
 
 	}
 
-	public boolean process(Body body) {
+	public boolean process(Frame frame) {
 		// set very first timestamp if processing has been just started
 		if (data.size() == 0) {
-			firstTimestamp = body.getTimestamp();
+			firstTimestamp = frame.getTimestamp();
 		}
 		// clean if left from previous processor cycle
 		if (data.size() == windowSize) {
 			clean();
 		}
-		data.add(body);
-		dataSummary.add(body);
+		data.add(frame);
+		dataSummary.add(frame);
 		if (data.size() == windowSize) {
 			analyze();
 			return true;
@@ -133,7 +133,7 @@ public class MotionProcessor {
 		return types;
 	}
 
-	public List<Body> getDataSummary() {
+	public List<Frame> getDataSummary() {
 		return dataSummary;
 	}
 

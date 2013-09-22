@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.CoordinateCorrection;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.view.chart.MotionDetectionAnalyzer;
@@ -166,18 +166,18 @@ public class MainView extends JFrame {
 		return filesForAnalysis;
 	}
 
-	public void redrawSkeleton(Body body, boolean seatedMode,
+	public void redrawSkeleton(Frame frame, boolean seatedMode,
 			CoordinateCorrection correction) {
 		// perform coordinate correction, if needed
-		performCorrection(body, correction);
+		performCorrection(frame, correction);
 
-		frontTracingPanel.redrawSkeleton(body, seatedMode);
-		sideTracingPanel.redrawSkeleton(body, seatedMode);
-		upTracingPanel.redrawSkeleton(body, seatedMode);
+		frontTracingPanel.redrawSkeleton(frame, seatedMode);
+		sideTracingPanel.redrawSkeleton(frame, seatedMode);
+		upTracingPanel.redrawSkeleton(frame, seatedMode);
 	}
 
-	public void redrawChart(Body body, boolean seatedMode) {
-		chartPanel.updateChart(body, seatedMode);
+	public void redrawChart(Frame frame, boolean seatedMode) {
+		chartPanel.updateChart(frame, seatedMode);
 	}
 
 	public void clearChart() {
@@ -307,22 +307,22 @@ public class MainView extends JFrame {
 		return markersPanel.getMarkersState();
 	}
 
-	public void openChartSelector(List<Body> data, ChartType type) {
+	public void openChartSelector(List<Frame> data, ChartType type) {
 		chartPanel.openChartSelector(data, type);
 	}
 
-	public void openMotionDetectionChart(List<Body> data,
+	public void openMotionDetectionChart(List<Frame> data,
 			List<JointType> types, double trajectoryMassSummary,
 			double accelerationMassSummary) {
 		motionDetectionChartOpener.open(data, types);
 	}
 
-	private void performCorrection(Body body, CoordinateCorrection correction) {
+	private void performCorrection(Frame frame, CoordinateCorrection correction) {
 		if (correction.areCorrectionsZOn()) {
 			Map<JointType, Double> correctionsZ = correction.getCorrectionsZ();
 			for (JointType type : correctionsZ.keySet()) {
-				double oldPositionZ = body.getJoint(type).getPositionZ();
-				body.getJoint(type).setPositionZ(
+				double oldPositionZ = frame.getJoint(type).getPositionZ();
+				frame.getJoint(type).setPositionZ(
 						oldPositionZ + correctionsZ.get(type));
 			}
 		}
@@ -330,8 +330,8 @@ public class MainView extends JFrame {
 		if (correction.areCorrectionsYOn()) {
 			Map<JointType, Double> correctionsY = correction.getCorrectionsY();
 			for (JointType type : correctionsY.keySet()) {
-				double oldPositionY = body.getJoint(type).getPositionY();
-				body.getJoint(type).setPositionY(
+				double oldPositionY = frame.getJoint(type).getPositionY();
+				frame.getJoint(type).setPositionY(
 						oldPositionY + correctionsY.get(type));
 			}
 		}

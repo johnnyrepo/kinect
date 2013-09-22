@@ -9,7 +9,7 @@ public class ModelProcessor {
 
 	private static final int DATA_SIZE_FOR_CALCULATION = 3;
 
-	private List<Body> data;
+	private List<Frame> data;
 
 	private double velocityX;
 	private double velocityY;
@@ -31,15 +31,15 @@ public class ModelProcessor {
 	}
 	
 	public void reset() {
-		data = new ArrayList<Body>();
+		data = new ArrayList<Frame>();
 	}
 	
-	public boolean process(Body body) {
+	public boolean process(Frame frame) {
 		if (data.size() == DATA_SIZE_FOR_CALCULATION) {
 			clean();
 		}
 		
-		data.add(body);
+		data.add(frame);
 		
 		if (data.size() == DATA_SIZE_FOR_CALCULATION) {
 			analyze();

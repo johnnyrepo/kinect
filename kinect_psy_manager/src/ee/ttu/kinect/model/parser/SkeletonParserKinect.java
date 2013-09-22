@@ -16,7 +16,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
@@ -28,12 +28,12 @@ public class SkeletonParserKinect implements SkeletonParser {
 	
 
 	//private int oldNumSkeletons = -1;
-	private long frame = -1;
+	private long frameNumber = -1;
 	private long timestamp = -1;
 
 	public void reset() {
 		//this.oldNumSkeletons = -1;
-		frame = -1;
+		frameNumber = -1;
 	}
 
 	public SkeletonParserKinect() {
@@ -41,7 +41,7 @@ public class SkeletonParserKinect implements SkeletonParser {
 	}
 
 	@Override
-	public void parseSkeleton(String input, Body body) {
+	public void parseSkeleton(String input, Frame frame) {
         XMLStreamReader streamReader;
 		try {
 			streamReader = inputFactory.createXMLStreamReader(new StringReader(input));
@@ -50,13 +50,13 @@ public class SkeletonParserKinect implements SkeletonParser {
 				if (streamReader.isStartElement()) {
 					if (streamReader.getLocalName().equals("frameId")) {
 						int currentFrame = Integer.parseInt(streamReader.getElementText());
-						if (currentFrame > frame) { // TODO I receive the same document multiple times
-							frame = currentFrame;
+						if (currentFrame > frameNumber) { // TODO I receive the same document multiple times
+							frameNumber = currentFrame;
 							streamReader.next();
 							if (streamReader.getLocalName().equals("timestamp")) {
 								timestamp = Long.parseLong(streamReader.getElementText());
-								body.setTimestamp(timestamp);
-								body.setFrameNumber(frame);
+								frame.setTimestamp(timestamp);
+								frame.setFrameNumber(frameNumber);
 								streamReader.nextTag(); // moving to 'skeletonData' tag
 								if (streamReader.getLocalName().equals("skeletonData")) {
 									//logger.info("Found skeleton");
@@ -89,7 +89,7 @@ public class SkeletonParserKinect implements SkeletonParser {
 													jointId = streamReader.getElementText();
 												}
 												
-												updateBody(body, parseJoint(jointId, positionX, positionY, positionZ));
+												updateBody(frame, parseJoint(jointId, positionX, positionY, positionZ));
 												
 												streamReader.next();
 											} else {
@@ -125,67 +125,67 @@ public class SkeletonParserKinect implements SkeletonParser {
 		return Double.parseDouble(pos);
 	}
 	
-	private void updateBody(Body body, Joint joint) {
+	private void updateBody(Frame frame, Joint joint) {
 		switch (joint.getType()) {
 		case ANKLE_LEFT:
-			body.setAnkleLeft(joint);
+			frame.setAnkleLeft(joint);
 			break;
 		case ANKLE_RIGHT:
-			body.setAnkleRight(joint);
+			frame.setAnkleRight(joint);
 			break;
 		case ELBOW_LEFT:
-			body.setElbowLeft(joint);
+			frame.setElbowLeft(joint);
 			break;
 		case ELBOW_RIGHT:
-			body.setElbowRight(joint);
+			frame.setElbowRight(joint);
 			break;
 		case FOOT_LEFT:
-			body.setFootLeft(joint);
+			frame.setFootLeft(joint);
 			break;
 		case FOOT_RIGHT:
-			body.setFootRight(joint);
+			frame.setFootRight(joint);
 			break;
 		case HAND_LEFT:
-			body.setHandLeft(joint);
+			frame.setHandLeft(joint);
 			break;
 		case HAND_RIGHT:
-			body.setHandRight(joint);
+			frame.setHandRight(joint);
 			break;
 		case HEAD:
-			body.setHead(joint);
+			frame.setHead(joint);
 			break;
 		case HIP_CENTER:
-			body.setHipCenter(joint);
+			frame.setHipCenter(joint);
 			break;
 		case HIP_LEFT:
-			body.setHipLeft(joint);
+			frame.setHipLeft(joint);
 			break;
 		case HIP_RIGHT:
-			body.setHipRight(joint);
+			frame.setHipRight(joint);
 			break;
 		case KNEE_LEFT:
-			body.setKneeLeft(joint);
+			frame.setKneeLeft(joint);
 			break;
 		case KNEE_RIGHT:
-			body.setKneeRight(joint);
+			frame.setKneeRight(joint);
 			break;
 		case SHOULDER_CENTER:
-			body.setShoulderCenter(joint);
+			frame.setShoulderCenter(joint);
 			break;
 		case SHOULDER_LEFT:
-			body.setShoulderLeft(joint);
+			frame.setShoulderLeft(joint);
 			break;
 		case SHOULDER_RIGHT:
-			body.setShoulderRight(joint);
+			frame.setShoulderRight(joint);
 			break;
 		case SPINE:
-			body.setSpine(joint);
+			frame.setSpine(joint);
 			break;
 		case WRIST_LEFT:
-			body.setWristLeft(joint);
+			frame.setWristLeft(joint);
 			break;
 		case WRIST_RIGHT:
-			body.setWristRight(joint);
+			frame.setWristRight(joint);
 			break;
 		}
 	}

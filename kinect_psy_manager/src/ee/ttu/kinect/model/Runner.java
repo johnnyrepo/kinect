@@ -14,7 +14,7 @@ public abstract class Runner {
 
 	protected MainController controller;
 
-	protected Body body;
+	protected Frame frame;
 
 	protected FileUtil fileUtil;
 	
@@ -29,7 +29,7 @@ public abstract class Runner {
 	
 	public Runner(MainController controller) {
 		this.controller = controller;
-		body = new Body();
+		frame = new Frame();
 		fileUtil = new FileUtil();
 	}
 
@@ -83,7 +83,7 @@ public abstract class Runner {
 
 	protected abstract void saveSkeleton();
 
-	private class Worker extends SwingWorker<Void, Body> {
+	private class Worker extends SwingWorker<Void, Frame> {
 
 		@Override
 		public synchronized Void doInBackground() {
@@ -97,11 +97,11 @@ public abstract class Runner {
 				input = getSkeletonData();
 				if (input != null) {
 					parseSkeleton(input);
-					// render body
-					if (body != null && body.isBodyReady()
-							&& body.isBodyChanged()) {
+					// render frame
+					if (frame != null && frame.isFrameReady()
+							&& frame.isFrameChanged()) {
 						try {
-							Body clone = body.clone();
+							Frame clone = frame.clone();
 							publish(clone);
 						} catch (CloneNotSupportedException e) {
 							logger.info(e.getLocalizedMessage());
@@ -111,8 +111,8 @@ public abstract class Runner {
 					}
 				}
 
-				// archive body
-				body.archive();
+				// archive frame
+				frame.archive();
 				
 				// Sleep for X ms
 				try {
@@ -125,8 +125,8 @@ public abstract class Runner {
 		}
 
 		@Override
-		protected void process(List<Body> chunks) {
-			for (Body chunk : chunks) {
+		protected void process(List<Frame> chunks) {
+			for (Frame chunk : chunks) {
 				// Redraw the skeleton
 				controller.redrawSkeleton(chunk);
 				// Redraw chart

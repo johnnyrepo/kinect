@@ -17,13 +17,13 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.view.ChartType;
 
 public class ChartSelector {
 	
-	public void open(List<Body> data, ChartType type) {
+	public void open(List<Frame> data, ChartType type) {
 		new ChartSelectorFrame(data, type);
 		//clearCharts();
 	}
@@ -32,7 +32,7 @@ public class ChartSelector {
 		
 		private static final long serialVersionUID = 1L;
 	
-		private List<Body> data;
+		private List<Frame> data;
 		
 		private ChartType type;
 	
@@ -48,7 +48,7 @@ public class ChartSelector {
 	
 		private JPanel chartsPanel;
 	
-		public ChartSelectorFrame(List<Body> data, ChartType type) {
+		public ChartSelectorFrame(List<Frame> data, ChartType type) {
 			this.data = data;
 			this.type = type;
 			

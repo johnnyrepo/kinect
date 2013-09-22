@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.ttu.kinect.calc.Calculator;
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.JointType;
 
 public class Experiment {
@@ -26,7 +26,7 @@ public class Experiment {
 		return motions;
 	}
 	
-	public void addMotion(List<Body> motionData) {
+	public void addMotion(List<Frame> motionData) {
 		Motion motion = new Motion(motionData);
 		motions.add(motion);
 	}
@@ -81,7 +81,7 @@ public class Experiment {
 	
 	class Motion {
 		
-		private List<Body> data;
+		private List<Frame> data;
 		
 		private boolean correct;
 		
@@ -93,7 +93,7 @@ public class Experiment {
 		
 		private long time;
 
-		public Motion(List<Body> data) {
+		public Motion(List<Frame> data) {
 			this.data = data;
 			calculateMasses();
 			time = (data.get(data.size() - 1)).getTimestamp() - data.get(0).getTimestamp();

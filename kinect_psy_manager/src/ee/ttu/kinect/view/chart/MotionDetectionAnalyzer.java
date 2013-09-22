@@ -16,13 +16,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ee.ttu.kinect.calc.Calculator;
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
 public class MotionDetectionAnalyzer {
 
-	public void open(List<Body> data, List<JointType> types) {
+	public void open(List<Frame> data, List<JointType> types) {
 		new MotionDetectionChartFrame(data, types);
 	}
 
@@ -43,7 +43,7 @@ public class MotionDetectionAnalyzer {
 		
 		private JButton saveImgButton;
 
-		private MotionDetectionChartFrame(List<Body> data, List<JointType> types) {
+		private MotionDetectionChartFrame(List<Frame> data, List<JointType> types) {
 			setTitle("Motion has been detected!");
 			setSize(800, 600);
 			setResizable(false);
@@ -83,7 +83,7 @@ public class MotionDetectionAnalyzer {
 			setVisible(true);
 		}
 		
-		private void calculateSummaries(List<Body> data, List<JointType> types) {
+		private void calculateSummaries(List<Frame> data, List<JointType> types) {
 			summary.frameStart = data.get(0).getFrameNumber();
 			summary.frameEnd = data.get(data.size() - 1).getFrameNumber();
 			summary.startTime = data.get(0).getTimestamp();
@@ -100,7 +100,7 @@ public class MotionDetectionAnalyzer {
 			summary.ratio = summary.eucledianDistance / summary.trajectoryMassSummary;
 		}
 
-		private void drawChart(List<Body> data, List<JointType> types) {
+		private void drawChart(List<Frame> data, List<JointType> types) {
 			chart.drawChart(data, types, false);
 		}
 
@@ -135,7 +135,7 @@ public class MotionDetectionAnalyzer {
 			return label;
 		}
 
-		private double calculateTrajectoryMass(List<Body> data, JointType type) {
+		private double calculateTrajectoryMass(List<Frame> data, JointType type) {
 			double trajectoryMass = 0;
 			for (int i = 0; i < data.size(); i++) {
 				if (i + 1 >= data.size()) {
@@ -150,7 +150,7 @@ public class MotionDetectionAnalyzer {
 			return trajectoryMass;
 		}
 
-		private double calculateAccelerationMass(List<Body> data, JointType type) {
+		private double calculateAccelerationMass(List<Frame> data, JointType type) {
 			double accelerationMass = 0;
 			for (int i = 0; i < data.size(); i++) {
 				if (i + 2 >= data.size()) {
@@ -179,7 +179,7 @@ public class MotionDetectionAnalyzer {
 			return accelerationMass;
 		}
 
-		private double calculateEucledianDistance(List<Body> data,
+		private double calculateEucledianDistance(List<Frame> data,
 				JointType type) {
 			System.out.println("eucl size " + data.size());
 			return Calculator.calculateTrajectoryLength3D(

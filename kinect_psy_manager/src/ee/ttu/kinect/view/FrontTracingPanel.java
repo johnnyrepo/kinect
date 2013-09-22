@@ -48,8 +48,8 @@ public class FrontTracingPanel extends TracingPanel {
     public synchronized void paint(Graphics g) {
 	    super.paint(g);
 	    
-	    if (this.body != null && this.body.isBodyReady()) {
-	        this.updateCoordLabel(this.body.getHead());
+	    if (this.frame != null && this.frame.isFrameReady()) {
+	        this.updateCoordLabel(this.frame.getHead());
 	    }
 	}
 

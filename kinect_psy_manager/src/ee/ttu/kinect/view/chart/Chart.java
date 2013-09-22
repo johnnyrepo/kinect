@@ -15,7 +15,7 @@ import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.TimeSeriesCollection;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.JointType;
 
 public abstract class Chart extends JPanel {
@@ -49,14 +49,14 @@ public abstract class Chart extends JPanel {
 		}
 	}
 
-//	public void drawChart(List<Body> data, JointType selectedType,
+//	public void drawChart(List<Frame> data, JointType selectedType,
 //			boolean seatedMode) {
 //		List<JointType> types = new ArrayList<JointType>();
 //		types.add(selectedType);
 //		drawChart(data, types, seatedMode);
 //	}
 
-	public abstract void drawChart(List<Body> data,
+	public abstract void drawChart(List<Frame> data,
 			List<JointType> selectedTypes, boolean seatedMode);
 
 }

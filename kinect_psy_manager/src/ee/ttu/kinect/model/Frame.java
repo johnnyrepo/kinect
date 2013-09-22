@@ -3,9 +3,9 @@ package ee.ttu.kinect.model;
 import java.util.logging.Logger;
 
 
-public class Body implements Cloneable {
+public class Frame implements Cloneable {
 
-	private Body oldBody;
+	private Frame oldFrame;
 	
 	private Long frameNumber;
 	private Long timestamp;
@@ -35,17 +35,17 @@ public class Body implements Cloneable {
 	private final Logger logger = Logger.getLogger(getClass().getName());
 
 	public void archive() {
-		if (isBodyReady()) {
+		if (isFrameReady()) {
 			try {
-				oldBody = clone();
+				oldFrame = clone();
 			} catch (CloneNotSupportedException e) {
 				logger.info(e.getLocalizedMessage());
 			}
 		}
 	}
 	
-	public Body getOldBody() {
-		return oldBody;
+	public Frame getOldFrame() {
+		return oldFrame;
 	}
 	
 	public Long getFrameNumber() {
@@ -299,14 +299,14 @@ public class Body implements Cloneable {
 		return joint;
 	}
 
-	public boolean isBodyReady() {
+	public boolean isFrameReady() {
 		return elbowLeft != null && elbowRight != null
 				&& handLeft != null && handRight != null && head != null
 				&& shoulderCenter != null && shoulderLeft != null
 				&& shoulderRight != null && wristLeft != null && wristRight != null;
 	}
 	
-//	public boolean isBodyReady() {
+//	public boolean isFrameReady() {
 //		return ankleLeft != null && ankleRight != null && elbowLeft != null
 //				&& elbowRight != null && footLeft != null && footRight != null
 //				&& handLeft != null && handRight != null && head != null
@@ -317,13 +317,13 @@ public class Body implements Cloneable {
 //				&& wristRight != null;
 //	}
 	
-	public boolean isBodyChanged() {
-		return !equals(oldBody);
+	public boolean isFrameChanged() {
+		return !equals(oldFrame);
 	}
 	
 	@Override
-	public Body clone() throws CloneNotSupportedException {
-		return (Body) super.clone();
+	public Frame clone() throws CloneNotSupportedException {
+		return (Frame) super.clone();
 	}
 
 	@Override
@@ -334,7 +334,7 @@ public class Body implements Cloneable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Body other = (Body) obj;
+		Frame other = (Frame) obj;
 		if (ankleLeft == null) {
 			if (other.ankleLeft != null)
 				return false;
@@ -415,10 +415,10 @@ public class Body implements Cloneable {
 				return false;
 		} else if (!logger.equals(other.logger))
 			return false;
-		if (oldBody == null) {
-			if (other.oldBody != null)
+		if (oldFrame == null) {
+			if (other.oldFrame != null)
 				return false;
-		} else if (!oldBody.equals(other.oldBody))
+		} else if (!oldFrame.equals(other.oldFrame))
 			return false;
 		if (shoulderCenter == null) {
 			if (other.shoulderCenter != null)

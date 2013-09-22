@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.MainModel;
 import ee.ttu.kinect.model.experiment.SegmentationExperimentAnalyzer;
 import ee.ttu.kinect.view.ChartType;
@@ -163,12 +163,12 @@ public class MainController {
 		model.startSensorRun();
 	}
 
-	public void redrawSkeleton(Body body) {
-		view.redrawSkeleton(body, model.isSeatedMode(), model.getCoordinateCorrection());
+	public void redrawSkeleton(Frame frame) {
+		view.redrawSkeleton(frame, model.isSeatedMode(), model.getCoordinateCorrection());
 	}
 	
-	public void redrawChart(Body body) {
-		view.redrawChart(body, model.isSeatedMode());
+	public void redrawChart(Frame frame) {
+		view.redrawChart(frame, model.isSeatedMode());
 	}
 	
 	public void showMessagePopup(String message) {
@@ -184,12 +184,12 @@ public class MainController {
 		view.setRecordingEnabled(enabled);
 	}
 
-	public void analyzeMotion(Body body) {		
+	public void analyzeMotion(Frame frame) {		
 		if (!model.isMotionAnalysisMode()) {
 			return;
 		}
 		
-		if (model.isMotionEnded(body)) {
+		if (model.isMotionEnded(frame)) {
 			view.setMotionDetectionEnabled(false); // TODO: make the controller and model in sync
 			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoints(), view.getTrajectoryMassMinValue());
 			//view.showMessagePopup("Motion has ended");

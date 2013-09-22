@@ -24,7 +24,7 @@ import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.time.TimeSeriesDataItem;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.JointType;
 import ee.ttu.kinect.model.ModelProcessor;
 import ee.ttu.kinect.view.ChartType;
@@ -152,14 +152,6 @@ public class TracingChartPanel extends JPanel {
 		add(chartControlPanel);
 		add(chartPanel);
 	}
-	
-	// XYPlot plot = (XYPlot) (chart.getPlot());
-	// plot.getRenderer().setSeriesPaint(0, Color.RED);
-	// plot.getRenderer().setSeriesPaint(1, Color.GREEN);
-	// plot.getRenderer().setSeriesPaint(2, Color.BLUE);
-	// plot.getRenderer().setSeriesPaint(3, Color.YELLOW);
-	// plot.getRenderer().setSeriesPaint(4, Color.MAGENTA);
-	// plot.getRenderer().setSeriesPaint(5, Color.CYAN);
 
 	private class ChartControlChangeListener implements ActionListener {
 		@Override
@@ -257,7 +249,7 @@ public class TracingChartPanel extends JPanel {
 		motionAnalysisButton.addActionListener(listener);
 	}
 	
-	public void openChartSelector(List<Body> data, ChartType type) {
+	public void openChartSelector(List<Frame> data, ChartType type) {
 		chartSelector.open(data, type);
 	}
 
@@ -272,7 +264,7 @@ public class TracingChartPanel extends JPanel {
 		processor.reset();
 	}
 	
-	public void updateChart(Body body, boolean seatedMode) {		
+	public void updateChart(Frame frame, boolean seatedMode) {		
 		if (!velocityXCheckbox.isSelected() 
 				&& !velocityYCheckbox.isSelected()
 				&& !velocityZCheckbox.isSelected()
@@ -281,16 +273,9 @@ public class TracingChartPanel extends JPanel {
 				&& !accelerationZCheckbox.isSelected()) {
 			return;
 		}
-		if (body == null || !body.isBodyReady()) {
+		if (frame == null || !frame.isFrameReady()) {
 			return;
 		}
-//		Body oldBody = body.getOldBody();
-//		Body oldOldBody = (oldBody == null) ? null : oldBody.getOldBody();
-//		if (body == null || !body.isBodyReady() 
-//				|| oldBody == null || !oldBody.isBodyReady() 
-//				|| oldOldBody == null || !oldOldBody.isBodyReady()) {
-//			return;
-//		}
 		
 		JointType type = (JointType) jointCombo.getSelectedItem();
 		if (seatedMode
@@ -309,26 +294,14 @@ public class TracingChartPanel extends JPanel {
 		
 		processor.setType(type);
 		
-		//System.out.print("frame nr. " + body.getFrameNumber() + " ");
-		if (processor.process(body)) {
-			updateVelocity(body.getTimestamp(), processor.getVelocityX(), processor.getVelocityY(), processor.getVelocityZ());
-			updateAcceleration(body.getTimestamp(), processor.getAccelerationX(), processor.getAccelerationY(), processor.getAccelerationZ());
+		if (processor.process(frame)) {
+			updateVelocity(frame.getTimestamp(), processor.getVelocityX(), processor.getVelocityY(), processor.getVelocityZ());
+			updateAcceleration(frame.getTimestamp(), processor.getAccelerationX(), processor.getAccelerationY(), processor.getAccelerationZ());
 		}
-		
-		
-//		updateVelocity(body.getTimestamp(),
-//				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionX(), body.getJoint(type).getPositionX(), oldBody.getTimestamp(), body.getTimestamp()),
-//				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionY(), body.getJoint(type).getPositionY(), oldBody.getTimestamp(), body.getTimestamp()),
-//				Calculator.calculateVelocity(oldBody.getJoint(type).getPositionZ(), body.getJoint(type).getPositionZ(), oldBody.getTimestamp(), body.getTimestamp()));
-//		updateAcceleration(body.getTimestamp(),
-//				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionX(), oldBody.getJoint(type).getPositionX(), body.getJoint(type).getPositionX(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()),
-//				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionY(), oldBody.getJoint(type).getPositionY(), body.getJoint(type).getPositionY(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()),
-//				Calculator.calculateAcceleration(oldOldBody.getJoint(type).getPositionZ(), oldBody.getJoint(type).getPositionZ(), body.getJoint(type).getPositionZ(), oldOldBody.getTimestamp(), oldBody.getTimestamp(), body.getTimestamp()));
 	}
 
 	private void updateVelocity(long timestamp, double velocityX,
 			double velocityY, double velocityZ) {
-//		System.out.printf("hoj2 %f %f %f \n", velocityX, velocityY, velocityZ);
 		seriesVelocityX.addOrUpdate(new TimeSeriesDataItem(
 				new FixedMillisecond(timestamp), velocityX));
 		seriesVelocityY.addOrUpdate(new TimeSeriesDataItem(
@@ -339,7 +312,6 @@ public class TracingChartPanel extends JPanel {
 
 	private void updateAcceleration(long timestamp, double accelerationX,
 			double accelerationY, double accelerationZ) {
-//		System.out.printf("hoj2 %f %f %f \n", accelerationX, accelerationY, accelerationZ);
 		seriesAccelerationX.addOrUpdate(new TimeSeriesDataItem(
 				new FixedMillisecond(timestamp), accelerationX));
 		seriesAccelerationY.addOrUpdate(new TimeSeriesDataItem(

@@ -40,39 +40,39 @@ public class FrameUtil {
 		return line.toString();
 	}
 	
-	public static String getData(Body body, boolean seatedMode, boolean[] markersState) {
-		return getJoints(body, seatedMode) + getMarkers(markersState);
+	public static String getData(Frame frame, boolean seatedMode, boolean[] markersState) {
+		return getJoints(frame, seatedMode) + getMarkers(markersState);
 	}
 	
-	private static String getJoints(Body body, boolean seatedMode) {
+	private static String getJoints(Frame frame, boolean seatedMode) {
 		StringBuffer line = new StringBuffer();
-		if (body.isBodyReady()) {
-			line = line.append(body.getFrameNumber()).append("\t");
-			line = line.append((body.getTimestamp() - body.getVeryFirstTimestamp())).append("\t");
+		if (frame.isFrameReady()) {
+			line = line.append(frame.getFrameNumber()).append("\t");
+			line = line.append((frame.getTimestamp() - frame.getVeryFirstTimestamp())).append("\t");
 			
-			line = line.append(body.getHead().toString());
-			line = line.append(body.getShoulderCenter().toString());
+			line = line.append(frame.getHead().toString());
+			line = line.append(frame.getShoulderCenter().toString());
 			if (!seatedMode) {
-				line = line.append(body.getSpine().toString());
-				line = line.append(body.getHipCenter().toString());
+				line = line.append(frame.getSpine().toString());
+				line = line.append(frame.getHipCenter().toString());
 			}
-			line = line.append(body.getShoulderLeft().toString());
-			line = line.append(body.getElbowLeft().toString());
-			line = line.append(body.getWristLeft().toString());
-			line = line.append(body.getHandLeft().toString());
-			line = line.append(body.getShoulderRight().toString());
-			line = line.append(body.getElbowRight().toString());
-			line = line.append(body.getWristRight().toString());
-			line = line.append(body.getHandRight().toString());
+			line = line.append(frame.getShoulderLeft().toString());
+			line = line.append(frame.getElbowLeft().toString());
+			line = line.append(frame.getWristLeft().toString());
+			line = line.append(frame.getHandLeft().toString());
+			line = line.append(frame.getShoulderRight().toString());
+			line = line.append(frame.getElbowRight().toString());
+			line = line.append(frame.getWristRight().toString());
+			line = line.append(frame.getHandRight().toString());
 			if (!seatedMode) {
-				line = line.append(body.getHipLeft().toString());
-				line = line.append(body.getKneeLeft().toString());
-				line = line.append(body.getAnkleLeft().toString());
-				line = line.append(body.getFootLeft().toString());
-				line = line.append(body.getHipRight().toString());
-				line = line.append(body.getKneeRight().toString());
-				line = line.append(body.getAnkleRight().toString());
-				line = line.append(body.getFootRight().toString());
+				line = line.append(frame.getHipLeft().toString());
+				line = line.append(frame.getKneeLeft().toString());
+				line = line.append(frame.getAnkleLeft().toString());
+				line = line.append(frame.getFootLeft().toString());
+				line = line.append(frame.getHipRight().toString());
+				line = line.append(frame.getKneeRight().toString());
+				line = line.append(frame.getAnkleRight().toString());
+				line = line.append(frame.getFootRight().toString());
 			}
 		}
 		

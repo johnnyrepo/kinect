@@ -20,7 +20,7 @@ public class FileRunner extends Runner {
 
 	@Override
 	public synchronized void start() {
-		body = new Body();
+		frame = new Frame();
 		
 		super.start();
 	}
@@ -42,7 +42,7 @@ public class FileRunner extends Runner {
 
 	@Override
 	protected synchronized void parseSkeleton(String input) {
-		skeletonParserFile.parseSkeleton(input, body);
+		skeletonParserFile.parseSkeleton(input, frame);
 	}
 
 	@Override
@@ -63,16 +63,16 @@ public class FileRunner extends Runner {
 		return skeletonParserFile.isSeatedMode();
 	}
 
-	public List<Body> getData() {
-		List<Body> data = new ArrayList<Body>();
-		Body body = new Body();
+	public List<Frame> getData() {
+		List<Frame> data = new ArrayList<Frame>();
+		Frame frame = new Frame();
 		List<String> textData = fileUtil.readAllLines();
 		skeletonParserFile.reset();
 		for (String text : textData) {
 			try {
-				skeletonParserFile.parseSkeleton(text, body);
-				if (body.isBodyReady() && body.isBodyChanged()) {
-					Body clone = body.clone();
+				skeletonParserFile.parseSkeleton(text, frame);
+				if (frame.isFrameReady() && frame.isFrameChanged()) {
+					Frame clone = frame.clone();
 					data.add(clone);
 				}
 			} catch (CloneNotSupportedException e) {

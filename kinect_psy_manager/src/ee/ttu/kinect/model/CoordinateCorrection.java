@@ -15,25 +15,25 @@ public class CoordinateCorrection {
 	}
 	
 	// joint coordinates corrections for "standing" body
-	public void calculateStandingCorrection(Body body) {		
+	public void calculateStandingCorrection(Frame frame) {		
 		for (JointType type : JointType.values()) {
 			if (type != JointType.SPINE && type != JointType.HEAD) {
 				double correctionZ = 0;
 				switch (type) {
 					case ANKLE_LEFT: 
-						correctionZ = body.getJoint(JointType.KNEE_LEFT).getPositionZ() - body.getJoint(type).getPositionZ();
+						correctionZ = frame.getJoint(JointType.KNEE_LEFT).getPositionZ() - frame.getJoint(type).getPositionZ();
 						break;
 					case ANKLE_RIGHT:
-						correctionZ = body.getJoint(JointType.KNEE_RIGHT).getPositionZ() - body.getJoint(type).getPositionZ();
+						correctionZ = frame.getJoint(JointType.KNEE_RIGHT).getPositionZ() - frame.getJoint(type).getPositionZ();
 						break;
 //					case FOOT_LEFT: 
-//						correctionZ = body.getJoint(JointType.KNEE_LEFT).getPositionZ() - body.getJoint(type).getPositionZ();
+//						correctionZ = frame.getJoint(JointType.KNEE_LEFT).getPositionZ() - frame.getJoint(type).getPositionZ();
 //						break;
 //					case FOOT_RIGHT:
-//						correctionZ = body.getJoint(JointType.KNEE_RIGHT).getPositionZ() - body.getJoint(type).getPositionZ();
+//						correctionZ = frame.getJoint(JointType.KNEE_RIGHT).getPositionZ() - frame.getJoint(type).getPositionZ();
 //						break;
 					default:
-						correctionZ = body.getJoint(JointType.SPINE).getPositionZ() - body.getJoint(type).getPositionZ();
+						correctionZ = frame.getJoint(JointType.SPINE).getPositionZ() - frame.getJoint(type).getPositionZ();
 						break;
 				}
 				this.correctionsZ.put(type, correctionZ);
@@ -42,15 +42,15 @@ public class CoordinateCorrection {
 	}
 	
 	// joint coordinates corrections for "sitting" body
-	public void calculateSittingCorrection(Body body) {
+	public void calculateSittingCorrection(Frame frame) {
 		for (JointType type : JointType.values()) {
 			double correctionY = 0;
 			switch (type) {
 				case KNEE_LEFT:
-					correctionY = body.getJoint(JointType.HIP_LEFT).getPositionY() - body.getJoint(type).getPositionY();
+					correctionY = frame.getJoint(JointType.HIP_LEFT).getPositionY() - frame.getJoint(type).getPositionY();
 					break;
 				case KNEE_RIGHT:
-					correctionY = body.getJoint(JointType.HIP_RIGHT).getPositionY() - body.getJoint(type).getPositionY();
+					correctionY = frame.getJoint(JointType.HIP_RIGHT).getPositionY() - frame.getJoint(type).getPositionY();
 					break;
 				default:
 					break;

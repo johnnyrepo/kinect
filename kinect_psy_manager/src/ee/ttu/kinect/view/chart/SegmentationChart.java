@@ -22,7 +22,7 @@ import com.stromberglabs.cluster.KMeansClusterer;
 import ee.ttu.kinect.calc.Calculator;
 import ee.ttu.kinect.calc.KohonenLearningData;
 import ee.ttu.kinect.calc.Step;
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
 
@@ -51,7 +51,7 @@ public class SegmentationChart extends Chart {
 	}
 	
 	@Override
-	public void drawChart(List<Body> data, List<JointType> selectedTypes,
+	public void drawChart(List<Frame> data, List<JointType> selectedTypes,
 			boolean seatedMode) {
 		// draw the result
 		String chartTitle = "";
@@ -68,7 +68,7 @@ public class SegmentationChart extends Chart {
 		chart.setTitle(chartTitle);
 	}
 
-	private void drawSegmentationChart(SegmentationSeriesComponent sc, List<Body> data, JointType selectedType, boolean isVelocity) {
+	private void drawSegmentationChart(SegmentationSeriesComponent sc, List<Frame> data, JointType selectedType, boolean isVelocity) {
 		// organizing data into steps
 		List<Step> stepData = organizeDataIntoSteps(data, selectedType, isVelocity);
 		// K-mean
@@ -87,7 +87,7 @@ public class SegmentationChart extends Chart {
 		}
 	}
 
-	private List<Step> organizeDataIntoSteps(List<Body> data, JointType selectedType, boolean isVelocityCalculation) {
+	private List<Step> organizeDataIntoSteps(List<Frame> data, JointType selectedType, boolean isVelocityCalculation) {
 		List<Step> resultData = new ArrayList<Step>();
 		
 		for (int i = 0; i < data.size(); i++) {
@@ -178,27 +178,11 @@ public class SegmentationChart extends Chart {
 		Cluster[] clusters = clusterer.cluster(data, clustersAmount);
 		System.out.println("Clusters = " + clusters.length);
 		for (Cluster c : clusters) {
-//			System.out.println("items = " + c.getItems().size() + " id = " + c.getId());
 			for (Clusterable cl : c.getItems()) {
 				((Step) cl).setClusterId(c.getId());
 			}
-//			System.out.print("=Centroid=");
-//			for (float centr : c.getClusterMean()) {
-//				System.out.print(centr + " ");
-//			}
-//			System.out.println();
 		}
 	}
-
-//	private List<Joint> getListOfJoints(List<Body> data, JointType type) {
-//		List<Joint> jointData = new ArrayList<Joint>();
-//		for (Body body : data) {
-//			Joint joint = body.getJoint(type);
-//			jointData.add(joint);
-//		}
-//		
-//		return jointData;
-//	}
 	
 	private void calculateKohonen(List<Step> data) {
 		MatrixTopology topology = new MatrixTopology(3, 3, 3);

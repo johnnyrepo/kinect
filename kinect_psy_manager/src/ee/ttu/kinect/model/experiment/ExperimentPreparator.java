@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import ee.ttu.kinect.model.Body;
+import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Markers;
 import ee.ttu.kinect.model.parser.SkeletonParserFile;
 import ee.ttu.kinect.util.FileUtil;
@@ -127,21 +127,21 @@ public class ExperimentPreparator {
 
 	private static Experiment prepareExperiment(String experimentId, List<String> data) {
 		Experiment experiment = experiments.get(experimentId);
-		List<Body> motionData = null;
+		List<Frame> motionData = null;
 		int motionCounter = 0;
-		Body body = new Body();
+		Frame frame = new Frame();
 		Markers markers = new Markers();
 		for (String item : data) {
-			parser.parseSkeleton(item, body);
+			parser.parseSkeleton(item, frame);
 			parser.parseMarkers(item, markers);
 			
 			if (markers.getState()[0]) {
 				if (motionData == null) {
-					motionData = new ArrayList<Body>();
+					motionData = new ArrayList<Frame>();
 				}
 				
 				try {
-					motionData.add(body.clone());
+					motionData.add(frame.clone());
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
