@@ -32,6 +32,8 @@ public class Frame implements Cloneable {
 	private Joint ankleRight;
 	private Joint footRight;
 	
+	private boolean[] markersState;
+	
 	private final Logger logger = Logger.getLogger(getClass().getName());
 
 	public void archive() {
@@ -229,6 +231,18 @@ public class Frame implements Cloneable {
 
 	public void setFootRight(Joint footRight) {
 		this.footRight = footRight;
+	}
+	
+	public boolean[] getMarkersState() {
+		return markersState;
+	}
+
+	public void setMarkersState(boolean[] states) {
+		markersState = new boolean[states.length];
+
+		for (int i = 0; i < states.length; i++) {
+			markersState[i] = states[i];
+		}
 	}
 	
 	public Joint getJoint(JointType type) {

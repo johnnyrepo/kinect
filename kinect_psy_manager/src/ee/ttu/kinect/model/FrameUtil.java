@@ -2,7 +2,7 @@ package ee.ttu.kinect.model;
 
 public class FrameUtil {
 
-	public static String getHeader(boolean seatedMode, int markersAmount) {
+	public static String prepareHeader(boolean seatedMode, int markersAmount) {
 		StringBuffer line = new StringBuffer();
 		line = line.append("FrameId\t");
 		line = line.append("Timestamp\t");
@@ -40,11 +40,11 @@ public class FrameUtil {
 		return line.toString();
 	}
 	
-	public static String getData(Frame frame, boolean seatedMode, boolean[] markersState) {
-		return getJoints(frame, seatedMode) + getMarkers(markersState);
+	public static String prepareData(Frame frame, boolean seatedMode, boolean[] markersState) {
+		return prepareJoints(frame, seatedMode) + prepareMarkers(markersState);
 	}
 	
-	private static String getJoints(Frame frame, boolean seatedMode) {
+	private static String prepareJoints(Frame frame, boolean seatedMode) {
 		StringBuffer line = new StringBuffer();
 		if (frame.isFrameReady()) {
 			line = line.append(frame.getFrameNumber()).append("\t");
@@ -79,7 +79,7 @@ public class FrameUtil {
 		return line.toString();
 	}
 
-	private static String getMarkers(boolean[] markersState) {
+	private static String prepareMarkers(boolean[] markersState) {
 		StringBuffer markers = new StringBuffer();
 		for (boolean ms : markersState) {
 			markers = markers.append((ms ? 1 : 0)).append("\t");

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import ee.ttu.kinect.model.Frame;
-import ee.ttu.kinect.model.Markers;
 import ee.ttu.kinect.model.parser.SkeletonParserFile;
 import ee.ttu.kinect.util.FileUtil;
 
@@ -130,12 +129,14 @@ public class ExperimentPreparator {
 		List<Frame> motionData = null;
 		int motionCounter = 0;
 		Frame frame = new Frame();
-		Markers markers = new Markers();
+		parser.reset();
 		for (String item : data) {
 			parser.parseSkeleton(item, frame);
-			parser.parseMarkers(item, markers);
+			if (!frame.isFrameReady()) {
+				continue;
+			}
 			
-			if (markers.getState()[0]) {
+			if (frame.getMarkersState()[0]) {
 				if (motionData == null) {
 					motionData = new ArrayList<Frame>();
 				}

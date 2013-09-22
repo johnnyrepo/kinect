@@ -7,7 +7,6 @@ import java.util.List;
 import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Joint;
 import ee.ttu.kinect.model.JointType;
-import ee.ttu.kinect.model.Markers;
 
 
 public class SkeletonParserFile implements SkeletonParser {
@@ -34,36 +33,34 @@ public class SkeletonParserFile implements SkeletonParser {
 			frame.setTimestamp(Long.parseLong(data[1]));
 			
 			// Joints coords starting from third column
-			data = Arrays.copyOfRange(data, 2, (data.length - markersAmount)); // markers are ignored
+			String[] joints = Arrays.copyOfRange(data, 2, (data.length - markersAmount)); // markers are ignored
 			int jointCounter = 0;
 			double coordX = 0;
 			double coordY = 0;
 			double coordZ = 0;
-			for (int i = 0; i < data.length; i += 3) {
-				coordX = Double.parseDouble(data[i]);
-				coordY = Double.parseDouble(data[i + 1]);
-				coordZ = Double.parseDouble(data[i + 2]);
+			for (int i = 0; i < joints.length; i += 3) {
+				coordX = Double.parseDouble(joints[i]);
+				coordY = Double.parseDouble(joints[i + 1]);
+				coordZ = Double.parseDouble(joints[i + 2]);
 				parseJoint(frame, jointTypes.get(jointCounter), coordX, coordY, coordZ);
 				jointCounter++;
+			}
+			
+			if (markersAmount > 0) {
+				// markers are taken
+				String[] markers = Arrays.copyOfRange(data, (2 + 3 * jointsAmount), data.length);
+				parseMarkers(markers, frame);
 			}
 		}
 	}
 	
-	public synchronized void parseMarkers(String input, Markers markers) {
-		if (input.length() > 50) {
-			String[] data = input.split("\\s+");
-			if (!isDataString(data)) {
-				return;
-			}
-			
-			// Parsing markers state
-			data = Arrays.copyOfRange(data, (2 + 3 * jointsAmount), data.length); // markers are taken
-			boolean[] markersBool = new boolean[data.length];
-			for (int i = 0; i < data.length; i++) {
-				markersBool[i] = Integer.parseInt(data[i]) == 1 ? true : false;
-			}
-			markers.setState(markersBool);
+	private void parseMarkers(String[] data, Frame frame) {
+		// Parsing markers state
+		boolean[] markersBool = new boolean[data.length];
+		for (int i = 0; i < data.length; i++) {
+			markersBool[i] = Integer.parseInt(data[i]) == 1 ? true : false;
 		}
+		frame.setMarkersState(markersBool);
 	}
 	
 	public void reset() {
