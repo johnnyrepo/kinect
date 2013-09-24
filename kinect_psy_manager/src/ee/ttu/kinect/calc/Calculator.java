@@ -26,7 +26,8 @@ public class Calculator {
 		double s2 = joint2.getPositionY() - joint1.getPositionY();
 		double s3 = joint2.getPositionZ() - joint1.getPositionZ();
 		return new BigDecimal(Math.sqrt(s1 * s1 + s2 * s2 + s3 * s3)).divide(
-				countTimeDeltaInSecs(time1, time2)).doubleValue();
+				countTimeDeltaInSecs(time1, time2), 5, RoundingMode.CEILING)
+				.doubleValue();
 	}
 
 	// Calculates acceleration in 3D space (m/s^2)
