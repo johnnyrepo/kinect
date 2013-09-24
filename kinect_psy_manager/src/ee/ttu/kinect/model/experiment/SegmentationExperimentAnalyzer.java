@@ -84,16 +84,16 @@ public class SegmentationExperimentAnalyzer {
 			}
 		}
 		
-		int clusterWithLessAccelMass = 0;
-		double accelMass = clusters[0].getClusterMean()[1];
-		for (int i = 0; i < clusters.length; i++) {
-			Cluster c = clusters[i];
-			double meanAccelMass = c.getClusterMean()[1];
-			if (accelMass > meanAccelMass) {
-				accelMass = meanAccelMass;
-				clusterWithLessAccelMass = i;
-			}
-		}
+//		int clusterWithLessAccelMass = 0;
+//		double accelMass = clusters[0].getClusterMean()[1];
+//		for (int i = 0; i < clusters.length; i++) {
+//			Cluster c = clusters[i];
+//			double meanAccelMass = c.getClusterMean()[1];
+//			if (accelMass > meanAccelMass) {
+//				accelMass = meanAccelMass;
+//				clusterWithLessAccelMass = i;
+//			}
+//		}
 		
 		System.out.print("Index, ");
 		for (MotionStep step : sortedSteps) {
