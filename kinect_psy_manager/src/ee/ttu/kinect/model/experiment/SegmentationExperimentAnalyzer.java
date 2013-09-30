@@ -3,6 +3,7 @@ package ee.ttu.kinect.model.experiment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 import com.stromberglabs.cluster.Cluster;
 import com.stromberglabs.cluster.Clusterable;
@@ -13,35 +14,60 @@ import ee.ttu.kinect.calc.Step;
 import ee.ttu.kinect.model.experiment.Experiment.Motion;
 
 public class SegmentationExperimentAnalyzer {
-
+	
 	public static void analyze(File[] files) {
 		ExperimentPreparator.prepareExperiments(files);
-		
-		List<MotionStep> steps;
+		// prepare
+		TreeMap<String, List<MotionStep>> data = new TreeMap<String, List<MotionStep>>();
 		for (String experimentId : ExperimentPreparator.experiments.keySet()) {
-			steps = new ArrayList<MotionStep>();
-			Experiment experiment = ExperimentPreparator.experiments.get(experimentId);
-			int i = 0;
-			for (Motion motion : experiment.getMotions()) {
-				MotionStep step = new MotionStep();
-				step.setMotion(motion);
-				step.addElement(motion.getTrajectoryMass());
-				step.addElement(motion.getAccelerationMass());
-				//step.addElement(motion.getVelocityMass());
-				//step.addElement(motion.getDurationTime());
-				step.setTimestamp(i);
-				steps.add(step);
-				i++;
-			}
-			
+			data.put(experimentId, prepareMotionSteps(experimentId));
 			System.out.println(experimentId);
-			
-			calculateKmean(steps);
+		}
+		// analyze
+		KClusterer clusterer = prepareClusterer(data);
+		for (String key : data.keySet()) {
+			calculateKmean(data.get(key), clusterer);
 		}
 	}
 	
-	private static void calculateKmean(List<MotionStep> data) {
+	private static List<MotionStep> prepareMotionSteps(String experimentId) {
+		List<MotionStep> steps = new ArrayList<MotionStep>();
+		Experiment experiment = ExperimentPreparator.experiments.get(experimentId);
+		int i = 0;
+		for (Motion motion : experiment.getMotions()) {
+			MotionStep step = new MotionStep();
+			step.setMotion(motion);
+			step.addElement(motion.getTrajectoryMass());
+			step.addElement(motion.getAccelerationMass());
+			//step.addElement(motion.getVelocityMass());
+			//step.addElement(motion.getDurationTime());
+			step.setTimestamp(i);
+			steps.add(step);
+			i++;
+		}
+		
+		return steps;
+	}
+
+	private static KClusterer prepareClusterer(TreeMap<String, List<MotionStep>> data) {
 		KClusterer clusterer = new KMeansClusterer();
+		int i = 0;
+		for (String key : data.keySet()) {
+			clusterer.cluster(data.get(key), 3);
+			i++;
+			if (i == 2) {
+				break;
+			}
+		}
+		
+		return clusterer;
+	}
+
+	private static void calculateKmean(List<MotionStep> data, KClusterer clusterer) {
+		if (clusterer == null) {
+			clusterer = new KMeansClusterer();
+		}
+		
 		Cluster[] clusters = clusterer.cluster(data, 3);
 		for (Cluster c : clusters) {
 			for (Clusterable cl : c.getItems()) {
