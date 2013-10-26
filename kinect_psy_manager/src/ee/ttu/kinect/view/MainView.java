@@ -41,6 +41,8 @@ public class MainView extends JFrame {
 
 	private final JMenuItem menuItemPolynomialAnalyzer;
 
+	private final JMenuItem menuItemSegmentationAnalyzer;
+
 	private final JFileChooser fileChooser;
 
 	private final RecordPlayPanel buttonPanel;
@@ -81,8 +83,11 @@ public class MainView extends JFrame {
 		menuItemOpen = new JMenuItem("Open");
 		menuItemPolynomialAnalyzer = new JMenuItem(
 				"Polynomial experiment analyzer");
+		menuItemSegmentationAnalyzer = new JMenuItem(
+				"Segmentation experiment analyzer");
 		menu.add(menuItemOpen);
 		menu.add(menuItemPolynomialAnalyzer);
+		menu.add(menuItemSegmentationAnalyzer);
 		menuBar.add(menu);
 		setJMenuBar(menuBar);
 
@@ -207,6 +212,17 @@ public class MainView extends JFrame {
 	public void addListenerForMenuPolynomialAnalyzer(
 			final ActionListener listener) {
 		menuItemPolynomialAnalyzer.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				filesForAnalysis = retrieveSelectedFiles(true);
+				listener.actionPerformed(e);
+			}
+		});
+	}
+	
+	public void addListenerForMenuSegmentationAnalyzer(
+			final ActionListener listener) {
+		menuItemSegmentationAnalyzer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				filesForAnalysis = retrieveSelectedFiles(true);

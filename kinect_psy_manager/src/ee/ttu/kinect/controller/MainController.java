@@ -2,16 +2,17 @@ package ee.ttu.kinect.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.logging.Logger;
 
 import javax.swing.JCheckBox;
 
 import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.MainModel;
+import ee.ttu.kinect.model.experiment.PolynomialExperimentAnalyzer;
 import ee.ttu.kinect.model.experiment.SegmentationExperimentAnalyzer;
 import ee.ttu.kinect.view.ChartType;
 import ee.ttu.kinect.view.MainView;
-
 
 public class MainController {
 
@@ -24,20 +25,31 @@ public class MainController {
 
 		view = new MainView();
 
-		//SwingUtilities.invokeLater(view);
-		
+		// SwingUtilities.invokeLater(view);
+
 		view.addListenerForMenuOpen(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.setFileToPlay(view.getFileToPlay()); //TODO: fix this hack
+				model.setFileToPlay(view.getFileToPlay()); // TODO: fix this hack
 				view.setPlayingEnabled(true);
 			}
 		});
 		view.addListenerForMenuPolynomialAnalyzer(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//PolynomialExperimentAnalyzer.analyze(view.getFilesForAnalysis());
-				SegmentationExperimentAnalyzer.analyze(view.getFilesForAnalysis());
+				File[] files = view.getFilesForAnalysis();
+				if (files != null) {
+					PolynomialExperimentAnalyzer.analyze(view.getFilesForAnalysis());
+				}
+			}
+		});
+		view.addListenerForMenuSegmentationAnalyzer(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				File[] files = view.getFilesForAnalysis();
+				if (files != null) {
+					SegmentationExperimentAnalyzer.analyze(view.getFilesForAnalysis());
+				}
 			}
 		});
 		view.addListenerForStartRecord(new ActionListener() {
@@ -83,7 +95,8 @@ public class MainController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean sensorOn = ((JCheckBox) e.getSource()).isSelected();
-				Logger.getLogger(this.getClass().getName()).info("sensor mode changed: " + sensorOn);
+				Logger.getLogger(this.getClass().getName()).info(
+						"sensor mode changed: " + sensorOn);
 				if (!sensorOn) {
 					model.stopSensorRun();
 				} else {
@@ -95,8 +108,10 @@ public class MainController {
 		view.addListenerForLifeMotionDetection(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.setMotionAnalysisMode(((JCheckBox) e.getSource()).isSelected(), 
-						view.getMotionDetectionDelay(), view.getMotionDetectionJoints(), 
+				model.setMotionAnalysisMode(
+						((JCheckBox) e.getSource()).isSelected(),
+						view.getMotionDetectionDelay(),
+						view.getMotionDetectionJoints(),
 						view.getTrajectoryMassMinValue());
 			}
 		});
@@ -143,14 +158,15 @@ public class MainController {
 				view.openChartSelector(model.getFileData(), ChartType.VALUES);
 			}
 		});
-		
+
 		view.addListenerForSegmentationAnalysis(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				view.openChartSelector(model.getFileData(), ChartType.SEGMENTATION);
+				view.openChartSelector(model.getFileData(),
+						ChartType.SEGMENTATION);
 			}
 		});
-		
+
 		view.addListenerForMotionAnalysis(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -164,39 +180,46 @@ public class MainController {
 	}
 
 	public void redrawSkeleton(Frame frame) {
-		view.redrawSkeleton(frame, model.isSeatedMode(), model.getCoordinateCorrection());
+		view.redrawSkeleton(frame, model.isSeatedMode(),
+				model.getCoordinateCorrection());
 	}
-	
+
 	public void redrawChart(Frame frame) {
 		view.redrawChart(frame, model.isSeatedMode());
 	}
-	
+
 	public void showMessagePopup(String message) {
 		view.showMessagePopup(message);
 	}
-	
+
 	public boolean[] getMarkersState() {
 		return model.getMarkersState();
 	}
-	
+
 	public void setSensorEnabled(boolean enabled) {
 		view.setSensorEnabled(enabled);
 		view.setRecordingEnabled(enabled);
 	}
 
-	public void analyzeMotion(Frame frame) {		
+	public void analyzeMotion(Frame frame) {
 		if (!model.isMotionAnalysisMode()) {
 			return;
 		}
-		
+
 		if (model.isMotionEnded(frame)) {
-			view.setMotionDetectionEnabled(false); // TODO: make the controller and model in sync
-			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(), view.getMotionDetectionJoints(), view.getTrajectoryMassMinValue());
-			//view.showMessagePopup("Motion has ended");
-			view.openMotionDetectionChart(model.getMotionData(), model.getMotionDetectionJointTypes(), model.getTrajectoryMassSummary(), model.getAccelerationMassSummary());
+			view.setMotionDetectionEnabled(false); // TODO: make the controller
+													// and model in sync
+			model.setMotionAnalysisMode(false, view.getMotionDetectionDelay(),
+					view.getMotionDetectionJoints(),
+					view.getTrajectoryMassMinValue());
+			// view.showMessagePopup("Motion has ended");
+			view.openMotionDetectionChart(model.getMotionData(),
+					model.getMotionDetectionJointTypes(),
+					model.getTrajectoryMassSummary(),
+					model.getAccelerationMassSummary());
 		}
 	}
-	
+
 	public static void main(String... args) {
 		new MainController();
 	}
