@@ -85,6 +85,7 @@ public class MarkersPanel extends JPanel {
 		return state;
 	}
 
+	@SuppressWarnings("serial")
 	private void addKeyBidings() {
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0, false), "PAGE_DOWN");
 		getActionMap().put("PAGE_DOWN", new AbstractAction() {
