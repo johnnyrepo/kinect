@@ -2,13 +2,13 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java7"/>
-	<classpathentry kind="lib" path="lib/jni4net.j-0.8.6.0.jar"/>
-	<classpathentry kind="lib" path="lib/KinectSensorProxy.j4n.jar"/>
-	<classpathentry kind="lib" path="lib/jfreechart-1.0.14.jar" sourcepath="lib-src/jfreechart-src.zip"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
-	<classpathentry kind="lib" path="lib/kmeansclustering.jar" sourcepath="/KMeansClustering/src"/>
-	<classpathentry kind="lib" path="lib/stromberglabs-commons.jar" sourcepath="/KMeansClustering/src"/>
-	<classpathentry kind="lib" path="lib/kohonen.jar" sourcepath="/Kohonen/src"/>
-	<classpathentry kind="lib" path="lib/OpenForecast-0.5.0.jar" sourcepath="lib-src/OpenForecast-0.5.0-src.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/jni4net.j-0.8.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/kohonen.jar"/>
+	<classpathentry kind="lib" path="lib/OpenForecast-0.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/stromberglabs-commons.jar"/>
+	<classpathentry kind="lib" path="lib/KinectSensorProxy.j4n.jar"/>
+	<classpathentry kind="lib" path="lib/kmeansclustering.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
