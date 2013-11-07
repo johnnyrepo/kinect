@@ -4,18 +4,23 @@
 	<property name="lib" location="lib" />
 	<property name="bin" location="bin" />
 	<property name="build" location="build" />
+	<property name="build.lib" location="build/lib" />
 	<property name="launch4j.dir" location="launch4j" />
-	
-	 <path id="dist.classpath">
-	    <pathelement path="${build}" />
-	    <fileset dir="${lib}">
-	    	<include name="**/*"/>
-	    </fileset>
-	  </path>
+
+	<path id="dist.classpath">
+		<pathelement path="${build}" />
+		<fileset dir="${lib}">
+			<include name="**/*" />
+		</fileset>
+	</path>
 
 	<target name="init">
-		<echo message="${toString:dist.classpath}"></echo>
+		<echo message="${toString:dist.classpath}">
+		</echo>
 		<mkdir dir="${build}" />
+		<copy todir="${build.lib}">
+			<fileset dir="${lib}" />
+		</copy>
 	</target>
 
 	<target name="clean">
@@ -27,31 +32,18 @@
 			<include name="**/*.java" />
 		</javac>
 	</target>
-	<!--
-	<target name="jar" depends="clean, compile, copy">
-		<jar destfile="build/kinectManager.jar">
-			<fileset dir="bin" />
-			<manifest>
-				<attribute name="Main-Class" value="ee.ttu.kinect.controller.MainController" />
-				<attribute name="Class-Path" value="lib/jni4net.j-0.8.6.0.jar lib/KinectSensorProxy.j4n.jar lib/jfreechart-1.0.14.jar lib/jcommon-1.0.17.jar lib/kmeansclustering.jar lib/stromberglabs-commons.jar lib/kohonen.jar lib/OpenForecast-0.5.0.jar" />
-			</manifest>
-		</jar>
-	</target>
-  -->
 
 	<target name="jar" depends="clean, compile" description="create the jar">
-		<fileset dir="${lib}" id="lib.dist.fileset"/>
+		<fileset dir="${lib}" id="lib.dist.fileset" />
 		<pathconvert pathsep=" " property="dist.classpath" refid="lib.dist.fileset">
 			<map from="${lib}" to=".\lib" />
 		</pathconvert>
-		<!-- Put everything in ${build} into a jar file -->
 		<jar jarfile="KinectManager.jar">
-			<fileset dir="${build}" includes="**/*" />
 			<manifest>
-				<!-- SET YOUR MAIN CLASS HERE -->
 				<attribute name="Main-Class" value="ee.ttu.kinect.controller.MainController" />
 				<attribute name="Class-Path" value=". ${dist.classpath}" />
 			</manifest>
+			<fileset dir="${build}" includes="**/*" />
 		</jar>
 	</target>
 
