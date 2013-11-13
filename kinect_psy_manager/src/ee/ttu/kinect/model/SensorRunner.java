@@ -65,10 +65,9 @@ public class SensorRunner extends Runner {
 			// URL locationUrl = FileLocator.find(bundle, new Path("/"), null);
 			// URL fileUrl = FileLocator.toFileURL(locationUrl);
 			// String parentPath = fileUrl.getFile();
-
-			Bridge.init(new File(System.getProperty("user.dir"), "lib"));
 			File path = new File(System.getProperty("user.dir"),
-					"lib/KinectSensorProxy.j4n.dll").getCanonicalFile();
+					"lib/KinectSensorProxy.j4n.dll");
+			Bridge.init(new File(System.getProperty("user.dir"), "lib"));
 			Bridge.LoadAndRegisterAssemblyFrom(path);
 
 			this.kinectSensorProxy = new KinectSensorProxy();
