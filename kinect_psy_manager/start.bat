@@ -1,1 +1,1 @@
-java -jar kinectManager.jar
+java -jar KinectManager.jar

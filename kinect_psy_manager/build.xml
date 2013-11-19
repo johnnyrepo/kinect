@@ -1,5 +1,6 @@
 <project name="KinectManager">
 
+	<taskdef name="one-jar" classname="com.simontuffs.onejar.ant.OneJarTask" classpath="one-jar-ant/one-jar-ant-task-0.97.jar" onerror="report" />
 	<property name="src" location="src" />
 	<property name="lib" location="lib" />
 	<property name="bin" location="bin" />
@@ -18,9 +19,6 @@
 		<echo message="${toString:dist.classpath}">
 		</echo>
 		<mkdir dir="${build}" />
-		<copy todir="${build.lib}">
-			<fileset dir="${lib}" />
-		</copy>
 	</target>
 
 	<target name="clean">
@@ -41,15 +39,27 @@
 		<jar jarfile="KinectManager.jar">
 			<manifest>
 				<attribute name="Main-Class" value="ee.ttu.kinect.controller.MainController" />
-				<attribute name="Class-Path" value=". ${dist.classpath}" />
+				<attribute name="Class-Path" value="${dist.classpath}" />
 			</manifest>
 			<fileset dir="${build}" includes="**/*" />
 		</jar>
 	</target>
 
-	<target name="exe" depends="jar">
+	<target name="app-jar" depends="jar">
+		<one-jar destfile="app.jar" manifest="one-jar-ant/MANIFEST.MF">
+			<main jar="KinectManager.jar" />
+			<lib>
+				<fileset dir="${lib}" includes="**/*" />
+			</lib>
+			<!--binlib>
+				<fileset dir="${lib}" includes="**/*.dll" />
+			</binlib-->	
+		</one-jar>
+	</target>
+
+	<target name="exe" depends="app-jar">
 		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
-		<launch4j configFile="./l4j/KinectManager.xml" />
+		<launch4j configFile="l4j/KinectManager.xml" />
 	</target>
 
 </project>

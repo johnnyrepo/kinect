@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: com.simontuffs.onejar.Boot
+One-Jar-Show-Expand: true
+One-Jar-Expand: lib
+One-Jar-Expand-Dir: .

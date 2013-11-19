@@ -1,11 +1,12 @@
 <launch4jConfig>
   <headerType>gui</headerType>
-  <jar>../KinectManager.jar</jar>
-  <outfile>../KinectManager.exe</outfile>
+  <jar>../app.jar</jar>
+  <outfile>../app.exe</outfile>
   <errTitle>KinectManager</errTitle>
   <chdir>.</chdir>
   <icon>KinectManager.ico</icon>
   <jre>
+    <path></path>
     <minVersion>1.6.0</minVersion>
   </jre>
   <splash>
