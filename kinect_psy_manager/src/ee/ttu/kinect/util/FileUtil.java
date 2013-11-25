@@ -54,7 +54,7 @@ public class FileUtil {
 		fileWriter.write(header);
 		fileWriter.newLine();
 
-		fileWriter.write(getCachedText());
+		fileWriter.write(getCachedText(header.split("\\s+").length));
 
 		emptyCache();
 		fileWriter.close();
@@ -79,10 +79,19 @@ public class FileUtil {
 		return stringCache;
 	}
 
-	private String getCachedText() {
+	private String getCachedText(int headerColumnsCount) {
 		StringBuffer cachedText = new StringBuffer();
 		for (String cached : stringCache) {
-			cachedText = cachedText.append(cached).append("\n");
+			cachedText = cachedText.append(cached);
+			
+			int columnsCount = cached.split("\\s+").length;
+			
+			if (columnsCount < headerColumnsCount) {
+				for (int i = columnsCount; i < headerColumnsCount; i++) {
+					cachedText = cachedText.append("0\t");
+				}
+			}
+			cachedText = cachedText.append("\n");
 		}
 		return cachedText.toString();
 	}

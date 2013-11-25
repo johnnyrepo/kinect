@@ -177,6 +177,7 @@ public class MainController {
 		view.setRecordingEnabled(false);
 		view.setPlayingEnabled(false);
 		model.startSensorRun();
+		model.startMarkersServer();
 	}
 
 	public void redrawSkeleton(Frame frame) {

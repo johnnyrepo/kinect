@@ -1,9 +1,11 @@
 package ee.ttu.kinect.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import ee.ttu.kinect.controller.MainController;
+import ee.ttu.kinect.model.network.MarkersServer;
 
 public class MainModel {
 	
@@ -17,6 +19,8 @@ public class MainModel {
 	
 	private Markers markers;
 	
+	private MarkersServer markersServer;
+	
 	private CoordinateCorrection coordinateCorrection;
 	
 	private MotionProcessor processor;
@@ -27,6 +31,9 @@ public class MainModel {
 		sensorRunner = new SensorRunner(controller);
 		fileRunner = new FileRunner(controller);
 		markers = new Markers();
+		try {
+			markersServer = new MarkersServer(markers);
+		} catch(IOException ioe) {}
 		coordinateCorrection = new CoordinateCorrection();
 		processor = new MotionProcessor();
 	}
@@ -41,6 +48,8 @@ public class MainModel {
 	
 	public void startRecord() {
 		stopFileRun();
+
+		markers.reset();
 		
 		sensorRunner.startRecord();
 	}
@@ -89,6 +98,10 @@ public class MainModel {
 		if (sensorRunner.isRunning()) {
 			sensorRunner.stop();
 		}
+	}
+	
+	public void startMarkersServer() {
+		markersServer.run();
 	}
 	
 	public boolean isFileRunPaused() {

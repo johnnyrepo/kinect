@@ -79,20 +79,20 @@ public class SegmentationExperimentAnalyzer {
 		printSortedResult(clusters);
 	}
 
-	private static void printResult(Cluster[] clusters) {
-		System.out.println("Clusters = " + clusters.length);
-		for (Cluster c : clusters) {
-			System.out.println("items = " + c.getItems().size() + " id = " + c.getId());
-			for (Clusterable cl : c.getItems()) {
-				System.out.println(((Step) cl).getTimestamp() + " = " + ((Step) cl).getElements().get(1));
-			}
-			System.out.print("=Centroid=");
-			for (float centr : c.getClusterMean()) {
-				System.out.print(centr + " ");
-			}
-			System.out.println();
-		}
-	}
+//	private static void printResult(Cluster[] clusters) {
+//		System.out.println("Clusters = " + clusters.length);
+//		for (Cluster c : clusters) {
+//			System.out.println("items = " + c.getItems().size() + " id = " + c.getId());
+//			for (Clusterable cl : c.getItems()) {
+//				System.out.println(((Step) cl).getTimestamp() + " = " + ((Step) cl).getElements().get(1));
+//			}
+//			System.out.print("=Centroid=");
+//			for (float centr : c.getClusterMean()) {
+//				System.out.print(centr + " ");
+//			}
+//			System.out.println();
+//		}
+//	}
 	
 	private static void printSortedResult(Cluster[] clusters) {
 		List<MotionStep> unsortedSteps = new ArrayList<MotionStep>();

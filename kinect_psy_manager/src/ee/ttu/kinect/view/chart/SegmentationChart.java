@@ -5,22 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kohonen.WTALearningFunction;
-import learningFactorFunctional.ConstantFunctionalFactor;
-import metrics.EuclidesMetric;
-import network.DefaultNetwork;
-import network.KohonenNeuron;
-import topology.MatrixTopology;
-import activationFunction.ActivationFunctionModel;
-import activationFunction.LinearActivationFunction;
-
 import com.stromberglabs.cluster.Cluster;
 import com.stromberglabs.cluster.Clusterable;
 import com.stromberglabs.cluster.KClusterer;
 import com.stromberglabs.cluster.KMeansClusterer;
 
 import ee.ttu.kinect.calc.Calculator;
-import ee.ttu.kinect.calc.KohonenLearningData;
 import ee.ttu.kinect.calc.Step;
 import ee.ttu.kinect.model.Frame;
 import ee.ttu.kinect.model.Joint;
@@ -30,11 +20,11 @@ public class SegmentationChart extends Chart {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final int AMOUNT_OF_CLUSTERS = 5; // 8
-
-	private static final int STEP_BETWEEN_POINTS = 5; // 7
-	
-	private static final int AMOUNT_OF_POINTS = 6; // 7
+//	private static final int AMOUNT_OF_CLUSTERS = 5; // 8
+//
+//	private static final int STEP_BETWEEN_POINTS = 5; // 7
+//	
+//	private static final int AMOUNT_OF_POINTS = 6; // 7
 	
 	private int clustersAmount;
 	
@@ -184,25 +174,25 @@ public class SegmentationChart extends Chart {
 		}
 	}
 	
-	private void calculateKohonen(List<Step> data) {
-		MatrixTopology topology = new MatrixTopology(3, 3, 3);
-		double[] maxWeight = {8, 8, 8};
-		DefaultNetwork network = new DefaultNetwork(3, maxWeight, topology);
-		ConstantFunctionalFactor constantFactor = new ConstantFunctionalFactor(0.8);
-		KohonenLearningData learningData = new KohonenLearningData(data);
-		WTALearningFunction learning = new WTALearningFunction(network, 20, new EuclidesMetric(), learningData, constantFactor);
-		learning.learn();
-		System.out.println(network);
-		for (int i = 0; i < network.getNumbersOfNeurons(); i++) {
-			System.out.println("Neuron= " + network.getNeuron(i));
-			for (double d : network.getNeuron(i).getWeight()) {
-				System.out.println("weight= " + d);
-			}
-		}
-		ActivationFunctionModel function = new LinearActivationFunction();
-		KohonenNeuron neuron = new KohonenNeuron(7, maxWeight, function);
-		double d = neuron.getValue(data.get(0).getElementsAsArr());
-		System.out.println("Double d= " + d);
-	}
+//	private void calculateKohonen(List<Step> data) {
+//		MatrixTopology topology = new MatrixTopology(3, 3, 3);
+//		double[] maxWeight = {8, 8, 8};
+//		DefaultNetwork network = new DefaultNetwork(3, maxWeight, topology);
+//		ConstantFunctionalFactor constantFactor = new ConstantFunctionalFactor(0.8);
+//		KohonenLearningData learningData = new KohonenLearningData(data);
+//		WTALearningFunction learning = new WTALearningFunction(network, 20, new EuclidesMetric(), learningData, constantFactor);
+//		learning.learn();
+//		System.out.println(network);
+//		for (int i = 0; i < network.getNumbersOfNeurons(); i++) {
+//			System.out.println("Neuron= " + network.getNeuron(i));
+//			for (double d : network.getNeuron(i).getWeight()) {
+//				System.out.println("weight= " + d);
+//			}
+//		}
+//		ActivationFunctionModel function = new LinearActivationFunction();
+//		KohonenNeuron neuron = new KohonenNeuron(7, maxWeight, function);
+//		double d = neuron.getValue(data.get(0).getElementsAsArr());
+//		System.out.println("Double d= " + d);
+//	}
 	
 }
